@@ -10,7 +10,7 @@ Simple & light weight (7kb) vanilla javascript plugin to create beautiful animat
 1) Add laxxx.js to your html
 
 ```html
-<script src="js/laxxx.js" >
+<script src="lib/laxxx.js" >
 ```
 
 
