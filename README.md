@@ -9,14 +9,14 @@ Light weight vanilla javascript plugin to do awesome things when you scroll!!
 
 1) Add laxx.js to your html page
 
-```
+```html
 <script src="js/laxx.js" >
 ```
 
 
 2) Initialize the plugin 
 
-```
+```javascript
 window.onload = function() {
 	laxx.setup({ /* opts */ }) // init
 	  
@@ -30,7 +30,7 @@ window.onload = function() {
 
 
 3) Add attributes to the HTML tags you want to animate e.g.
-```
+```html
 <p laxx-preset="spin fadeInOut">Look at me goooooo!</p>
 ```
 
@@ -49,13 +49,19 @@ You can chain multiple together e.g. `laxx-preset="blurOut fadeOut spin"`
 ## Custom Animations
 
 You can easily create your own effects. Just add an attribute to your HTML tag (see [Supported Attribute Keys](#supported-attribute-keys)) with an array of values. These arrays take the format of `scrollPos val, scrollPos val, ...` e.g:
-```
-<p laxx-opacity="0 1, 100 1, 200 0">I start to fade out after the window scrolls 100px and then I'm gone by 200px!</p>
+```html
+<p laxx-opacity="0 1, 100 1, 200 0">
+	I start to fade out after the window scrolls 100px
+	and then I'm gone by 200px!
+</p>
 ```
 
 By default the `scrollPos` is `window.scrollY` but you can set an anchor element which will adjust the `scrollPos` by the elements offsetTop. You can either pass in a selector `laxx-anchor="#bio"` or set it to use itself `laxx-anchor="self"` e.g.
-```
-<p laxx-opacity="-200 1, -100 1, 0 0" laxx-anchor="self">I start to fade out after I'm 100px away from the top of the window and then I'm gone by the time I reach the top!</p>
+```html
+<p laxx-opacity="-200 1, -100 1, 0 0" laxx-anchor="self">
+	I start to fade out after I'm 100px away from the top of the window
+	and then I'm gone by the time I reach the top!
+</p>
 ```
 
 There are some shortcuts for useful values: 
@@ -68,13 +74,19 @@ There are some shortcuts for useful values:
 | elh     	| targetElement.clientWidth |
 
 You can use these instead of integer values for the scrollPos  e.g.
-```
-<p laxx-opacity="0 1, vh 0">I fade out as the page scrolls down and I'm gone when the page has scrolled the view port height!</p>
+```html
+<p laxx-opacity="0 1, vh 0">
+	I fade out as the page scrolls down and
+	I'm gone when the page has scrolled the view port height!
+</p>
 ```
 
 You can also do calculations using `( )` e.g.
-```
-<p laxx-opacity="0 1, (vh*0.5) 0">I fade out as the page scrolls down and I'm gone when the page has scrolled half the view port height!</p>
+```html
+<p laxx-opacity="0 1, (vh*0.5) 0">
+	I fade out as the page scrolls down and
+	I'm gone when the page has scrolled half the view port height!
+</p>
 ```
 
 ### Supported Attribute Keys
@@ -107,6 +119,20 @@ Filters (note - these may be unperformant on low powered machines)
 | saturate     | laxx-saturate |
 | grayscale     | laxx-grayscale |
 
+### Custom Presets
+To avoid duplicate code you can define your own presets with a list of attributes e.g.
+```javascript
+laxx.addPreset("myCoolPreset", {
+	"laxx-opacity": "(-vh*0.8) 40, (-vh*0.6) 0",
+	"laxx-rotate": "(-vh*2) 1000, (-vh*0.5) 0"
+})
+```
+You can then access this preset like this:
+```html
+<p laxx-preset="myCoolPreset">
+	I'm the coolest preset in the world 😎
+</p>
+```
 ## Scroll Wheels
 Scroll wheels only icrement the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
 
