@@ -17,15 +17,15 @@ const transforms = {
   "laxx-skew": function(style, v) { style.transform += ` skew(${v}deg, ${v}deg` },
   "laxx-skew-x": function(style, v) { style.transform += ` skewX(${v}deg)` },
   "laxx-skew-y": function(style, v) { style.transform += ` skewY(${v}deg)` },
-  "laxx-translate-rotate": function(style, v) { style.transform += ` rotate(${v}deg)` },
+  "laxx-rotate": function(style, v) { style.transform += ` rotate(${v}deg)` },
 
-  "laxx-filter-brightness": function(style, v) { style.filter += ` brightness(${v}%)` },
-  "laxx-filter-contrast": function(style, v) { style.filter += ` contrast(${v}%)` },
-  "laxx-filter-huerotate": function(style, v) { style.filter += ` hue-rotate(${v}deg)` },
-  "laxx-filter-blur": function(style, v) { style.filter += ` blur(${v}px)` },
-  "laxx-filter-invert": function(style, v) { style.filter += `  invert(${v}%)` },
-  "laxx-filter-saturate": function(style, v) { style.filter += `  saturate(${v}%)` },
-  "laxx-filter-grayscale": function(style, v) { style.filter += `  grayscale(${v}%)` },
+  "laxx-brightness": function(style, v) { style.filter += ` brightness(${v}%)` },
+  "laxx-contrast": function(style, v) { style.filter += ` contrast(${v}%)` },
+  "laxx-hue-rotate": function(style, v) { style.filter += ` hue-rotate(${v}deg)` },
+  "laxx-blur": function(style, v) { style.filter += ` blur(${v}px)` },
+  "laxx-invert": function(style, v) { style.filter += `  invert(${v}%)` },
+  "laxx-saturate": function(style, v) { style.filter += `  saturate(${v}%)` },
+  "laxx-grayscale": function(style, v) { style.filter += `  grayscale(${v}%)` },
 }
 
 let crazy = ""
@@ -48,25 +48,25 @@ laxx.presets = {
     "laxx-translate-x": "-vh 50, (-vh*0.8) -50, (-vh*0.6) 50, (-vh*0.4) -50, (-vh*0.2) 50, (-vh*0) -50, (vh*0.2) 50"
   },
   crazy: {
-    "laxx-filter-huerotate": crazy
+    "laxx-hue-rotate": crazy
   },
   spin: {
-    "laxx-translate-rotate": "(-vh) 0, (vh*0.1) 360"
+    "laxx-rotate": "(-vh) 0, (vh*0.1) 360"
   },
   spinIn: {
-    "laxx-translate-rotate": "(-vh*2) 1000, (-vh*0.5) 0"
+    "laxx-rotate": "(-vh*2) 1000, (-vh*0.5) 0"
   },
   spinOut: {
-    "laxx-translate-rotate": "(-vh*0.4) 0, (vh) 1000"
+    "laxx-rotate": "(-vh*0.4) 0, (vh) 1000"
   },
   blurInOut: {
-    "laxx-filter-blur": "(-vh*0.8) 40, (-vh*0.6) 0, (-vh*0.15) 0, (vh*0.1) 40"
+    "laxx-blur": "(-vh*0.8) 40, (-vh*0.6) 0, (-vh*0.15) 0, (vh*0.1) 40"
   },
   blurIn: {
-    "laxx-filter-blur": "(-vh*0.8) 40, (-vh*0.6) 0"
+    "laxx-blur": "(-vh*0.8) 40, (-vh*0.6) 0"
   },
   blurOut: {
-    "laxx-filter-blur": "(-vh*0.3) 0, 0 40"
+    "laxx-blur": "(-vh*0.3) 0, 0 40"
   },
   fadeInOut: {
     "laxx-opacity": "(-vh*0.8) 0, (-vh*0.6) 1, (-vh*0.15) 1, (vh*0.1) 0"
@@ -165,6 +165,10 @@ laxx.populateParallaxObjects = function() {
             .replace(new RegExp('vh', 'g'), window.innerHeight)
             .replace(new RegExp('elh', 'g'), el.clientHeight)
             .replace(new RegExp('elw', 'g'), el.clientWidth)
+            .replace(new RegExp('-vw', 'g'), -window.innerWidth)
+            .replace(new RegExp('-vh', 'g'), -window.innerHeight)
+            .replace(new RegExp('-elh', 'g'), -el.clientHeight)
+            .replace(new RegExp('-elw', 'g'), -el.clientWidth)
             .split(" ").map((x) => {
             if(x[0] === "(") return eval(x)
             else return parseFloat(x)

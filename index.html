@@ -42,17 +42,19 @@
 
 <script>
   window.onload = function() {
-    laxx.populateParallaxObjects()
+    laxx.setup()
       
     document.addEventListener('scroll', function(x) {
-      laxx.updateparallaxObjects(window.scrollY)
+      laxx.update(window.scrollY)
     }, false)
 
-    laxx.updateparallaxObjects(window.scrollY)
+    laxx.update(window.scrollY)
   }
 </script>
 
 <div class="doc">
+
+  <p laxx-opacity="0 1, vh 0" style="position: fixed; top:0;">I fade out as the page scrolls down and I'm gone when the page has scrolled the view port height!</p>
 
   <h1
     class="scrolllll"

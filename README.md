@@ -7,7 +7,7 @@ Light weight vanilla javascript plugin to do awesome things when you scroll!!
 
 ## Getting started
 
-1) Add laxx.js to your html page
+1) Add laxx.js to your html
 
 ```
 <script src="js/laxx.js" >
