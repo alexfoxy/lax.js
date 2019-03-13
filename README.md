@@ -48,7 +48,7 @@ You can chain multiple together e.g. `laxx-preset="blurOut fadeOut spin"`
 
 ## Custom Animations
 
-You can easily create your own effects. Just add an attribute to your HTML tag (see Supported Attribute Keys) with an array of values. These arrays take the format of `scrollPos val, scrollPos val, ...` e.g:
+You can easily create your own effects. Just add an attribute to your HTML tag (see [Supported Attribute Keys](#supported-attribute-keys)) with an array of values. These arrays take the format of `scrollPos val, scrollPos val, ...` e.g:
 ```
 <p laxx-opacity="0 1, 100 1, 200 0">I start to fade out after the window scrolls 100px and then I'm gone by 200px!</p>
 ```
