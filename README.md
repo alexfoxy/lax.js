@@ -139,6 +139,7 @@ Scroll wheels only icrement the scroll position in steps which can cause the ani
 ## To Do
 * Add "momentum" as option for anchor & presets
 * Add debug mode 
+* Elastic bouncing values
 * Optimise elements that go off screen
 * Better error reporting
 
