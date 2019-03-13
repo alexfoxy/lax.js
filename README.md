@@ -38,26 +38,22 @@ window.onload = function() {
 
 ## Presets
 
-The easiest way to get started is to use the built in presets. E.g.
-```
-<p laxx-preset="spin fadeInOut">Look at me goooooo!</p>
-```
-The available presets are:
+The easiest way to get started is to use the presets via the `laxx-preset` attribute. The available presets are:
 ```
 linger, lazy, eager, slalom, crazy, spin, spinIn, spinOut, 
 blurInOut, blurIn, blurOut, fadeInOut, fadeIn, fadeOut, driftLeft, 
 driftRight, slideLeft, slideRight, zoomInOut, zoomIn, zoomOut
 ```
+You can chain multiple together e.g. `laxx-preset="blurOut fadeOut spin"`
 
 ## Custom Animations
 
-You can easily create your own effects. Just add a the correct attr to your tag (see table below) and set an array of values. These arrays take the format of `[scrollPos val, ...]` e.g:
+You can easily create your own effects. Just add an attribute to your HTML tag (see Supported Attribute Keys) with an array of values. These arrays take the format of `scrollPos val, scrollPos val, ...` e.g:
 ```
 <p laxx-opacity="0 1, 100 1, 200 0">I start to fade out after the window scrolls 100px and then I'm gone by 200px!</p>
 ```
 
-
-By default the scrollPos is `window.scrollY` but you can set an anchor element which will adjust the scrollPos by the elements offsetTop. You can either pass in a selector `laxx-anchor="#bio"` or set it to use itself `laxx-anchor="self"` e.g.
+By default the `scrollPos` is `window.scrollY` but you can set an anchor element which will adjust the `scrollPos` by the elements offsetTop. You can either pass in a selector `laxx-anchor="#bio"` or set it to use itself `laxx-anchor="self"` e.g.
 ```
 <p laxx-opacity="-200 1, -100 1, 0 0" laxx-anchor="self">I start to fade out after I'm 100px away from the top of the window and then I'm gone by the time I reach the top!</p>
 ```
@@ -81,7 +77,7 @@ You can also do calculations using `( )` e.g.
 <p laxx-opacity="0 1, (vh*0.5) 0">I fade out as the page scrolls down and I'm gone when the page has scrolled half the view port height!</p>
 ```
 
-### Supported Animation Keys
+### Supported Attribute Keys
 
 Transforms
 
