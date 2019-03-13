@@ -1,8 +1,6 @@
 # laxxx
 
-Simple & light weight (7kb) vanilla javascript plugin to create beautiful animations when you scrolllll!
-
-Harness the power of the most intuitive interaction and make your websites come alive!
+Simple & light weight (7kb) vanilla javascript plugin to create beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
 
 ## Demos
 
