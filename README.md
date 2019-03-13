@@ -60,19 +60,29 @@ You can easily create your own effects. Just add a the correct attr to your tag 
 <p laxx-opacity="0 1, 100 1, 200 0">I start to fade out after the window scrolls 100px and then I'm gone by 200px!</p>
 ```
 
+
 By default the scrollPos is `window.scrollY` but you can set an anchor element which will adjust the scrollPos by the elements offsetTop. You can either pass in a selector `laxx-anchor="#bio"` or set it to use itself `laxx-anchor="self"` e.g.
 ```
 <p laxx-opacity="-200 1, -100 1, 0 0" laxx-anchor="self">I start to fade out after I'm 100px away from the top of the window and then I'm gone by the time I reach the top!</p>
 ```
 
+There are some shortcuts for useful values: 
 
+| Key     	| Value           |
+| ------------- | ------------- |
+| vw       	| window.innerWidth  |
+| vh     	| window.innerHeight |
+| elw     	| targetElement.clientHeight |
+| elh     	| targetElement.clientWidth |
 
-choose a key and then [0 1,2 3]
-You can use shortcuts for window height e.g.
-vw, vh, elw, elh
-You can do calculations in brackets e.g. 
+You can use these instead of integer values for the scrollPos  e.g.
 ```
-[(-vw*0.5) 100, 0 0]
+<p laxx-opacity="0 1, vh 0">I fade out as the page scrolls down and I'm gone when the page has scrolled the view port height!</p>
+```
+
+You can also do calculations using `( )` e.g.
+```
+<p laxx-opacity="0 1, (vh*0.5) 0">I fade out as the page scrolls down and I'm gone when the page has scrolled half the view port height!</p>
 ```
 
 ### Supported Animation Keys
@@ -105,15 +115,11 @@ Filters (note - these may be unperformant on low powered machines)
 | saturate     | laxx-saturate |
 | grayscale     | laxx-grayscale |
 
-### Anchor
-Default is dcument.scrollTop
-can use "self" to use its own el top
-can use query selector 
-
 ## Scroll Wheels
-use super scroll
+Scroll wheels only icrement the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
 
 ## To Do
-* Add scroll momentum as option for anchor with presets
+* Add "momentum" as option for anchor & presets
 * Optimise elements that go off screen
 * Better error reporting
+
