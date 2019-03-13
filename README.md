@@ -29,13 +29,9 @@ window.onload = function() {
 ```
 
 
-3) Add attributes to HTML tags you want to animate, either by using presets:
+3) Add attributes to the HTML tags you want to animate e.g.
 ```
 <p laxx-preset="spin fadeInOut">Look at me goooooo!</p>
-```
-or creating your own animations:
-```
-<p laxx-translate-y="200 100, 0 -100">Look at me goooooo!</p>
 ```
 
 4) Scroll and enjoy!
