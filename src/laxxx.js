@@ -1,10 +1,22 @@
-// scrollform 
+//
+// laxxx v0.0.1 (Alex Fox)
+// Simple & light weight vanilla javascript plugin to create beautiful animations things when you scrolllll!!
+//
+// Licensed under the terms of the MIT license.
+//
+// You may use it in your theme if you credit me. 
+// It is also free to use on any individual website.
+//
+// Exception:
+// The only restriction is to not publish any  
+// extension for browsers or native application
+// without getting a written permission first.
+//
 
 var laxxx = {}
 window.laxxx = laxxx
 
 var parallaxObjects = []
-// var prefix = "laxxx"
 
 const transforms = {
   "laxxx-opacity": function(style, v) { style.opacity = v },
