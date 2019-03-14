@@ -2,7 +2,7 @@
 
 Simple & light weight (2kb minified & zipped) vanilla javascript plugin to create beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
 
-## Demos
+[>>> DEMO <<<](https://alexfox.dev/laxxx/)
 
 
 ## Getting started
@@ -52,15 +52,15 @@ You can easily create your own effects. Just add an attribute to your HTML tag (
 </p>
 ```
 
-By default the `scrollPos` is `window.scrollY` but you can set an anchor element which will adjust the `scrollPos` by the elements offsetTop. You can either pass in a selector `laxxx-anchor="#bio"` or set it to use itself `laxxx-anchor="self"` e.g.
+By default the `scrollPos` is `window.scrollY` but you can use an element distance from the top of the screen instead. You can either pass in a selector `laxxx-anchor="#bio"` or set it to use itself `laxxx-anchor="self"` (this is the default for all presets) e.g.
 ```html
-<p laxxx-opacity="-200 1, -100 1, 0 0" laxxx-anchor="self">
+<p laxxx-opacity="200 1, 100 1, 0 0" laxxx-anchor="self">
 	I start to fade out after I'm 100px away from the top of the window
 	and then I'm gone by the time I reach the top!
 </p>
 ```
 
-There are some shortcuts for useful values: 
+There are also some shortcuts for useful values: 
 
 | Key     	| Value           |
 | ------------- | ------------- |
@@ -168,10 +168,11 @@ By default `-webkit-backface-visibility: hidden;` is added to your elements styl
 ### Scroll Wheels
 Scroll wheels only icrement the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
 
-## To Do
-* Add "momentum" as option for anchor & presets
-* Add debug mode 
+## To Do / Ideas
+* Add debug mode
 * Elastic bouncing values
 * Optimise elements that go off screen
+* Impliment a tween for scroll wheels to remove dependancy on smoothscroll
 * Better error reporting
+* Add "momentum" as option for anchor & presets
 
