@@ -2,7 +2,7 @@
 
 Simple & light weight (12kb) vanilla javascript plugin to create beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
 
-## Demos
+[>>> DEMO <<<](https://alexfox.dev/laxxx/)
 
 
 ## Getting started
