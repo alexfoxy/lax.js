@@ -89,7 +89,7 @@ You can also do calculations using `( )` e.g.
 </p>
 ```
 
-### Supported Attribute Keys
+## Supported Attribute Keys
 
 Transforms
 
@@ -119,7 +119,7 @@ Filters (note - these may be unperformant on low powered machines)
 | saturate     | laxxx-saturate |
 | grayscale     | laxxx-grayscale |
 
-### Custom Presets
+## Custom Presets
 To avoid duplicate code you can define your own presets with a list of attributes e.g.
 ```javascript
 laxxx.addPreset("myCoolPreset", {
@@ -134,15 +134,15 @@ You can then access this preset like this:
 </p>
 ```
 
-### Notes
+## Notes
 
-# Performance
+### Performance
 By default `-webkit-backface-visibility: hidden;` is added to your elements style to encourage the browser to render that object as a layer on the GPU and increase performance. To turn this off add `laxx-optimize="false"` to your element.
 
-# Scroll Wheels
+### Scroll Wheels
 Scroll wheels only icrement the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
 
-### To Do
+## To Do
 * Add "momentum" as option for anchor & presets
 * Add debug mode 
 * Elastic bouncing values
