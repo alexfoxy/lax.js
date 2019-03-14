@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75, minimum-scale=0.75">
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:300,600,800" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  <script src="../lib/laxxx.js"></script>
+
+  <script type="text/javascript">
+    window.onload = function() {
+      laxxx.setup()
+        
+      document.addEventListener('scroll', function(x) {
+        laxxx.update(window.scrollY)
+      }, false)
+
+      laxxx.update(window.scrollY)
+    }
+  </script>
+
+  <style>
+    body,html {
+      margin:0;
+      padding:0;
+      color: #F3F4F5;
+      background: #191818;
+      overflow-x: hidden;
+      font-family: 'Montserrat', sans-serif;
+    }
+   
+    #header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      margin-top: 20vh;
+      z-index: 2;
+    }
+
+    .bg {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      z-index: 1;
+    }
+
+    #header img {
+      width: 14vh;
+      margin-top: 2vh;
+    }
+
+    #header h2 {
+      margin-top: 12vh;
+      font-size: 24pt;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    #header h4 {
+      font-size: 16pt;
+      font-weight: 300;
+      text-align: center;
+    }
+
+    #header i {
+      font-size: 14pt;
+      background: white;
+      color: black;
+      width: 30pt;
+      text-align: center;
+      height: 30pt;
+      line-height: 30pt;
+      border-radius: 15pt;
+      margin-top: -10pt;
+    }
+
+    .left {
+      position: absolute;
+      left: 80pt;
+    }
+
+    .right {
+      position: absolute;
+      right: 80pt;
+    }
+
+    .chunkyText {
+      font-size: 80pt;
+      font-weight: 1000;
+    }
+
+    .crazyText {
+      font-size: 40pt;
+      font-weight: 1000;
+      color: #5ee5d5;
+      position: absolute;
+      width: 100vw;
+      text-align: center;
+      margin-top: 500pt;
+    }
+
+    .bubble {
+      position: absolute;
+      margin-top: 100pt;
+    }
+
+    .block {
+      position: absolute;
+      width: 60pt;
+      height: 60pt;
+    }
+
+    .bubble.a {
+      width: 100pt;
+      height: 100pt;
+      border-radius: 50pt
+    }
+
+    .bubble.b {
+      width: 130pt;
+      height: 130pt;
+      border-radius: 65pt
+    }
+
+    .bubble.c {
+      width: 50pt;
+      height: 50pt;
+      border-radius: 25pt
+    }
+
+    .section {
+      z-index: 2;
+      display: block;
+      position: relative;
+    }
+
+    #section1 {
+      height: 750pt;
+    }
+
+    #section2 {
+      height: 200pt;
+    }
+
+    #section3 {
+      padding: 0 20pt;
+      font-size: 20pt;
+      line-height: 30pt;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      height: 85vh;
+    }
+
+    p {
+      max-width: 500pt;
+      text-align: center;
+      margin-bottom: 100pt;
+      font-weight: 300;
+    }
+
+    .button {
+      padding: 10pt 20pt; 
+      background: #35D5E5;
+      border-radius: 10pt;
+      font-weight: 600;
+    }
+
+    .button:hover {
+      background: white;
+      color: #35D5E5;
+      cursor: pointer;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    a:visited {
+      color: white;
+    }
+
+  </style>
+</head>
+
+
+<body>
+  <div class="bg" laxxx-opacity="0 0, (1*vh) 1, (3*vh) 0" style="background: #511b9f" laxxx-optimize="false">  
+
+  </div>
+
+  <div class="bg" laxxx-opacity="(vh) 0, (2*vh) 1" style="background: rgb(238, 63, 148)" laxxx-optimize="false">  
+
+  </div>
+
+  <div id="header" class="section" laxxx-opacity="0 1, (0.8*vh) 0">
+    <img src="./img/l.svg" style="width: 19vh; margin-left: 5vh;" laxxx-translate-x="0 0, vh 200" />
+    <img src="./img/a.svg" laxxx-translate-x="0 0, vh -200" />
+    <img src="./img/x.svg" />
+    <img src="./img/x.svg" style="margin-top: -14vh" laxxx-translate-y="0 0, vh 200" />
+    <img src="./img/x.svg" style="margin-top: -14vh" laxxx-translate-y="0 0, vh 400" />
+    <img src="./img/x.svg" style="margin-top: -14vh" laxxx-translate-y="0 0, vh 600" />
+    <img src="./img/x.svg" style="margin-top: -14vh" laxxx-translate-y="0 0, vh 800" />
+    <img src="./img/x.svg" style="margin-top: -14vh" laxxx-translate-y="0 0, vh 1000" />
+    <h2 laxxx-scale="0 1, vh 0.2" laxxx-translate-y="0 0, vh 1200" laxxx-opacity="0 1, (vh*0.5) 0">awesum scroll effects</h2>
+
+    <h4 laxxx-opacity="0 1, (vh*0.05) 0">scroll down</h4>
+    <i class="fas fa-chevron-down" 
+      laxxx-opacity="0 1, (vh*0.1) 0" 
+      laxxx-translate-y="0 0, 200 100">
+    </i>
+  </div>
+
+
+  <div id="section1" class="section">
+    <div class="left">
+      <div class="bubble a"
+        style="background: #EDD943"
+        laxxx-preset="lazy-250"
+      ></div>
+
+      <div class="bubble c"
+        style="background: #ED2471; margin-left: 80pt"
+        laxxx-preset="lazy-100"
+      ></div>
+
+      <div class="bubble b"
+        style="background: #35D5E5; margin-left: 160pt"
+        laxxx-preset="lazy-300"
+      ></div>
+
+      <h3 laxxx-preset="driftRight" class="chunkyText" style="color: #35D5E5;">oooh!</h3>
+    </div>
+
+    <div class="right">
+        <div class="bubble a"
+          style="background: #35D5E5; margin-left: 120pt"
+          laxxx-preset="lazy-200"
+        ></div>
+
+        <div class="bubble c"
+          style="background: #EDD943; margin-left: -20pt"
+          laxxx-preset="lazy-150"
+        ></div>
+
+        <div class="bubble b"
+          style="background: #ED2471; margin-left: 20pt; margin-top: 200pt"
+          laxxx-preset="lazy-350"
+        ></div>
+      <h3 laxxx-preset="driftLeft" class="chunkyText" style="color: #ED2471; margin-top: 200pt;">aaah!</h3>
+    </div>
+
+    <h3 laxxx-preset="crazy zoomInOut" class="crazyText">sooo crazy</h3>
+  </div>
+
+  <div id="section2" class="section">
+    <div class="blockContainer" laxxx-preset="leftToRight-1.1 fadeInOut">
+      <div class="block"
+        style="background: #35D5E5;"
+        laxxx-preset="spin"
+      ></div>
+    </div>
+
+    <div class="blockContainer" laxxx-preset="leftToRight-1.2 fadeInOut">
+      <div class="block"
+        style="background: #EDD943; margin-top: -50pt; margin-left: -50pt; width: 40pt; height: 40pt;"
+        laxxx-preset="spinRev-500"
+      ></div>
+    </div>
+
+    <div class="blockContainer" laxxx-preset="leftToRight-1.4 fadeInOut">
+      <div class="block"
+        style="background: #ED2471; margin-top: -90pt; margin-left: -0pt;"
+        laxxx-preset="spin-500"
+      ></div>
+    </div>
+
+    <div class="blockContainer" laxxx-preset="leftToRight-1.5 fadeInOut">
+      <div class="block"
+        style="background: #EDD943; margin-top: 70pt; margin-left: -150pt; width: 40pt; height: 40pt;"
+        laxxx-preset="spinRev-500"
+      ></div>
+    </div>
+
+    <div class="blockContainer" laxxx-preset="leftToRight-1.3 fadeInOut">
+      <div class="block"
+        style="background: #EDD943; margin-top: 100pt; margin-left: -60pt; width: 25pt; height: 25pt;"
+        laxxx-preset="spin-500"
+      ></div>
+    </div>
+
+    <div class="blockContainer" laxxx-preset="leftToRight-1.05 fadeInOut">
+      <div class="block"
+        style="background: #ED2471; margin-top: -30pt; margin-left: -70pt;"
+        laxxx-preset="spin"
+      ></div>
+    </div>
+
+    <h3 laxxx-preset="leftToRight-0.8 fadeInOut" class="chunkyText" style="
+      color: #white; position: absolute; margin-top: -20pt; margin-left: -100pt">
+      wheee!
+    </h3>
+
+    <div class="blockContainer" laxxx-preset="leftToRight-1.15 fadeInOut">
+      <div class="block"
+        style="background: #35D5E5; margin-top: -70pt; margin-left: -20pt; width: 40pt; height: 40pt;"
+        laxxx-preset="spinRev-500"
+      ></div>
+    </div>
+
+    <div class="blockContainer" laxxx-preset="leftToRight-1.45 fadeInOut">
+      <div class="block"
+        style="background: #ED2471; margin-top: -50pt; margin-left: -50pt; width: 25pt; height: 25pt;"
+        laxxx-preset="spin-500"
+      ></div>
+    </div>
+
+    <div class="blockContainer" laxxx-preset="leftToRight-1.5 fadeInOut">
+      <div class="block"
+        style="background: #35D5E5; margin-top: 30pt; margin-left: -20pt;"
+        laxxx-preset="spinRev-500"
+      ></div>
+    </div>
+
+    <div class="blockContainer" laxxx-preset="leftToRight-1.25 fadeInOut">
+      <div class="block"
+        style="background: #ED2471; margin-top: 80pt; margin-left: -10pt;"
+        laxxx-preset="spin-500"
+      ></div>
+    </div>
+  </div>
+
+  <div id="section3" class="section">
+    <p laxxx-preset="linger">
+      Harness the power of scrolling and make your websites come alive!
+    </p>
+    <a class="button" laxxx-preset="linger" href="https://github.com/alexfoxy/laxxx">
+      Get laxxx.js
+    </a>
+  </div>
+
+
+
+</body>
