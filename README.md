@@ -1,6 +1,6 @@
 # laxxx.js
 
-Simple & light weight (12kb) vanilla javascript plugin to create beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
+Simple & light weight (2kb minified & zipped) vanilla javascript plugin to create beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
 
 ## Demos
 
@@ -10,7 +10,7 @@ Simple & light weight (12kb) vanilla javascript plugin to create beautiful anima
 1) Add laxxx.js to your html
 
 ```html
-<script src="lib/laxxx.js" >
+<script src="lib/laxxx.min.js" >
 ```
 
 

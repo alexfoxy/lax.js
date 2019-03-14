@@ -13,6 +13,7 @@
 // without getting a written permission first.
 //
 
+(function() {
 var laxxx = {}
 window.laxxx = laxxx
 
@@ -249,3 +250,4 @@ laxxx.update = function(y) {
   })
 }
 
+})()

@@ -2,7 +2,9 @@
 	"name": "laxxx",
 	"version": "0.0.1",
 	"scripts": {
-		"build": "babel src -d lib"
+		"build": "babel src -d lib",
+		"minify": "uglifyjs lib/laxxx.js -o lib/laxxx.min.js -c -m",
+		"zip": "gzip < lib/laxxx.min.js > lib/laxxx.min.js.gz"
 	},
 	"dependencies": {
 		"@babel/cli": "^7.2.3",
