@@ -1,6 +1,6 @@
 # laxxx
 
-Simple & light weight (7kb) vanilla javascript plugin to create beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
+Simple & light weight (12kb) vanilla javascript plugin to create beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
 
 ## Demos
 
@@ -38,13 +38,9 @@ window.onload = function() {
 
 ## Presets
 
-The easiest way to get started is to use the presets via the `laxxx-preset` attribute. The available presets are:
-```
-linger, lazy, eager, slalom, crazy, spin, spinIn, spinOut, 
-blurInOut, blurIn, blurOut, fadeInOut, fadeIn, fadeOut, driftLeft, 
-driftRight, slideLeft, slideRight, zoomInOut, zoomIn, zoomOut
-```
-You can chain multiple together e.g. `laxxx-preset="blurOut fadeOut spin"`
+The easiest way to get started is to use the presets via the `laxxx-preset` attribute. You can chain multiple presetes together for e.g. `laxxx-preset="blurOut fadeOut spin"`. Some presets also support an optional strength e.g. `laxxx-preset="blurOut-50"`
+
+See the list of [Supported Presets](#supported-presets) for details.
 
 ## Custom Animations
 
@@ -88,6 +84,34 @@ You can also do calculations using `( )` e.g.
 	I'm gone when the page has scrolled half the view port height!
 </p>
 ```
+## Supported Presets
+
+| Preset     	| Default Strength | 
+| ------------- | -------------	| 
+| linger      	| n/a 		|
+| lazy     	| 100 		|
+| eager     	| 100 		|
+| lazy     	| 100 		|
+| slalom     	| 50 		|
+| crazy     	| n/a 		|
+| spin     	| 360 		|
+| spinRev     	| 360 		|
+| spinIn     	| 360 		|
+| spinOut     	| 360 		|
+| blurInOut     | 40 		|
+| blurIn     	| 40 		|
+| blurOut     	| 40 		|
+| fadeInOut     | n/a 		|
+| fadeIn     	| n/a 		|
+| fadeOut     	| n/a 		|
+| driftLeft     | 100 		|
+| driftRight    | 100 		|
+| leftToRight   | 1 		|
+| rightToLeft   | 1 		|
+| zoomInOut    	| 0.2 		|
+| zoomIn     	| 0.2 		|
+| zoomOut     	| 0.2 		|
+
 
 ## Supported Attribute Keys
 
@@ -122,9 +146,11 @@ Filters (note - these may be unperformant on low powered machines)
 ## Custom Presets
 To avoid duplicate code you can define your own presets with a list of attributes e.g.
 ```javascript
-laxxx.addPreset("myCoolPreset", {
-	"laxxx-opacity": "(-vh*0.8) 40, (-vh*0.6) 0",
-	"laxxx-rotate": "(-vh*2) 1000, (-vh*0.5) 0"
+laxxx.addPreset("myCoolPreset", function() {
+	return { 
+		"laxxx-opacity": "(-vh*0.8) 40, (-vh*0.6) 0",
+		"laxxx-rotate": "(-vh*2) 1000, (-vh*0.5) 0" 
+	}
 })
 ```
 You can then access this preset like this:
