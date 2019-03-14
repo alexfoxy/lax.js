@@ -137,7 +137,7 @@ You can then access this preset like this:
 ### Notes
 
 # Performance
-By default `-webkit-backface-visibility: hidden;` is added to your elements style to encourage the browser to render that object as a layer on the GPU and increase performance. To turn this off add `laxx-optimize="false"`to your element.
+By default `-webkit-backface-visibility: hidden;` is added to your elements style to encourage the browser to render that object as a layer on the GPU and increase performance. To turn this off add `laxx-optimize="false"` to your element.
 
 # Scroll Wheels
 Scroll wheels only icrement the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
