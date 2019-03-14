@@ -216,8 +216,6 @@ laxxx.update = function(y) {
   var momentum = lastScroll-y
   lastScroll = y
 
-  // console.log(momentum)
-
   parallaxObjects.forEach(function(o) {
     var transformString = ""
     var r = o["laxxx-anchor-top"] ? o["laxxx-anchor-top"]-y : y
