@@ -2,7 +2,7 @@
 	"name": "laxxx",
 	"version": "0.0.1",
 	"scripts": {
-		"build": "babel src -d lib",
+		"build": "babel src -d lib; uglifyjs lib/laxxx.js -o lib/laxxx.min.js -c -m; gzip < lib/laxxx.min.js > lib/laxxx.min.js.gz",
 		"minify": "uglifyjs lib/laxxx.js -o lib/laxxx.min.js -c -m",
 		"zip": "gzip < lib/laxxx.min.js > lib/laxxx.min.js.gz"
 	},
