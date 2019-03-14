@@ -148,4 +148,5 @@ Scroll wheels only icrement the scroll position in steps which can cause the ani
 * Elastic bouncing values
 * Optimise elements that go off screen
 * Better error reporting
+* Tag to optimise elements that are off screen
 
