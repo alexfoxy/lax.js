@@ -6,18 +6,18 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,600,800" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
-  <script src="./lib/laxxx.min.js"></script>
-  <!-- <script src="../src/laxxx.js"></script> -->
+  <script src="./lib/lax.min.js"></script>
+  <!-- <script src="../src/lax.js"></script> -->
 
   <script type="text/javascript">
     window.onload = function() {
-      laxxx.setup()
+      lax.setup()
         
       document.addEventListener('scroll', function(x) {
-        laxxx.update(window.scrollY)
+        lax.update(window.scrollY)
       }, false)
 
-      laxxx.update(window.scrollY)
+      lax.update(window.scrollY)
     }
   </script>
 
@@ -182,7 +182,7 @@
     }
 
     a:visited {
-      color: white;
+      color: white !important;
     }
 
   </style>
@@ -190,21 +190,21 @@
 
 
 <body>
-  <div id="header" class="section" laxxx-opacity="0 1, (0.8*vh) 0">
-    <img src="./img/l.svg" style="width: 19vh; margin-left: 5vh;" laxxx-translate-x="0 0, vh 200" />
-    <img src="./img/a.svg" laxxx-translate-x="0 0, vh -200" />
+  <div id="header" class="section" data-lax-opacity="0 1, (0.8*vh) 0">
+    <img src="./img/l.svg" style="width: 19vh; margin-left: 5vh;" data-lax-translate-x="0 0, vh 200" />
+    <img src="./img/a.svg" data-lax-translate-x="0 0, vh -200" />
     <img src="./img/x.svg" />
-    <img src="./img/x.svg" style="margin-top: -14vh" laxxx-translate-y="0 0, vh 200" />
-    <img src="./img/x.svg" style="margin-top: -14vh" laxxx-translate-y="0 0, vh 400" />
-    <img src="./img/x.svg" style="margin-top: -14vh" laxxx-translate-y="0 0, vh 600" />
-    <img src="./img/x.svg" style="margin-top: -14vh" laxxx-translate-y="0 0, vh 800" />
-    <img src="./img/x.svg" style="margin-top: -14vh" laxxx-translate-y="0 0, vh 1000" />
-    <h2 laxxx-scale="0 1, vh 0.2" laxxx-translate-y="0 0, vh 1200" laxxx-opacity="0 1, (vh*0.5) 0">awesum scroll effects</h2>
+    <img src="./img/x.svg" style="margin-top: -14vh" data-lax-translate-y="0 0, vh 200" />
+    <img src="./img/x.svg" style="margin-top: -14vh" data-lax-translate-y="0 0, vh 400" />
+    <img src="./img/x.svg" style="margin-top: -14vh" data-lax-translate-y="0 0, vh 600" />
+    <img src="./img/x.svg" style="margin-top: -14vh" data-lax-translate-y="0 0, vh 800" />
+    <img src="./img/x.svg" style="margin-top: -14vh" data-lax-translate-y="0 0, vh 1000" />
+    <h2 data-lax-scale="0 1, vh 0.2" data-lax-translate-y="0 0, vh 1200" data-lax-opacity="0 1, (vh*0.5) 0">awesum scroll effects</h2>
 
-    <h4 laxxx-opacity="0 1, (vh*0.05) 0">scroll down</h4>
+    <h4 data-lax-opacity="0 1, (vh*0.05) 0">scroll down</h4>
     <i class="fas fa-chevron-down" 
-      laxxx-opacity="0 1, (vh*0.1) 0" 
-      laxxx-translate-y="0 0, 200 100">
+      data-lax-opacity="0 1, (vh*0.1) 0" 
+      data-lax-translate-y="0 0, 200 100">
     </i>
   </div>
 
@@ -213,126 +213,126 @@
     <div class="left">
       <div class="bubble a"
         style="background: #EDD943"
-        laxxx-preset="lazy-250"
+        data-lax-preset="lazy-250"
       ></div>
 
       <div class="bubble c"
         style="background: #ED2471; margin-left: 80pt"
-        laxxx-preset="lazy-100"
+        data-lax-preset="lazy-100"
       ></div>
 
       <div class="bubble b"
         style="background: #35D5E5; margin-left: 160pt"
-        laxxx-preset="lazy-300"
+        data-lax-preset="lazy-300"
       ></div>
 
-      <h3 laxxx-preset="driftRight" class="chunkyText" style="color: #35D5E5;">oooh!</h3>
+      <h3 data-lax-preset="driftRight" class="chunkyText" style="color: #35D5E5;">oooh!</h3>
     </div>
 
     <div class="right">
         <div class="bubble a"
           style="background: #35D5E5; margin-left: 120pt"
-          laxxx-preset="lazy-200"
+          data-lax-preset="lazy-200"
         ></div>
 
         <div class="bubble c"
           style="background: #EDD943; margin-left: -20pt"
-          laxxx-preset="lazy-150"
+          data-lax-preset="lazy-150"
         ></div>
 
         <div class="bubble b"
           style="background: #ED2471; margin-left: 20pt; margin-top: 200pt"
-          laxxx-preset="lazy-350"
+          data-lax-preset="lazy-350"
         ></div>
-      <h3 laxxx-preset="driftLeft" class="chunkyText" style="color: #ED2471; margin-top: 200pt;">aaah!</h3>
+      <h3 data-lax-preset="driftLeft" class="chunkyText" style="color: #ED2471; margin-top: 200pt;">aaah!</h3>
     </div>
 
-    <h3 laxxx-preset="crazy zoomInOut" class="crazyText">sooo crazy</h3>
+    <h3 data-lax-preset="crazy zoomInOut" class="crazyText">sooo crazy</h3>
   </div>
 
   <div id="section2" class="section">
-    <div class="blockContainer" laxxx-preset="leftToRight-1.1 fadeInOut">
+    <div class="blockContainer" data-lax-preset="leftToRight-1.1 fadeInOut">
       <div class="block"
         style="background: #35D5E5;"
-        laxxx-preset="spin"
+        data-lax-preset="spin"
       ></div>
     </div>
 
-    <div class="blockContainer" laxxx-preset="leftToRight-1.2 fadeInOut">
+    <div class="blockContainer" data-lax-preset="leftToRight-1.2 fadeInOut">
       <div class="block"
         style="background: #EDD943; margin-top: -50pt; margin-left: -50pt; width: 40pt; height: 40pt;"
-        laxxx-preset="spinRev-500"
+        data-lax-preset="spinRev-500"
       ></div>
     </div>
 
-    <div class="blockContainer" laxxx-preset="leftToRight-1.4 fadeInOut">
+    <div class="blockContainer" data-lax-preset="leftToRight-1.4 fadeInOut">
       <div class="block"
         style="background: #ED2471; margin-top: -90pt; margin-left: -0pt;"
-        laxxx-preset="spin-500"
+        data-lax-preset="spin-500"
       ></div>
     </div>
 
-    <div class="blockContainer" laxxx-preset="leftToRight-1.5 fadeInOut">
+    <div class="blockContainer" data-lax-preset="leftToRight-1.5 fadeInOut">
       <div class="block"
         style="background: #EDD943; margin-top: 70pt; margin-left: -150pt; width: 40pt; height: 40pt;"
-        laxxx-preset="spinRev-500"
+        data-lax-preset="spinRev-500"
       ></div>
     </div>
 
-    <div class="blockContainer" laxxx-preset="leftToRight-1.3 fadeInOut">
+    <div class="blockContainer" data-lax-preset="leftToRight-1.3 fadeInOut">
       <div class="block"
         style="background: #EDD943; margin-top: 100pt; margin-left: -60pt; width: 25pt; height: 25pt;"
-        laxxx-preset="spin-500"
+        data-lax-preset="spin-500"
       ></div>
     </div>
 
-    <div class="blockContainer" laxxx-preset="leftToRight-1.05 fadeInOut">
+    <div class="blockContainer" data-lax-preset="leftToRight-1.05 fadeInOut">
       <div class="block"
         style="background: #ED2471; margin-top: -30pt; margin-left: -70pt;"
-        laxxx-preset="spin"
+        data-lax-preset="spin"
       ></div>
     </div>
 
-    <h3 laxxx-preset="leftToRight-0.8 fadeInOut" class="chunkyText" style="
+    <h3 data-lax-preset="leftToRight-0.8 fadeInOut" class="chunkyText" style="
       color: #white; position: absolute; margin-top: -20pt; margin-left: -100pt">
       wheee!
     </h3>
 
-    <div class="blockContainer" laxxx-preset="leftToRight-1.15 fadeInOut">
+    <div class="blockContainer" data-lax-preset="leftToRight-1.15 fadeInOut">
       <div class="block"
         style="background: #35D5E5; margin-top: -70pt; margin-left: -20pt; width: 40pt; height: 40pt;"
-        laxxx-preset="spinRev-500"
+        data-lax-preset="spinRev-500"
       ></div>
     </div>
 
-    <div class="blockContainer" laxxx-preset="leftToRight-1.45 fadeInOut">
+    <div class="blockContainer" data-lax-preset="leftToRight-1.45 fadeInOut">
       <div class="block"
         style="background: #ED2471; margin-top: -50pt; margin-left: -50pt; width: 25pt; height: 25pt;"
-        laxxx-preset="spin-500"
+        data-lax-preset="spin-500"
       ></div>
     </div>
 
-    <div class="blockContainer" laxxx-preset="leftToRight-1.5 fadeInOut">
+    <div class="blockContainer" data-lax-preset="leftToRight-1.5 fadeInOut">
       <div class="block"
         style="background: #35D5E5; margin-top: 30pt; margin-left: -20pt;"
-        laxxx-preset="spinRev-500"
+        data-lax-preset="spinRev-500"
       ></div>
     </div>
 
-    <div class="blockContainer" laxxx-preset="leftToRight-1.25 fadeInOut">
+    <div class="blockContainer" data-lax-preset="leftToRight-1.25 fadeInOut">
       <div class="block"
         style="background: #ED2471; margin-top: 80pt; margin-left: -10pt;"
-        laxxx-preset="spin-500"
+        data-lax-preset="spin-500"
       ></div>
     </div>
   </div>
 
   <div id="section3" class="section">
-    <p laxxx-preset="linger">
+    <p data-lax-preset="linger">
       Harness the power of scrolling and make your websites come alive!
     </p>
-    <a class="button" laxxx-preset="linger" href="https://github.com/alexfoxy/laxxx">
-      Get laxxx.js
+    <a class="button" data-lax-preset="linger" href="https://github.com/alexfoxy/lax">
+      Get lax.js
     </a>
   </div>
 
