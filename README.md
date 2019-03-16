@@ -4,6 +4,7 @@ Simple & light weight (2kb minified & zipped) vanilla javascript plugin to creat
 
 [>>> DEMO <<<](https://alexfox.dev/laxxx/)
 
+![](https://i.imgur.com/DHhlrM3.gif) 
 
 ## Getting started
 
