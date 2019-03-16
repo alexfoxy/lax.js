@@ -8,14 +8,23 @@ Simple & light weight (2kb minified & zipped) vanilla javascript plugin to creat
 
 ## Getting started
 
+### NPM setup
+
+```bash
+npm install lax.js
+```
+```js
+import lax from 'lax.js'
+```
+
+### Basic browser setup
 1) Add lax.js to your html
 
 ```html
 <script src="lib/lax.min.js" >
 ```
 
-
-2) Initialize the plugin 
+2) Initialize the plugin
 
 ```javascript
 window.onload = function() {
