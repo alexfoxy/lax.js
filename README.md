@@ -175,4 +175,5 @@ Scroll wheels only icrement the scroll position in steps which can cause the ani
 * Impliment a tween for scroll wheels to remove dependancy on smoothscroll
 * Better error reporting
 * Add "momentum" as option for anchor & presets
+* Move presets to lax-presets.js to reduce base library size
 

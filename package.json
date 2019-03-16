@@ -1,6 +1,6 @@
 {
 	"name": "lax.js",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"scripts": {
 		"build": "babel src -d lib; uglifyjs lib/lax.js -o lib/lax.min.js -c -m; gzip < lib/lax.min.js > lib/lax.min.js.gz"
 	},
@@ -8,5 +8,22 @@
 		"@babel/cli": "^7.2.3",
 		"@babel/core": "^7.3.4",
 		"@babel/preset-env": "^7.3.4"
-	}
+	},
+	"description": "Simple & light weight (2kb minified & zipped) vanilla javascript plugin to create smooth & beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!",
+	"license": "MIT",
+	"author": "alexfoxy@gmail.com",
+	"repository": {
+	  "type" : "git",
+	  "url" : "https://github.com/alexfoxy/laxxx"
+	},
+	"main": "index.js",
+	"keywords": [
+		"javascript",
+		"parallax",
+		"scroll",
+		"animation",
+		"effects",
+		"css",
+		"html"
+	]
 }
