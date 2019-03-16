@@ -16,7 +16,7 @@
 	  "type" : "git",
 	  "url" : "https://github.com/alexfoxy/laxxx"
 	},
-	"main": "index.js",
+	"main": "lib/lax.min.js",
 	"keywords": [
 		"javascript",
 		"parallax",
