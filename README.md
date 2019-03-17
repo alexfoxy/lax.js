@@ -179,6 +179,7 @@ By default `-webkit-backface-visibility: hidden;` is added to your elements styl
 Scroll wheels only icrement the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
 
 ## To Do / Ideas
+* Re-calculate values on rotate / change window size
 * Add debug mode
 * Elastic bouncing values
 * Optimise elements that go off screen
