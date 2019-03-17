@@ -89,9 +89,10 @@ You can use these instead of integer values for the scrollPos  e.g.
 
 You can also do calculations using `( )` e.g.
 ```html
-<p data-lax-opacity="0 1, (vh*0.5) 0">
+<p data-lax-opacity="0 1, (document.body.scrollHeight*0.5) 0">
 	I fade out as the page scrolls down and
-	I'm gone when the page has scrolled half the view port height!
+	I'm gone when the page has scrolled 50%
+	down the entire page height!
 </p>
 ```
 ## Supported Presets
