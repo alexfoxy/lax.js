@@ -6,7 +6,7 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,600,800" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
-  <script src="./lib/lax.min.js"></script>
+  <script src="./lib/lax.min.js?v=1.0.4"></script>
   <!-- <script src="../src/lax.js"></script> -->
 
   <script type="text/javascript">
@@ -18,6 +18,13 @@
       document.addEventListener('scroll', function(x) {
         lax.update(window.scrollY)
       }, false)
+
+      let w = window.innerWidth
+      window.addEventListener("resize", function() {
+        if(w !== window.innerWidth) {
+          lax.populateElements()
+        }
+      });
 
       lax.update(window.scrollY)
     }

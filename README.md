@@ -46,6 +46,11 @@ window.onload = function() {
 
 4) Scroll and enjoy!
 
+### Dealing with DOM changes
+lax builds a list of all elements it needs to control when the page loads so if they are added to the DOM subsequently they won't be updated on page scroll. If you're using a library like React or vue.js, it is likely that not all elements are in the dom on page load. Because of this you will need to call `lax.populateElements()` when you add elements to the DOM that you want to animate. 
+
+For example `componentDidMount() // React` or `created() // vue.js`. 
+
 ## Presets
 
 The easiest way to get started is to use the presets via the `data-lax-preset` attribute. You can chain multiple presetes together for e.g. `data-lax-preset="blurOut fadeOut spin"`. Some presets also support an optional strength e.g. `data-lax-preset="blurOut-50"`
@@ -174,6 +179,15 @@ You can then access this preset like this:
 
 ### Performance
 By default `-webkit-backface-visibility: hidden;` is added to your elements style to encourage the browser to render that object as a layer on the GPU and increase performance. To turn this off add `lax-optimize="false"` to your element.
+
+### Screen rotating & resizing 
+As some values (vh, vw, elh, elw) are calculated on load, when the screen size changes or rotates you might want to recalculate these. E.g.
+```
+window.addEventListener("resize", function() {
+	lax.populateElements()
+});
+```
+Be warned, on mobile, a resize event is fired when you scroll and the toolbar is hidden so you might want to check if the width or orientation has changed.
 
 ### Scroll Wheels
 Scroll wheels only icrement the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.

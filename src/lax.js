@@ -140,10 +140,13 @@
     }
 
     lax.setup = function(o) {
-      lax.populateObjects()
+      lax.populateElements()
     }
 
-    lax.populateObjects = function() {
+    lax.populateElements = function() {
+      lax.elements = []
+
+
       var selector = Object.keys(transforms).map(t => `[${t}]`).join(",")
       selector += ",[data-lax-preset]"
 
