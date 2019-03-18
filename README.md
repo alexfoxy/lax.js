@@ -81,8 +81,8 @@ There are also some shortcuts for useful values:
 | ------------- | ------------- |
 | vw       	| window.innerWidth  |
 | vh     	| window.innerHeight |
-| elw     	| targetElement.clientHeight |
-| elh     	| targetElement.clientWidth |
+| elw     	| targetElement.clientWidth |
+| elh     	| targetElement.clientHeight |
 
 You can use these instead of integer values for the scrollPos  e.g.
 ```html
