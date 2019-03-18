@@ -28,7 +28,7 @@ import lax from 'lax.js'
 
 ```javascript
 window.onload = function() {
-	lax.setup({ /* opts */ }) // init
+	lax.setup() // init
 	  
 	document.addEventListener('scroll', function(e) {
 	  lax.update(window.scrollY) // update every scroll
