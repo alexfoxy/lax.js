@@ -33,8 +33,6 @@ window.onload = function() {
 	document.addEventListener('scroll', function(e) {
 	  lax.update(window.scrollY) // update every scroll
 	}, false)
-
-	lax.update(window.scrollY) // set initial positions
 }
 ```
 
@@ -46,10 +44,15 @@ window.onload = function() {
 
 4) Scroll and enjoy!
 
-### Dealing with DOM changes
-lax builds a list of all elements it needs to control when the page loads so if they are added to the DOM subsequently they won't be updated on page scroll. If you're using a library like React or vue.js, it is likely that not all elements are in the dom on page load. Because of this you will need to call `lax.populateElements()` when you add elements to the DOM that you want to animate. 
+### Usage with React, Vue.js & DOM changes
+To increase performance lax.js indexes the list of elements to animate when the page loads. If you're using a library like React or vue.js, it is likely that you are adding elements after the initial `window.onload`. Because of this you will need to call `lax.addElement(domElement)` when you add components to the DOM that you want to animate. 
 
-For example `componentDidMount() // React` or `created() // vue.js`. 
+See below for working examples:
+* [react](https://codepen.io/alexfoxy/pen/PLaKaE)
+* [vue](https://codepen.io/alexfoxy/pen/ZPRZBq)
+
+You can also call `lax.removeElement(domElement)` when the component unmounts.
+
 
 ## Presets
 
@@ -81,8 +84,8 @@ There are also some shortcuts for useful values:
 | ------------- | ------------- |
 | vw       	| window.innerWidth  |
 | vh     	| window.innerHeight |
-| elw     	| targetElement.clientHeight |
-| elh     	| targetElement.clientWidth |
+| elw     	| targetElement.clientWidth |
+| elh     	| targetElement.clientHeight |
 
 You can use these instead of integer values for the scrollPos  e.g.
 ```html
@@ -194,12 +197,10 @@ Be warned, on mobile, a resize event is fired when you scroll and the toolbar is
 Scroll wheels only icrement the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
 
 ## To Do / Ideas
-* Re-calculate values on rotate / change window size
-* Add debug mode
-* Elastic bouncing values
-* Optimise elements that go off screen
-* Implement a tween for scroll wheels to remove dependency on smoothscroll
-* Better error reporting
-* Add "momentum" as option for anchor & presets
+* ~~Re-calculate values on rotate / change window size~~
+* Elastic bouncing values at edges of screen (if possible)
+* Optimise: Do not update elements with bounds that are off screen
+* Implement a tween for scroll wheels to remove reliance on smoothscroll
+* Add "momentum" option 
 * Move presets to lax-presets.js to reduce base library size
 

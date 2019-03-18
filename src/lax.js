@@ -19,6 +19,8 @@
       elements: []
     }
 
+    let lastY = 0;
+
     const transforms = {
       "data-lax-opacity": function(style, v) { style.opacity = v },
       "data-lax-translate": function(style, v) { style.transform += ` translate(${v}px, ${v}px)` },
@@ -143,112 +145,119 @@
       lax.populateElements()
     }
 
+    lax.removeElement = function(el) {
+      const i = this.elements.findIndex(o => o.el = el)
+      if(i > -1) {
+        this.elements.splice(i, 1)
+      }
+    }
+
+    lax.addElement = function(el) {
+      var o = {
+        el: el,
+        transforms: []
+      }
+
+      var presetNames = el.attributes["data-lax-preset"] && el.attributes["data-lax-preset"].value
+      if(presetNames) {
+        presetNames.split(" ").forEach((p) => {
+          const bits = p.split("-")
+          const fn = lax.presets[bits[0]]
+          if(!fn) {
+            console.error(`preset #{bits[0]} is not defined`)
+          } else {
+            const d = fn(bits[1])
+            for(var k in d) {
+              el.setAttribute(k, d[k])
+            }
+          }
+        })
+
+        el.setAttribute("data-lax-anchor", "self")
+        el.attributes.removeNamedItem("data-lax-preset")
+      }
+
+      const optimise = !(el.attributes["data-lax-optimize"] && el.attributes["data-lax-optimize"].value === 'false')
+      if(optimise) el.style["-webkit-backface-visibility"] = "hidden"
+      if(el.attributes["data-lax-optimize"]) el.attributes.removeNamedItem("data-lax-optimize")
+
+      for(var i=0; i<el.attributes.length; i++) {
+        var a = el.attributes[i]
+        var bits = a.name.split("-")
+        if(bits[1] === "lax") {
+          if(a.name === "data-lax-anchor") {
+            o["data-lax-anchor"] = a.value === "self" ? el : document.querySelector(a.value)
+            const rect = o["data-lax-anchor"].getBoundingClientRect()
+            o["data-lax-anchor-top"] = Math.floor(rect.top) + window.scrollY
+          } else {
+            o.transforms[a.name] = a.value
+              .replace(new RegExp('vw', 'g'), window.innerWidth)
+              .replace(new RegExp('vh', 'g'), window.innerHeight)
+              .replace(new RegExp('elh', 'g'), el.clientHeight)
+              .replace(new RegExp('elw', 'g'), el.clientWidth)
+              .replace(new RegExp('-vw', 'g'), -window.innerWidth)
+              .replace(new RegExp('-vh', 'g'), -window.innerHeight)
+              .replace(new RegExp('-elh', 'g'), -el.clientHeight)
+              .replace(new RegExp('-elw', 'g'), -el.clientWidth).replace(/\s+/g," ")
+              .split(",").map((x) => { 
+                return x.trim().split(" ").map(y => {
+                  if(y[0] === "(") return eval(y)
+                  else return parseFloat(y)
+                })
+              }).sort((a,b) => {
+                return a[0] - b[0]  
+              })
+          }
+        }
+      }
+
+      lax.elements.push(o)
+      lax.updateElement(o)
+    }
+
     lax.populateElements = function() {
       lax.elements = []
-
 
       var selector = Object.keys(transforms).map(t => `[${t}]`).join(",")
       selector += ",[data-lax-preset]"
 
-      document.querySelectorAll(selector).forEach(function(el) {
-        var o = {
-          el: el,
-          transforms: []
-        }
-
-        var presetNames = el.attributes["data-lax-preset"] && el.attributes["data-lax-preset"].value
-        if(presetNames) {
-          presetNames.split(" ").forEach((p) => {
-            const bits = p.split("-")
-            const fn = lax.presets[bits[0]]
-            if(!fn) {
-              console.error(`preset #{bits[0]} is not defined`)
-            } else {
-              const d = fn(bits[1])
-              for(var k in d) {
-                el.setAttribute(k, d[k])
-              }
-            }
-          })
-
-          el.setAttribute("data-lax-anchor", "self")
-          el.attributes.removeNamedItem("data-lax-preset")
-        }
-
-        const optimise = !(el.attributes["data-lax-optimize"] && el.attributes["data-lax-optimize"].value == 'false')
-        if(optimise) el.style["-webkit-backface-visibility"] = "hidden"
-        if(el.attributes["data-lax-optimize"]) el.attributes.removeNamedItem("data-lax-optimize")
-
-        for(var i=0; i<el.attributes.length; i++) {
-          var a = el.attributes[i]
-          var bits = a.name.split("-")
-          if(bits[1] === "lax") {
-            if(a.name === "data-lax-anchor") {
-              o["data-lax-anchor"] = a.value === "self" ? el : document.querySelector(a.value)
-              const rect = o["data-lax-anchor"].getBoundingClientRect()
-              o["data-lax-anchor-top"] = Math.floor(rect.top) + window.scrollY
-            } else {
-              o.transforms[a.name] = a.value
-                .replace(new RegExp('vw', 'g'), window.innerWidth)
-                .replace(new RegExp('vh', 'g'), window.innerHeight)
-                .replace(new RegExp('elh', 'g'), el.clientHeight)
-                .replace(new RegExp('elw', 'g'), el.clientWidth)
-                .replace(new RegExp('-vw', 'g'), -window.innerWidth)
-                .replace(new RegExp('-vh', 'g'), -window.innerHeight)
-                .replace(new RegExp('-elh', 'g'), -el.clientHeight)
-                .replace(new RegExp('-elw', 'g'), -el.clientWidth).replace(/\s+/g," ")
-                .split(",").map((x) => { 
-                  return x.trim().split(" ").map(y => {
-                    if(y[0] === "(") return eval(y)
-                    else return parseFloat(y)
-                  })
-                }).sort((a,b) => {
-                  return a[0] - b[0]  
-                })
-            }
-          }
-        }
-
-        lax.elements.push(o)
-      })
+      document.querySelectorAll(selector).forEach(this.addElement)
     }
 
-    var lastScroll = 0
+    lax.updateElement = function(o) {
+      const y = lastY
+      var r = o["data-lax-anchor-top"] ? o["data-lax-anchor-top"]-y : y
+
+      var style = {
+        transform: "",
+        filter: ""
+      }
+
+      for(var i in o.transforms) {
+        var arr = o.transforms[i]
+        var t = transforms[i]
+        var v = intrp(arr, r)
+
+        if(!t) {
+          console.error("lax: " + i + " is not supported")
+          return
+        }
+
+        t(style, v)
+      }
+
+      for(let k in style) {
+        if(style.opacity === 0) { // if opacity 0 don't update
+          o.el.style.opacity = 0 
+        } else {
+          o.el.style[k] = style[k]
+        }
+      }
+    }
 
     lax.update = function(y) {
-      var momentum = lastScroll-y
-      lastScroll = y
-
-      lax.elements.forEach(function(o) {
-        var transformString = ""
-        var r = o["data-lax-anchor-top"] ? o["data-lax-anchor-top"]-y : y
-
-        var style = {
-          transform: "",
-          filter: ""
-        }
-
-        for(var i in o.transforms) {
-          var arr = o.transforms[i]
-          var t = transforms[i]
-          var v = intrp(arr, r)
-
-          if(!t) {
-            console.error("lax: " + i + " is not supported")
-            return
-          }
-
-          t(style, v)
-        }
-
-        for(let k in style) {
-          if(style.opacity === 0) { // if opacity 0 don't update
-            o.el.style.opacity = 0 
-          } else {
-            o.el.style[k] = style[k]
-          }
-        }
-      })
+      lastY = y
+      lax.elements.forEach(lax.updateElement)
     }
 
     return lax;
