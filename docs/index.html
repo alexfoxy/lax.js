@@ -6,7 +6,7 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,600,800" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
-  <script src="./lib/lax.min.js?v=1.0.4"></script>
+  <script src="./lib/lax.min.js"></script>
   <!-- <script src="../src/lax.js"></script> -->
 
   <script type="text/javascript">
@@ -183,10 +183,12 @@
     }
 
     .button {
-      padding: 10pt 20pt; 
-      background: #35D5E5;
+      padding: 10pt 50pt; 
+      background: url(img/button-bg.jpg);
+      background-size: 100pt;
       border-radius: 10pt;
       font-weight: 600;
+      color: black !important;
     }
 
     a {
@@ -194,12 +196,12 @@
     }
 
     a:visited {
-      color: white !important;
+      color: black !important;
     }
 
     .button:hover {
       background: white;
-      color: #35D5E5 !important;
+      color: black !important;
       cursor: pointer;
     }
 
@@ -210,8 +212,8 @@
 <body>
   <div id="main">
     <div id="header" class="section">
-      <img src="./img/l.png" style="width: 103pt; margin-left: 26pt; margin-bottom: -4pt;" data-lax-translate-x="0 0, vh 200" />
-      <img src="./img/a.png" data-lax-translate-x="0 0, vh -200" />
+      <img src="./img/l.png" style="width: 103pt; margin-left: 26pt; margin-bottom: -4pt;" data-lax-translate-x="0 0, vh 200" data-lax-optimize=true />
+      <img src="./img/a.png" data-lax-translate-x="0 0, vh -200" data-lax-optimize=true />
       <img src="./img/x.png" data-lax-opacity="0 1, (0.8*vh) 0" />
       <img src="./img/x.png" style="margin-top: -79pt" data-lax-translate-y="0 0, vh 200" data-lax-opacity="0 1, (0.8*vh) 0" />
       <img src="./img/x.png" style="margin-top: -79pt" data-lax-translate-y="0 0, vh 400" data-lax-opacity="0 1, (0.8*vh) 0" />
@@ -245,7 +247,7 @@
           data-lax-preset="lazy-300"
         ></div>
 
-        <h3 data-lax-preset="driftRight" class="chunkyText" style="color: #35D5E5;">oooh!</h3>
+        <h3 data-lax-preset="driftRight" data-lax-optimize=true class="chunkyText" style="color: #35D5E5;">oooh!</h3>
       </div>
 
       <div class="right">
@@ -263,10 +265,10 @@
             style="background: #ED2471; margin-left: 20pt; margin-top: 200pt"
             data-lax-preset="lazy-350"
           ></div>
-        <h3 data-lax-preset="driftLeft" class="chunkyText" style="color: #ED2471; margin-top: 200pt;">aaah!</h3>
+        <h3 data-lax-optimize=true data-lax-preset="driftLeft" class="chunkyText" style="color: #ED2471; margin-top: 200pt;">aaah!</h3>
       </div>
 
-      <h3 data-lax-preset="crazy zoomInOut" class="crazyText">sooo crazy</h3>
+      <h3 data-lax-preset="crazy zoomInOut" class="crazyText" data-lax-optimize=true>sooo crazy</h3>
     </div>
 
     <div id="section2" class="section">
@@ -312,7 +314,7 @@
         ></div>
       </div>
 
-      <h3 data-lax-preset="leftToRight-0.8 fadeInOut" class="chunkyText" style="
+      <h3 data-lax-preset="leftToRight-0.8 speedy" data-lax-optimize=true class="chunkyText" style="
         color: #white; position: absolute; margin-top: -20pt; margin-left: -100pt">
         wheee!
       </h3>
@@ -347,10 +349,10 @@
     </div>
 
     <div id="section3" class="section">
-      <p data-lax-preset="linger">
+      <p data-lax-preset="linger" data-lax-optimize=true>
         Harness the power of scrolling and make your websites come alive!
       </p>
-      <a class="button" data-lax-preset="linger" href="https://github.com/alexfoxy/laxxx">
+      <a class="button" data-lax-preset="linger" data-lax-optimize=true data-lax-bg-pos-x="0 0, 3000 1000" href="https://github.com/alexfoxy/laxxx">
         Get lax.js
       </a>
     </div>
