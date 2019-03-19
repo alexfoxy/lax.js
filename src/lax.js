@@ -33,7 +33,6 @@
       "data-lax-skew-x": function(style, v) { style.transform += ` skewX(${v}deg)` },
       "data-lax-skew-y": function(style, v) { style.transform += ` skewY(${v}deg)` },
       "data-lax-rotate": function(style, v) { style.transform += ` rotate(${v}deg)` },
-
       "data-lax-brightness": function(style, v) { style.filter += ` brightness(${v}%)` },
       "data-lax-contrast": function(style, v) { style.filter += ` contrast(${v}%)` },
       "data-lax-hue-rotate": function(style, v) { style.filter += ` hue-rotate(${v}deg)` },
@@ -41,6 +40,9 @@
       "data-lax-invert": function(style, v) { style.filter += `  invert(${v}%)` },
       "data-lax-saturate": function(style, v) { style.filter += `  saturate(${v}%)` },
       "data-lax-grayscale": function(style, v) { style.filter += `  grayscale(${v}%)` },
+      "data-lax-bg-pos": function(style, v) { style.backgroundPosition = `${v}px ${v}px` },
+      "data-lax-bg-pos-x": function(style, v) { style.backgroundPositionX = `${v}px` },
+      "data-lax-bg-pos-y": function(style, v) { style.backgroundPositionY = `${v}px` }
     }
 
     let crazy = ""
@@ -116,24 +118,30 @@
       zoomOut: (v=0.2) => {
         return { "data-lax-scale": `(vh*0.3) 1, -elh ${v}` }
       },
+      speedy: (v=30) => {
+        return { "data-lax-skew-x": `(vh) ${v}, -elh ${-v}` }
+      },
+      swing: (v=30) => {
+        return { "data-lax-skew-y": `(vh) ${v}, -elh ${-v}` }
+      }
     }
 
-    lax.addPreset = (name, o) => {
-      lax.presets[name] = o
+    lax.addPreset = (p, o) => {
+      lax.presets[p] = o
     }
 
-    function intrp(table, v) {
+    function intrp(t, v) {
       var i = 0
 
-      while(table[i][0] <= v && table[i+1] !== undefined) {
+      while(t[i][0] <= v && t[i+1] !== undefined) {
         i+=1
       }
 
-      var x = table[i][0]
-      var prevX = table[i-1] === undefined ? x : table[i-1][0]
+      var x = t[i][0]
+      var prevX = t[i-1] === undefined ? x : t[i-1][0]
 
-      var y = table[i][1]
-      var prevY = table[i-1] === undefined ? y : table[i-1][1]
+      var y = t[i][1]
+      var prevY = t[i-1] === undefined ? y : t[i-1][1]
 
       var xPoint = Math.min(Math.max((v-prevX)/(x-prevX),0),1)
       var yPoint = (xPoint*(y-prevY)) + prevY
@@ -164,7 +172,7 @@
           const bits = p.split("-")
           const fn = lax.presets[bits[0]]
           if(!fn) {
-            console.error(`preset #{bits[0]} is not defined`)
+            console.error(`preset ${bits[0]} is not defined`)
           } else {
             const d = fn(bits[1])
             for(var k in d) {
@@ -177,9 +185,17 @@
         el.attributes.removeNamedItem("data-lax-preset")
       }
 
-      const optimise = !(el.attributes["data-lax-optimize"] && el.attributes["data-lax-optimize"].value === 'false')
-      if(optimise) el.style["-webkit-backface-visibility"] = "hidden"
-      if(el.attributes["data-lax-optimize"]) el.attributes.removeNamedItem("data-lax-optimize")
+      const useGpu = !(el.attributes["data-lax-use-gpu"] && el.attributes["data-lax-use-gpu"].value === 'false')
+      if(useGpu) el.style["-webkit-backface-visibility"] = "hidden"
+      if(el.attributes["data-lax-use-gpu"]) el.attributes.removeNamedItem("data-lax-use-gpu")
+
+      o.optimise = false 
+      if(el.attributes["data-lax-optimize"] && el.attributes["data-lax-optimize"].value === 'true') {
+        o.optimise = true
+        const bounds = el.getBoundingClientRect()
+        el.setAttribute("data-lax-opacity", `${-bounds.height-1} 0, ${-bounds.height} 1, ${window.innerHeight} 1, ${window.innerHeight+1} 0`)
+        el.attributes.removeNamedItem("data-lax-optimize")
+      }
 
       for(var i=0; i<el.attributes.length; i++) {
         var a = el.attributes[i]

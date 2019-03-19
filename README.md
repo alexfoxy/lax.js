@@ -1,6 +1,6 @@
 # lax.js
 
-Simple & light weight (2kb minified & zipped) vanilla javascript plugin to create *smooth* & beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
+Simple & light weight (<2kb gzipped) vanilla javascript plugin to create *smooth* & beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
 
 [>>> DEMO <<<](https://alexfox.dev/laxxx/)
 
@@ -56,7 +56,7 @@ You can also call `lax.removeElement(domElement)` when the component unmounts.
 
 ## Presets
 
-The easiest way to get started is to use the presets via the `data-lax-preset` attribute. You can chain multiple presetes together for e.g. `data-lax-preset="blurOut fadeOut spin"`. Some presets also support an optional strength e.g. `data-lax-preset="blurOut-50"`
+The easiest way to get started is to use the presets via the `data-lax-preset` attribute. You can chain multiple presets together for e.g. `data-lax-preset="blurOut fadeOut spin"`. Some presets also support an optional strength e.g. `data-lax-preset="blurOut-50"`
 
 See the list of [Supported Presets](#supported-presets) for details.
 
@@ -130,7 +130,8 @@ You can also use vanilla JS within `( )` for calculations and access to more var
 | zoomInOut    	| 0.2 		|
 | zoomIn     	| 0.2 		|
 | zoomOut     	| 0.2 		|
-
+| swing     	| 30		|
+| speedy     	| 30 		|
 
 ## Supported Attribute Keys
 
@@ -162,6 +163,15 @@ Filters (note - these may be unperformant on low powered machines)
 | saturate     | data-lax-saturate |
 | grayscale     | data-lax-grayscale |
 
+Other
+
+| Filter     | Key           |
+| ------------- | ------------- |
+| background position | data-lax-bg-pos  |
+| background position-x | data-lax-bg-pos-x  |
+| background position-y | data-lax-bg-pos-y |
+
+
 ## Custom Presets
 To avoid duplicate code you can define your own presets with a list of attributes e.g.
 ```javascript
@@ -179,10 +189,15 @@ You can then access this preset like this:
 </p>
 ```
 
-## Notes
+## Performance Tips
 
-### Performance
-By default `-webkit-backface-visibility: hidden;` is added to your elements style to encourage the browser to render that object as a layer on the GPU and increase performance. To turn this off add `lax-optimize="false"` to your element.
+* Avoid nesting lax enabled elements within each other, you'll get better performance using lax with smaller elements in the dom tree.
+* Avoid transforms on large elements, e.g. full screen backgrounds.
+* By default elements that have opacity 0 aren't updated. You can either manually set up a `data-lax-opacity` to control this yourself or use `data-lax-optimize` which will set the elements opacity to 0 when it goes off -screen. 
+* By default `-webkit-backface-visibility: hidden;` is added to your elements style to encourage the browser to render that object as a layer on the GPU and increase performance. To turn this off add `data-lax-use-gpu="false"` to your element.
+
+
+## Notes
 
 ### Screen rotating & resizing 
 As some values (vh, vw, elh, elw) are calculated on load, when the screen size changes or rotates you might want to recalculate these. E.g.
@@ -194,13 +209,12 @@ window.addEventListener("resize", function() {
 Be warned, on mobile, a resize event is fired when you scroll and the toolbar is hidden so you might want to check if the width or orientation has changed.
 
 ### Scroll Wheels
-Scroll wheels only icrement the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
+Scroll wheels only increment the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
 
 ## To Do / Ideas
 * ~~Re-calculate values on rotate / change window size~~
 * Elastic bouncing values at edges of screen (if possible)
-* Optimise: Do not update elements with bounds that are off screen
+* ~~Optimise: Do not update elements with bounds that are off screen~~
 * Implement a tween for scroll wheels to remove reliance on smoothscroll
 * Add "momentum" option 
-* Move presets to lax-presets.js to reduce base library size
 
