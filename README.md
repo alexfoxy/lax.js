@@ -194,7 +194,7 @@ window.addEventListener("resize", function() {
 Be warned, on mobile, a resize event is fired when you scroll and the toolbar is hidden so you might want to check if the width or orientation has changed.
 
 ### Scroll Wheels
-Scroll wheels only icrement the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
+Scroll wheels only increment the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
 
 ## To Do / Ideas
 * ~~Re-calculate values on rotate / change window size~~
