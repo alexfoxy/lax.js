@@ -56,7 +56,7 @@ You can also call `lax.removeElement(domElement)` when the component unmounts.
 
 ## Presets
 
-The easiest way to get started is to use the presets via the `data-lax-preset` attribute. You can chain multiple presetes together for e.g. `data-lax-preset="blurOut fadeOut spin"`. Some presets also support an optional strength e.g. `data-lax-preset="blurOut-50"`
+The easiest way to get started is to use the presets via the `data-lax-preset` attribute. You can chain multiple presets together for e.g. `data-lax-preset="blurOut fadeOut spin"`. Some presets also support an optional strength e.g. `data-lax-preset="blurOut-50"`
 
 See the list of [Supported Presets](#supported-presets) for details.
 
