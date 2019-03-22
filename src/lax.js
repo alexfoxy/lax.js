@@ -163,7 +163,7 @@
     lax.addElement = function(el) {
       var o = {
         el: el,
-        transforms: []
+        transforms: {}
       }
 
       var presetNames = el.attributes["data-lax-preset"] && el.attributes["data-lax-preset"].value
