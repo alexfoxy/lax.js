@@ -174,7 +174,7 @@
           const bits = p.split("-")
           const fn = lax.presets[bits[0]]
           if(!fn) {
-            console.error(`preset ${bits[0]} is not defined`)
+            console.error(`lax error: preset ${bits[0]} is not defined`)
           } else {
             const d = fn(bits[1])
             for(var k in d) {
@@ -281,11 +281,16 @@
 
       for(var i in o.transforms) {
         var arr = o.transforms[i][currentBreakpoint] || o.transforms[i]["default"]
+
+        if(!arr) {
+          console.error(`lax error: there is no setting for key ${i} and screen size ${currentBreakpoint}. Try adding a default value!`)
+        }
+
         var t = transforms[i]
         var v = intrp(arr, r)
 
         if(!t) {
-          console.error("lax: " + i + " is not supported")
+          console.error(`lax: error ${i} is not supported`)
           return
         }
 
