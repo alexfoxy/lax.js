@@ -152,7 +152,9 @@
 
     lax.setup = function(o={}) {
       lax.breakpoints = o.breakpoints || {}
+      lax.selector = o.selector || '.lax'
       lax.populateElements()
+
     }
 
     lax.removeElement = function(el) {
@@ -247,10 +249,7 @@
     lax.populateElements = function() {
       lax.elements = []
 
-      var selector = Object.keys(transforms).map(t => `[${t}]`).join(",")
-      selector += ",[data-lax-preset]"
-
-      document.querySelectorAll(selector).forEach(this.addElement)
+      document.querySelectorAll(lax.selector).forEach(this.addElement)
       currentBreakpoint = lax.getCurrentBreakPoint()
     }
 
@@ -259,11 +258,11 @@
       const w = window.innerWidth
 
       for(var i in lax.breakpoints) {
-        let px = lax.breakpoints[i]
-        if(px > w) {
-          break
-        } else {
+        let px = parseFloat(lax.breakpoints[i])
+        if(px <= w) {
           b = i
+        } else {
+          break
         }
       }
 
