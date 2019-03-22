@@ -260,9 +260,8 @@
     lax.populateElements = function() {
       lax.elements = []
 
-      var selector = Object.keys(transforms).map(t => `[${t}]`).join(",")
-      selector += ",[data-lax-preset]"
-
+      var selector = ".lax"
+ 
       document.querySelectorAll(selector).forEach(this.addElement)
       currentBreakpoint = lax.getCurrentBreakPoint()
     }
@@ -321,6 +320,7 @@
     }
 
     lax.update = function(y) {
+      if(lastY === y) return
       lastY = y
       lax.elements.forEach(lax.updateElement)
     }

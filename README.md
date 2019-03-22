@@ -29,17 +29,20 @@ import lax from 'lax.js'
 ```javascript
 window.onload = function() {
 	lax.setup() // init
-	  
-	document.addEventListener('scroll', function(e) {
-	  lax.update(window.scrollY) // update every scroll
-	}, false)
+
+	const updateLax = () => {
+		lax.update(window.scrollY)
+		window.requestAnimationFrame(updateLax)
+	}
+
+	window.requestAnimationFrame(updateLax)
 }
 ```
 
 
-3) Add attributes to the HTML tags you want to animate e.g.
+3) Add class and attributes to the HTML tags you want to animate e.g.
 ```html
-<p data-lax-preset="spin fadeInOut">Look at me goooooo!</p>
+<p class="lax" data-lax-preset="spin fadeInOut">Look at me goooooo!</p>
 ```
 
 4) Scroll and enjoy!
@@ -64,7 +67,7 @@ See the list of [Supported Presets](#supported-presets) for details.
 
 You can easily create your own effects. Just add an attribute to your HTML tag (see [Supported Attribute Keys](#supported-attribute-keys)) with an array of values. These arrays take the format of `scrollPos val, scrollPos val, ...` e.g:
 ```html
-<p data-lax-opacity="0 1, 100 1, 200 0">
+<p class="lax" data-lax-opacity="0 1, 100 1, 200 0">
 	I start to fade out after the window scrolls 100px
 	and then I'm gone by 200px!
 </p>
@@ -72,7 +75,7 @@ You can easily create your own effects. Just add an attribute to your HTML tag (
 
 By default the `scrollPos` is `window.scrollY` but you can use an element distance from the top of the screen instead. You can either pass in a selector `data-lax-anchor="#bio"` or set it to use itself `data-lax-anchor="self"` (this is the default for all presets) e.g.
 ```html
-<p data-lax-opacity="200 1, 100 1, 0 0" data-lax-anchor="self">
+<p class="lax" data-lax-opacity="200 1, 100 1, 0 0" data-lax-anchor="self">
 	I start to fade out after I'm 100px away from the top of the window
 	and then I'm gone by the time I reach the top!
 </p>
@@ -89,7 +92,7 @@ There are also some shortcuts for useful values:
 
 You can use these instead of integer values for the scrollPos  e.g.
 ```html
-<p data-lax-opacity="0 1, vh 0">
+<p class="lax" data-lax-opacity="0 1, vh 0">
 	I fade out as the page scrolls down and
 	I'm gone when the page has scrolled the view port height!
 </p>
@@ -97,7 +100,7 @@ You can use these instead of integer values for the scrollPos  e.g.
 
 You can also use vanilla JS within `( )` for calculations and access to more variables e.g.
 ```html
-<p data-lax-opacity="0 1, (document.body.scrollHeight*0.5) 0">
+<p class="lax" data-lax-opacity="0 1, (document.body.scrollHeight*0.5) 0">
 	I fade out as the page scrolls down and
 	I'm gone when the page has scrolled 50%
 	down the entire page height!
@@ -184,7 +187,7 @@ lax.addPreset("myCoolPreset", function() {
 ```
 You can then access this preset like this:
 ```html
-<p data-lax-preset="myCoolPreset">
+<p class="lax" data-lax-preset="myCoolPreset">
 	I'm the coolest preset in the world 😎
 </p>
 ```

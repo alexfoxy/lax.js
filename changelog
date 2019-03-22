@@ -1,1 +1,4 @@
-changlog
+- Added responsive stuff
+- Changed demo to use window.animationFrame
+- now have to add lax class to elements
+
