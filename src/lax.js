@@ -180,8 +180,8 @@
       for(var i=0; i<el.attributes.length; i++) {
         var a = el.attributes[i]
         if(a.name.indexOf("data-lax") < 0) continue
-        var b = a.name.split(":")
-        const breakpoint = b[1] ? `:${b[1]}` : '' 
+        var b = a.name.split("#")
+        const breakpoint = b[1] ? `:${b[1]}` : ''
 
         if(b[0] == 'data-lax-preset') {
           a.value.split(" ").forEach((p) => {
@@ -218,7 +218,7 @@
         var a = el.attributes[i]
         if(a.name.indexOf("data-lax") < 0) continue
 
-        var b = a.name.split(":")
+        var b = a.name.split("#")
         var bits = b[0].split("-")
         var breakpoint = b[1] || "default"
         if(bits[1] === "lax") {
