@@ -20,6 +20,7 @@
     }
 
     let lastY = 0;
+    let currentBreakpoint = 'default'
 
     const transforms = {
       "data-lax-opacity": function(style, v) { style.opacity = v },
@@ -149,7 +150,8 @@
       return yPoint
     }
 
-    lax.setup = function(o) {
+    lax.setup = function(o={}) {
+      lax.breakpoints = o.breakpoints || {}
       lax.populateElements()
     }
 
@@ -163,7 +165,7 @@
     lax.addElement = function(el) {
       var o = {
         el: el,
-        transforms: []
+        transforms: {}
       }
 
       var presetNames = el.attributes["data-lax-preset"] && el.attributes["data-lax-preset"].value
@@ -199,14 +201,19 @@
 
       for(var i=0; i<el.attributes.length; i++) {
         var a = el.attributes[i]
-        var bits = a.name.split("-")
+        if(a.name.indexOf("data-lax") < 0) continue
+
+        var b = a.name.split("#")
+        var bits = b[0].split("-")
+        var breakpoint = b[1] || "default"
         if(bits[1] === "lax") {
           if(a.name === "data-lax-anchor") {
             o["data-lax-anchor"] = a.value === "self" ? el : document.querySelector(a.value)
             const rect = o["data-lax-anchor"].getBoundingClientRect()
             o["data-lax-anchor-top"] = Math.floor(rect.top) + window.scrollY
           } else {
-            o.transforms[a.name] = a.value
+            var name = b[0]
+            var value = a.value
               .replace(new RegExp('vw', 'g'), window.innerWidth)
               .replace(new RegExp('vh', 'g'), window.innerHeight)
               .replace(new RegExp('elh', 'g'), el.clientHeight)
@@ -223,6 +230,12 @@
               }).sort((a,b) => {
                 return a[0] - b[0]  
               })
+
+            if(!o.transforms[name]) {
+              o.transforms[name] = {}
+            }
+            
+            o.transforms[name][breakpoint] = value 
           }
         }
       }
@@ -238,6 +251,23 @@
       selector += ",[data-lax-preset]"
 
       document.querySelectorAll(selector).forEach(this.addElement)
+      currentBreakpoint = lax.getCurrentBreakPoint()
+    }
+
+    lax.getCurrentBreakPoint = function() {
+      let b = 'default'
+      const w = window.innerWidth
+
+      for(var i in lax.breakpoints) {
+        let px = lax.breakpoints[i]
+        if(px > w) {
+          break
+        } else {
+          b = i
+        }
+      }
+
+      return b
     }
 
     lax.updateElement = function(o) {
@@ -250,7 +280,7 @@
       }
 
       for(var i in o.transforms) {
-        var arr = o.transforms[i]
+        var arr = o.transforms[i][currentBreakpoint] || o.transforms[i]["default"]
         var t = transforms[i]
         var v = intrp(arr, r)
 
