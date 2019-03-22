@@ -212,9 +212,8 @@ Be warned, on mobile, a resize event is fired when you scroll and the toolbar is
 Scroll wheels only increment the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
 
 ## To Do / Ideas
-* ~~Re-calculate values on rotate / change window size~~
-* Elastic bouncing values at edges of screen (if possible)
-* ~~Optimise: Do not update elements with bounds that are off screen~~
 * Implement a tween for scroll wheels to remove reliance on smoothscroll
-* Add "momentum" option 
+* Combine already translated values
+* A way to add weight/momentum to moving objecs
+* Support for sprite sheet animations
 
