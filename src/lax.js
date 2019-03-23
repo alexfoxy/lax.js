@@ -154,9 +154,9 @@
     }
 
     lax.removeElement = function(el) {
-      const i = this.elements.findIndex(o => o.el = el)
+      const i = lax.elements.findIndex(o => o.el = el)
       if(i > -1) {
-        this.elements.splice(i, 1)
+        lax.elements.splice(i, 1)
       }
     }
 
@@ -237,7 +237,7 @@
       var selector = Object.keys(transforms).map(t => `[${t}]`).join(",")
       selector += ",[data-lax-preset]"
 
-      document.querySelectorAll(selector).forEach(this.addElement)
+      document.querySelectorAll(selector).forEach(lax.addElement)
     }
 
     lax.updateElement = function(o) {
