@@ -1,11 +1,15 @@
 - Added responsive stuff
 - Changed demo to use window.animationFrame
 - breaking change - now have to add lax class to elements
+- Now merges in elements original transform and filter
 
 todo
 - update change log
 	- usage with vue/react
 	- response stuff
+	- merge in style 
+	- added sprite animation
 
-extra
-- sprite animation
+- add link to my personal site
+
+- better sprite example

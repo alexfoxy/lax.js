@@ -169,14 +169,12 @@
     lax.addElement = function(el) {
       var o = {
         el: el,
-        // originalTransforms: {},
+        originalStyle: {
+          transform: el.style.transform,
+          filter: el.style.filter
+        },
         transforms: {}
       }
-
-      // el.style.transform.split(" ").forEach((s) => {
-      //   const bits = s.split(/[()]/)
-      //   o.originalTransforms[bits[0]] = parseFloat(bits[1])
-      // })
 
       //find presets in data attributes
       var presets = []
@@ -186,6 +184,7 @@
             presets.push(a);
           }
       }
+
       //unwrap presets into transformations
       for(var i=0; i<presets.length; i++) {
           var a = presets[i]
@@ -209,10 +208,12 @@
 
       }
 
+      // use gpu
       const useGpu = !(el.attributes["data-lax-use-gpu"] && el.attributes["data-lax-use-gpu"].value === 'false')
       if(useGpu) el.style["-webkit-backface-visibility"] = "hidden"
       if(el.attributes["data-lax-use-gpu"]) el.attributes.removeNamedItem("data-lax-use-gpu")
 
+      // optmise off screen
       o.optimise = false 
       if(el.attributes["data-lax-optimize"] && el.attributes["data-lax-optimize"].value === 'true') {
         o.optimise = true
@@ -221,6 +222,7 @@
         el.attributes.removeNamedItem("data-lax-optimize")
       }
 
+      // build transform list
       for(var i=0; i<el.attributes.length; i++) {
         var a = el.attributes[i]
         if(a.name.indexOf("data-lax") < 0) continue
@@ -262,6 +264,19 @@
         }
       }
 
+      // sprite sheet animation
+      const spriteData = el.attributes["data-lax-sprite-data"] && el.attributes["data-lax-sprite-data"].value
+      if(spriteData) {
+        o.spriteData = spriteData.split(",").map(x => parseInt(x))
+        el.style.height = o.spriteData[0] + "px"
+        el.style.width = o.spriteData[1] + "px"
+
+        const spriteImage = el.attributes["data-lax-sprite-image"] && el.attributes["data-lax-sprite-image"].value
+        if(spriteImage) {
+          el.style.backgroundImage = `url(${spriteImage})`
+        }
+      }
+
       lax.elements.push(o)
       lax.updateElement(o)
     }
@@ -294,8 +309,8 @@
       var r = o["data-lax-anchor-top"] ? o["data-lax-anchor-top"]-y : y
 
       var style = {
-        transform: "",
-        filter: ""
+        transform: o.originalStyle.transform,
+        filter: o.originalStyle.filter
       }
 
       for(var i in o.transforms) {
@@ -315,6 +330,14 @@
         }
 
         t(style, v)
+      }
+
+      if(o.spriteData) {
+        const [frameW,frameH,numFrames,cols,scrollStep] = o.spriteData
+        const frameNo = Math.floor(y/scrollStep) % numFrames
+        const framePosX = frameNo%cols
+        const framePosY = Math.floor(frameNo/cols)
+        style.backgroundPosition = `${framePosX*frameW}px -${framePosY*frameH}px`
       }
 
       for(let k in style) {

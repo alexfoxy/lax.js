@@ -59,7 +59,7 @@ You can also call `lax.removeElement(domElement)` when the component unmounts.
 
 ## Presets
 
-The easiest way to get started is to use the presets via the `data-lax-preset` attribute. You can chain multiple presets together for e.g. `data-lax-preset="blurOut fadeOut spin"`. Some presets also support an optional strength e.g. `data-lax-preset="blurOut-50"`
+The easiest way to get started is to use the presets via the `data-lax-preset` attribute. You can chain multiple presets together for e.g. `data-lax-preset="blurOut fadeOut spin"`. Some presets also support an optional strength e.g. `data-lax-preset="blurOut-50"`.
 
 See the list of [Supported Presets](#supported-presets) for details.
 
@@ -174,6 +174,41 @@ Other
 | background position-x | data-lax-bg-pos-x  |
 | background position-y | data-lax-bg-pos-y |
 
+## Responsive Design
+Lax supports different presets and custom animations dependant on screen sizes. When setting up lax you need to pass in your screen width breakpoints e.g.
+```
+lax.setup({
+    breakpoints: { small: 0, large: 992 }
+})
+```
+Then you can define preseets or transforms per breakpoint. 
+```
+<p class="lax" data-lax-preset_small="spin">
+	I only spin when the screen is smaller than 992px.
+</p>
+
+<p class="lax" data-lax-scale_small="0 1, 500 0" data-lax-scale_large="0 1, 500 2">
+	I shrink when the screen is smaller than 992px but grow when the screen is larger 992px.
+</p>
+```
+	
+
+## Sprite Sheet Animations
+You can create animations using sprite sheets. See DEMO.
+
+The `data-lax-sprite-data` is required and formated like so `[frameWidth, frameHeight, frameCount, columnCount, scrollStep]`. You can either set the image in the CSS or using the `data-lax-sprite-image` attribute. 
+
+```
+<div 
+	class="lax"
+	data-lax-sprite-data="500,500,36,36,10"
+	data-lax-sprite-image="./spritesheet.png"
+/>
+```
+
+You can turn a gif or a video into a sprite sheet with this tool: [link]
+
+Note: current implimentation requires the element to be the same size as the frame width & height.
 
 ## Custom Presets
 To avoid duplicate code you can define your own presets with a list of attributes e.g.
