@@ -21,6 +21,7 @@
 
     let lastY = 0;
     let currentBreakpoint = 'default'
+    const breakpointsSeparator = "_"
 
     const transforms = {
       "data-lax-opacity": function(style, v) { style.opacity = v },
@@ -152,7 +153,7 @@
 
     lax.setup = function(o={}) {
       lax.breakpoints = o.breakpoints || {}
-      lax.breakpointsSeparator = o.breakpointsSeparator || '--'
+      
       lax.selector = o.selector || '.lax'
       lax.populateElements()
 
@@ -188,8 +189,8 @@
       //unwrap presets into transformations
       for(var i=0; i<presets.length; i++) {
           var a = presets[i]
-          var b = a.name.split(lax.breakpointsSeparator)
-          const breakpoint = b[1] ? `${lax.breakpointsSeparator}${b[1]}` : ''
+          var b = a.name.split(breakpointsSeparator)
+          const breakpoint = b[1] ? `${breakpointsSeparator}${b[1]}` : ''
           a.value.split(" ").forEach((p) => {
               const bits = p.split("-")
               const fn = lax.presets[bits[0]]
@@ -224,7 +225,7 @@
         var a = el.attributes[i]
         if(a.name.indexOf("data-lax") < 0) continue
 
-        var b = a.name.split(lax.breakpointsSeparator)
+        var b = a.name.split(breakpointsSeparator)
         var bits = b[0].split("-")
         var breakpoint = b[1] || "default"
         if(bits[1] === "lax") {

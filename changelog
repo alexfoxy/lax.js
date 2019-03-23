@@ -1,4 +1,11 @@
 - Added responsive stuff
 - Changed demo to use window.animationFrame
-- now have to add lax class to elements
+- breaking change - now have to add lax class to elements
 
+todo
+- update change log
+	- usage with vue/react
+	- response stuff
+
+extra
+- sprite animation
