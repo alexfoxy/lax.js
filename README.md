@@ -216,7 +216,6 @@ Scroll wheels only increment the scroll position in steps which can cause the an
 
 ## To Do / Ideas
 * Implement a tween for scroll wheels to remove reliance on smoothscroll
-* Combine already translated values
 * A way to add weight/momentum to moving objecs
 * Support for sprite sheet animations
 
