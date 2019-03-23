@@ -152,7 +152,10 @@
 
     lax.setup = function(o={}) {
       lax.breakpoints = o.breakpoints || {}
+      lax.breakpointsSeparator = o.breakpointsSeparator || '--'
+      lax.selector = o.selector || '.lax'
       lax.populateElements()
+
     }
 
     lax.removeElement = function(el) {
@@ -174,30 +177,35 @@
       //   o.originalTransforms[bits[0]] = parseFloat(bits[1])
       // })
 
-      // find presets
+      //find presets in data attributes
+      var presets = []
       for(var i=0; i<el.attributes.length; i++) {
-        var a = el.attributes[i]
-        if(a.name.indexOf("data-lax") < 0) continue
-        var b = a.name.split(":")
-        const breakpoint = b[1] ? `:${b[1]}` : '' 
-
-        if(b[0] == 'data-lax-preset') {
+          var a = el.attributes[i]
+          if(a.name.indexOf("data-lax-preset") > -1)  {
+            presets.push(a);
+          }
+      }
+      //unwrap presets into transformations
+      for(var i=0; i<presets.length; i++) {
+          var a = presets[i]
+          var b = a.name.split(lax.breakpointsSeparator)
+          const breakpoint = b[1] ? `${lax.breakpointsSeparator}${b[1]}` : ''
           a.value.split(" ").forEach((p) => {
-            const bits = p.split("-")
-            const fn = lax.presets[bits[0]]
-            if(!fn) {
-              console.log(`lax error: preset ${bits[0]} is not defined`)
-            } else {
-              const d = fn(bits[1])
-              for(var k in d) {
-                el.setAttribute(`${k}${breakpoint}`, d[k])
+              const bits = p.split("-")
+              const fn = lax.presets[bits[0]]
+              if(!fn) {
+                  console.log(`lax error: preset ${bits[0]} is not defined`)
+              } else {
+                  const d = fn(bits[1])
+                  for(var k in d) {
+                      el.setAttribute(`${k}${breakpoint}`, d[k])
+                  }
               }
-            }
           })
 
           el.setAttribute("data-lax-anchor", "self")
           el.attributes.removeNamedItem(a.name)
-        }
+
       }
 
       const useGpu = !(el.attributes["data-lax-use-gpu"] && el.attributes["data-lax-use-gpu"].value === 'false')
@@ -216,7 +224,7 @@
         var a = el.attributes[i]
         if(a.name.indexOf("data-lax") < 0) continue
 
-        var b = a.name.split(":")
+        var b = a.name.split(lax.breakpointsSeparator)
         var bits = b[0].split("-")
         var breakpoint = b[1] || "default"
         if(bits[1] === "lax") {
@@ -260,9 +268,7 @@
     lax.populateElements = function() {
       lax.elements = []
 
-      var selector = ".lax"
- 
-      document.querySelectorAll(selector).forEach(this.addElement)
+      document.querySelectorAll(lax.selector).forEach(this.addElement)
       currentBreakpoint = lax.getCurrentBreakPoint()
     }
 
@@ -271,11 +277,11 @@
       const w = window.innerWidth
 
       for(var i in lax.breakpoints) {
-        let px = lax.breakpoints[i]
-        if(px > w) {
-          break
-        } else {
+        let px = parseFloat(lax.breakpoints[i])
+        if(px <= w) {
           b = i
+        } else {
+          break
         }
       }
 
