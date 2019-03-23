@@ -48,10 +48,12 @@
     }
 
     #letter {
-      width: 10vw; 
+      width: 50pt; 
+      height: 50pt;
       margin-left: 10vw;
       position: fixed;
       top: 20vh;
+      background: url("./img/a.png")
     }
 
   </style>
@@ -61,10 +63,9 @@
 <body>
   <div id="main">
     <div id="header" class="section">
-                              <!--  frameHeight, frameWidth, numFrames, rows, cols  -->
-      <img src="./img/a.png" id="letter" 
-        data-lax-spritesheet-data="10px,10px,9,3,3"
-        data-lax-spritesheet-transform="0 "
+        <!--  frameHeight, frameWidth, numFrames, rows, cols, step  -->
+      <div id="letter" 
+        data-lax-sprite="50,50,9,3,3,10"
       />
     </div>
 

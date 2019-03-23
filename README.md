@@ -6,9 +6,9 @@ Simple & light weight (<2kb gzipped) vanilla javascript plugin to create *smooth
 
 ![](https://i.imgur.com/DHhlrM3.gif) 
 
-## Getting started
+## Getting Started
 
-### NPM setup
+### NPM Setup
 
 ```bash
 npm install lax.js
@@ -17,7 +17,7 @@ npm install lax.js
 import lax from 'lax.js'
 ```
 
-### Basic browser setup
+### Basic Browser Betup
 1) Add lax.js to your html
 
 ```html
@@ -47,7 +47,7 @@ window.onload = function() {
 
 4) Scroll and enjoy!
 
-### Usage with React, Vue.js & DOM changes
+### Usage With React, Vue.js & DOM Changes
 To increase performance lax.js indexes the list of elements to animate when the page loads. If you're using a library like React or vue.js, it is likely that you are adding elements after the initial `window.onload`. Because of this you will need to call `lax.addElement(domElement)` when you add components to the DOM that you want to animate. 
 
 See below for working examples:
@@ -202,7 +202,7 @@ You can then access this preset like this:
 
 ## Notes
 
-### Screen rotating & resizing 
+### Screen Rotating & Resizing 
 As some values (vh, vw, elh, elw) are calculated on load, when the screen size changes or rotates you might want to recalculate these. E.g.
 ```
 window.addEventListener("resize", function() {
