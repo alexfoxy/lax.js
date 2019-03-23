@@ -45,7 +45,7 @@ window.onload = function() {
 4) Scroll and enjoy!
 
 ### Usage with React, Vue.js & DOM changes
-To increase performance lax.js indexes the list of elements to animate when the page loads. If you're using a library like React or vue.js, it is likely that you are adding elements after the initial `window.onload`. Because of this you will need to call `lax.addElement(domElement)` when you add components to the DOM that you want to animate. 
+Indexing the list of elements to animate when loading the page could increase the performance of lax.js. Using React or vue.js is likly to add elements after the initial window.onload. When adding components to animte the DOM, calling lax.addElement(domElement) is needed.
 
 See below for working examples:
 * [react](https://codepen.io/alexfoxy/pen/PLaKaE)
