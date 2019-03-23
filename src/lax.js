@@ -196,7 +196,7 @@
         el.setAttribute("data-lax-opacity", `${-bounds.height-1} 0, ${-bounds.height} 1, ${window.innerHeight} 1, ${window.innerHeight+1} 0`)
         el.attributes.removeNamedItem("data-lax-optimize")
       }
-
+      
       for(var i=0; i<el.attributes.length; i++) {
         var a = el.attributes[i]
         var bits = a.name.split("-")
