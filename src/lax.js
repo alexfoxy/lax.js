@@ -13,11 +13,18 @@
 // without getting a written permission first.
 //
 
-(function() {
-  var lax = (function() {
-    var lax = {
-      elements: []
-    }
+;(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define([], factory);
+  } else if (typeof module === 'object' && module.exports) {
+    module.exports = factory();
+  } else {
+    root.lax = factory();
+  }
+}(this, function() {
+    'use strict';
+
+    const lax = Object.create(null)
 
     let lastY = 0;
 
@@ -126,11 +133,11 @@
       }
     }
 
-    lax.addPreset = (p, o) => {
-      lax.presets[p] = o
+    lax.addPreset = function(p, o) {
+      this.presets[p] = o
     }
 
-    function intrp(t, v) {
+    const intrp = function(t, v) {
       var i = 0
 
       while(t[i][0] <= v && t[i+1] !== undefined) {
@@ -150,7 +157,7 @@
     }
 
     lax.setup = function(o) {
-      lax.populateElements()
+      this.populateElements();
     }
 
     lax.removeElement = function(el) {
@@ -170,7 +177,7 @@
       if(presetNames) {
         presetNames.split(" ").forEach((p) => {
           const bits = p.split("-")
-          const fn = lax.presets[bits[0]]
+          const fn = this.presets[bits[0]]
           if(!fn) {
             console.error(`preset ${bits[0]} is not defined`)
           } else {
@@ -189,7 +196,7 @@
       if(useGpu) el.style["-webkit-backface-visibility"] = "hidden"
       if(el.attributes["data-lax-use-gpu"]) el.attributes.removeNamedItem("data-lax-use-gpu")
 
-      o.optimise = false 
+      o.optimise = false
       if(el.attributes["data-lax-optimize"] && el.attributes["data-lax-optimize"].value === 'true') {
         o.optimise = true
         const bounds = el.getBoundingClientRect()
@@ -207,37 +214,33 @@
             o["data-lax-anchor-top"] = Math.floor(rect.top) + window.scrollY
           } else {
             o.transforms[a.name] = a.value
-              .replace(new RegExp('vw', 'g'), window.innerWidth)
-              .replace(new RegExp('vh', 'g'), window.innerHeight)
-              .replace(new RegExp('elh', 'g'), el.clientHeight)
-              .replace(new RegExp('elw', 'g'), el.clientWidth)
-              .replace(new RegExp('-vw', 'g'), -window.innerWidth)
-              .replace(new RegExp('-vh', 'g'), -window.innerHeight)
-              .replace(new RegExp('-elh', 'g'), -el.clientHeight)
-              .replace(new RegExp('-elw', 'g'), -el.clientWidth).replace(/\s+/g," ")
-              .split(",").map((x) => { 
+              .replace(/vw/g, window.innerWidth)
+              .replace(/vh/g, window.innerHeight)
+              .replace(/elh/g, el.clientHeight)
+              .replace(/elw/g, el.clientWidth).replace(/\s+/g," ")
+              .split(",").map((x) => {
                 return x.trim().split(" ").map(y => {
                   if(y[0] === "(") return eval(y)
                   else return parseFloat(y)
                 })
               }).sort((a,b) => {
-                return a[0] - b[0]  
+                return a[0] - b[0]
               })
           }
         }
       }
 
-      lax.elements.push(o)
-      lax.updateElement(o)
+      this.elements.push(o)
+      this.updateElement(o)
     }
 
     lax.populateElements = function() {
-      lax.elements = []
+      this.elements = []
 
       var selector = Object.keys(transforms).map(t => `[${t}]`).join(",")
       selector += ",[data-lax-preset]"
 
-      document.querySelectorAll(selector).forEach(this.addElement)
+      document.querySelectorAll(selector).forEach(e => this.addElement(e))
     }
 
     lax.updateElement = function(o) {
@@ -264,7 +267,7 @@
 
       for(let k in style) {
         if(style.opacity === 0) { // if opacity 0 don't update
-          o.el.style.opacity = 0 
+          o.el.style.opacity = 0
         } else {
           o.el.style[k] = style[k]
         }
@@ -273,14 +276,8 @@
 
     lax.update = function(y) {
       lastY = y
-      lax.elements.forEach(lax.updateElement)
+      this.elements.forEach(e => this.updateElement(e))
     }
 
     return lax;
-  })();
-
-  if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-    module.exports = lax;
-  else
-    window.lax = lax;
-})();
+}));
