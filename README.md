@@ -49,6 +49,7 @@ To increase performance lax.js indexes the list of elements to animate when the 
 
 See below for working examples:
 * [react](https://codepen.io/alexfoxy/pen/PLaKaE)
+* [react (using hooks)](https://github.com/arthurdenner/use-lax)
 * [vue](https://codepen.io/alexfoxy/pen/ZPRZBq)
 
 You can also call `lax.removeElement(domElement)` when the component unmounts.
