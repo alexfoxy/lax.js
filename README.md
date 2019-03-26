@@ -6,7 +6,7 @@ Simple & light weight (<3kb gzipped) vanilla javascript plugin to create *smooth
 
 ![](https://i.imgur.com/Jbkna80.gif) 
 
-[>>> MARIO DEMO <<<](https://alexfox.dev/laxxx/sprite)
+[>>> MARIO DEMO <<<](https://alexfox.dev/laxxx/sprite.html)
 
 ![](https://i.imgur.com/GGQFucZ.gif)
 
@@ -219,7 +219,7 @@ Other
 	
 
 ## Sprite Sheet Animations
-You can create animations using sprite sheets. See a demo here: https://alexfox.dev/laxxx/sprite
+You can create animations using sprite sheets. See a demo [here](https://alexfox.dev/laxxx/sprite.html)
 
 The `data-lax-sprite-data` is required and formated like so `[frameWidth, frameHeight, frameCount, columnCount, scrollStep]`. You can either set the image using CSS or the `data-lax-sprite-image` attribute. e.g.
 
