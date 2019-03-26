@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75, minimum-scale=0.75">
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:300,600,800" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  <!-- <script src="./lib/lax.min.js"></script> -->
+  <script src="../src/lax.js"></script>
+
+  <script type="text/javascript">
+    window.onload = function() {
+      document.getElementById("main").classList.add("loaded")
+
+      lax.setup({
+        breakpoints: { xs: 0, s: 576, m: 768, l: 992  }
+      })
+
+      const update = () => {
+        lax.update(window.scrollY)
+        window.requestAnimationFrame(update)
+      }
+
+      window.requestAnimationFrame(update)
+      
+      let w = window.innerWidth
+      window.addEventListener("resize", function() {
+        if(w !== window.innerWidth) {
+          lax.populateElements()
+        }
+      });
+    }
+
+  </script>
+
+  <style>
+    body,html {
+      margin:0;
+      padding:0;
+      color: #F3F4F5;
+      background: #191818;
+      overflow-x: hidden;
+      height: 500vh;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    #main {
+      opacity: 0;
+      transition: opacity 200ms;
+    }
+
+    #main.loaded {
+      opacity: 1;
+    }
+   
+    #header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      z-index: 2;
+      height: 100vh;
+    }
+
+    #header img {
+      width: 78pt;
+      margin-top: 12pt;
+      position: fixed;
+      transform: scale(0.5)
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="main">
+    <div id="header" class="section">
+      <img src="./img/a.png" 
+        class="lax"
+        data-lax-scale="0 1, vh 5"
+        data-lax-scale_s="0 1, vh 1"
+        data-lax-preset_s="fadeInOut"
+        data-lax-scale_xs="0 1, vh 0"
+      />
+    </div>
+  </div>
+
+</body>
