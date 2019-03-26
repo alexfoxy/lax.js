@@ -280,5 +280,7 @@ Only inline styles for transforms and filters will be merged in to the animation
 ## To Do / Ideas
 * Implement a tween for scroll wheels to remove reliance on smoothscroll
 * A way to add weight/momentum to moving objecs
+* More cool demos
+* More concise read me for react / vue.js
 * ~~Support for sprite sheet animations~~
 
