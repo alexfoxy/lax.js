@@ -133,7 +133,7 @@ lax.setup({
     breakpoints: { small: 0, large: 992 }
 })
 ```
-Then you can define preseets or transforms per breakpoint. 
+Then you can define presets or transforms per breakpoint. 
 ```html
 <p class="lax" data-lax-preset_small="spin">
 	I only spin when the screen is smaller than 992px.
@@ -215,7 +215,7 @@ Other
 	
 
 ## Sprite Sheet Animations
-You can create animations using sprite sheets. See a demo here!
+You can create animations using sprite sheets. See a demo here: https://alexfox.dev/laxxx/sprite
 
 The `data-lax-sprite-data` is required and formated like so `[frameWidth, frameHeight, frameCount, columnCount, scrollStep]`. You can either set the image using CSS or the `data-lax-sprite-image` attribute. e.g.
 
