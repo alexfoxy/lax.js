@@ -23,7 +23,7 @@
     let currentBreakpoint = 'default'
     const breakpointsSeparator = "_"
 
-    const transforms = {
+    const transformFns = {
       "data-lax-opacity": function(style, v) { style.opacity = v },
       "data-lax-translate": function(style, v) { style.transform += ` translate(${v}px, ${v}px)` },
       "data-lax-translate-x": function(style, v) { style.transform += ` translateX(${v}px)` },
@@ -49,8 +49,8 @@
 
     let crazy = ""
 
-    for(var i=0;i<100;i++) {
-      crazy += " " + (window.innerHeight*(i/100)) + " " + (Math.random() * 360) + ", "
+    for(var i=0;i<20;i++) {
+      crazy += " " + i*5 + " " + (i*47)%360 + ", "
     }
 
     lax.presets = {
@@ -67,7 +67,7 @@
         return { "data-lax-translate-x": `vh ${v}, (vh*0.8) ${-v}, (vh*0.6) ${v}, (vh*0.4) ${-v}, (vh*0.2) ${v}, (vh*0) ${-v}, (-elh) ${v}` }
       },
       crazy: (v) => {
-        return { "data-lax-hue-rotate": crazy }
+        return { "data-lax-hue-rotate": `${crazy} | loop=20` }
       },
       spin: (v=360) => {
         return { "data-lax-rotate": `(vh) 0, (-elh) ${v}` }
@@ -151,6 +151,11 @@
       return yPoint
     }
 
+    function fnOrVal(s) {
+      if(s[0] === "(") return eval(s)
+      else return parseFloat(s)
+    }
+
     lax.setup = function(o={}) {
       lax.breakpoints = o.breakpoints || {}
       
@@ -169,14 +174,12 @@
     lax.addElement = function(el) {
       var o = {
         el: el,
-        // originalTransforms: {},
+        originalStyle: {
+          transform: el.style.transform,
+          filter: el.style.filter
+        },
         transforms: {}
       }
-
-      // el.style.transform.split(" ").forEach((s) => {
-      //   const bits = s.split(/[()]/)
-      //   o.originalTransforms[bits[0]] = parseFloat(bits[1])
-      // })
 
       //find presets in data attributes
       var presets = []
@@ -186,6 +189,7 @@
             presets.push(a);
           }
       }
+
       //unwrap presets into transformations
       for(var i=0; i<presets.length; i++) {
           var a = presets[i]
@@ -209,10 +213,12 @@
 
       }
 
+      // use gpu
       const useGpu = !(el.attributes["data-lax-use-gpu"] && el.attributes["data-lax-use-gpu"].value === 'false')
       if(useGpu) el.style["-webkit-backface-visibility"] = "hidden"
       if(el.attributes["data-lax-use-gpu"]) el.attributes.removeNamedItem("data-lax-use-gpu")
 
+      // optmise off screen
       o.optimise = false 
       if(el.attributes["data-lax-optimize"] && el.attributes["data-lax-optimize"].value === 'true') {
         o.optimise = true
@@ -221,6 +227,7 @@
         el.attributes.removeNamedItem("data-lax-optimize")
       }
 
+      // build transform list
       for(var i=0; i<el.attributes.length; i++) {
         var a = el.attributes[i]
         if(a.name.indexOf("data-lax") < 0) continue
@@ -232,23 +239,32 @@
           if(a.name === "data-lax-anchor") {
             o["data-lax-anchor"] = a.value === "self" ? el : document.querySelector(a.value)
             const rect = o["data-lax-anchor"].getBoundingClientRect()
-            o["data-lax-anchor-top"] = Math.floor(rect.top) + window.scrollY
+            o.anchorTop = Math.floor(rect.top) + window.scrollY
           } else {
-            var name = b[0]
-            var value = a.value
+            const tString = a.value
+              .replace(new RegExp('-vw', 'g'), -window.innerWidth)
+              .replace(new RegExp('-vh', 'g'), -window.innerHeight)
+              .replace(new RegExp('-elh', 'g'), -el.clientHeight)
+              .replace(new RegExp('-elw', 'g'), -el.clientWidth)
               .replace(new RegExp('vw', 'g'), window.innerWidth)
               .replace(new RegExp('vh', 'g'), window.innerHeight)
               .replace(new RegExp('elh', 'g'), el.clientHeight)
               .replace(new RegExp('elw', 'g'), el.clientWidth)
-              .replace(new RegExp('-vw', 'g'), -window.innerWidth)
-              .replace(new RegExp('-vh', 'g'), -window.innerHeight)
-              .replace(new RegExp('-elh', 'g'), -el.clientHeight)
-              .replace(new RegExp('-elw', 'g'), -el.clientWidth).replace(/\s+/g," ")
-              .split(",").map((x) => { 
-                return x.trim().split(" ").map(y => {
-                  if(y[0] === "(") return eval(y)
-                  else return parseFloat(y)
-                })
+              .replace(/\s+/g," ")
+
+            const [arrString, optionString] = tString.split("|")
+            const options = {}
+
+            if(optionString) {
+              optionString.split(" ").forEach((o) => {
+                const [key, val] = o.split("=")
+                options[key] = key && fnOrVal(val)
+              }) 
+            }
+
+            var name = b[0]
+            var valueMap = arrString.split(",").map((x) => { 
+                return x.trim().split(" ").map(fnOrVal)
               }).sort((a,b) => {
                 return a[0] - b[0]  
               })
@@ -257,8 +273,21 @@
               o.transforms[name] = {}
             }
             
-            o.transforms[name][breakpoint] = value 
+            o.transforms[name][breakpoint] = { valueMap, options } 
           }
+        }
+      }
+
+      // sprite sheet animation
+      const spriteData = el.attributes["data-lax-sprite-data"] && el.attributes["data-lax-sprite-data"].value
+      if(spriteData) {
+        o.spriteData = spriteData.split(",").map(x => parseInt(x))
+        el.style.height = o.spriteData[1] + "px"
+        el.style.width = o.spriteData[0] + "px"
+
+        const spriteImage = el.attributes["data-lax-sprite-image"] && el.attributes["data-lax-sprite-image"].value
+        if(spriteImage) {
+          el.style.backgroundImage = `url(${spriteImage})`
         }
       }
 
@@ -290,24 +319,30 @@
     }
 
     lax.updateElement = function(o) {
-      const y = lastY
-      var r = o["data-lax-anchor-top"] ? o["data-lax-anchor-top"]-y : y
+      const { originalStyle, anchorTop, transforms, spriteData, el } = o
+
+      let r = anchorTop ? anchorTop-lastY : lastY
 
       var style = {
-        transform: "",
-        filter: ""
+        transform: originalStyle.transform,
+        filter: originalStyle.filter
       }
 
-      for(var i in o.transforms) {
-        var arr = o.transforms[i][currentBreakpoint] || o.transforms[i]["default"]
+      for(var i in transforms) {
+        const transformData = transforms[i][currentBreakpoint] || transforms[i]["default"]
 
-        if(!arr) {
+        if(!transformData) {
           // console.log(`lax error: there is no setting for key ${i} and screen size ${currentBreakpoint}. Try adding a default value!`)
           continue
         }
 
-        var t = transforms[i]
-        var v = intrp(arr, r)
+        let _r = r
+        if(transformData.options.offset) _r = _r+transformData.options.offset
+        if(transformData.options.speed) _r = _r*transformData.options.speed
+        if(transformData.options.loop) _r = _r%transformData.options.loop
+
+        const t = transformFns[i]
+        const v = intrp(transformData.valueMap, _r)
 
         if(!t) {
           // console.info(`lax: error ${i} is not supported`)
@@ -317,11 +352,19 @@
         t(style, v)
       }
 
-      for(let k in style) {
-        if(style.opacity === 0) { // if opacity 0 don't update
-          o.el.style.opacity = 0 
-        } else {
-          o.el.style[k] = style[k]
+      if(spriteData) {
+        const [frameW,frameH,numFrames,cols,scrollStep] = spriteData
+        const frameNo = Math.floor(lastY/scrollStep) % numFrames
+        const framePosX = frameNo%cols
+        const framePosY = Math.floor(frameNo/cols)
+        style.backgroundPosition = `-${framePosX*frameW}px -${framePosY*frameH}px`
+      }
+
+      if(style.opacity === 0) { // if opacity 0 don't update
+        el.style.opacity = 0 
+      } else {
+        for(let k in style) {
+          el.style[k] = style[k]
         }
       }
     }
