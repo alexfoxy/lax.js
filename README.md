@@ -4,7 +4,11 @@ Simple & light weight (<2kb gzipped) vanilla javascript plugin to create *smooth
 
 [>>> DEMO <<<](https://alexfox.dev/laxxx/)
 
-![](https://i.imgur.com/DHhlrM3.gif) 
+![](https://i.imgur.com/Jbkna80.gif) 
+
+[>>> MARIO DEMO <<<](https://alexfox.dev/laxxx/sprite)
+
+![](https://i.imgur.com/GGQFucZ.gif)
 
 ## Getting Started
 
