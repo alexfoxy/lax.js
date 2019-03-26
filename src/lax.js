@@ -215,7 +215,10 @@
 
       // use gpu
       const useGpu = !(el.attributes["data-lax-use-gpu"] && el.attributes["data-lax-use-gpu"].value === 'false')
-      if(useGpu) el.style["-webkit-backface-visibility"] = "hidden"
+      if(useGpu) {
+        el.style["backface-visibility"] = "hidden"
+        el.style["-webkit-backface-visibility"] = "hidden"
+      }
       if(el.attributes["data-lax-use-gpu"]) el.attributes.removeNamedItem("data-lax-use-gpu")
 
       // optmise off screen
