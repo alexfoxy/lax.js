@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75, minimum-scale=0.75">
+  <script src="../src/lax.js"></script>
+  <script src="./js/stats.js"></script>
+
+  <script type="text/javascript">
+
+
+    window.onload = function() {
+    	var stats = new Stats();
+		stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+		document.body.appendChild( stats.dom );
+
+		for(let i=0; i<1000; i++) {
+			const el = document.createElement("img")
+			el.src="../docs/img/a.png" 
+    		el.className="lax"
+    		el.style.width = 50 + 'px'
+    		el.style.height = 50 + 'px'
+    		el.style.left = 50*(i%25) + 'px'
+    		el.style.top = 50*Math.floor(i/25) + 'px'
+    		el.setAttribute("data-lax-rotate","0 0, 500 1000")
+    		el.setAttribute("data-lax-opacity","0 1, 500 0")
+    		el.setAttribute("data-lax-scale","0 1, 500 0.5")
+    		document.body.appendChild(el)
+		}
+
+    	lax.setup()
+	      
+    	let i = 0
+	      const update = () => {
+	      	stats.begin();
+	        lax.update(i%500)
+	        i++
+		  	stats.end();
+	        window.requestAnimationFrame(update)
+	      }
+
+	      window.requestAnimationFrame(update)
+    }
+
+  </script>
+
+  <style>
+    body,html {
+      margin:0;
+      padding:0;
+      color: #F3F4F5;
+      background: #191818;
+      overflow-x: hidden;
+      height: 500vh;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    img {
+    	position: fixed;
+    }
+  </style>
+</head>
+
+<body>
+
+</body>

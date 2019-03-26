@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75, minimum-scale=0.75">
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:300,600,800" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  <script src="./lib/lax.min.js"></script>
+  <!-- <script src="../src/lax.js"></script> -->
+
+  <script type="text/javascript">
+    window.onload = function() {
+      document.getElementById("main").classList.add("loaded")
+
+      lax.setup()
+
+      let toAdd = 0
+      let lastY = 0
+      const scrolls = [0,0,0,0,0]
+      const update = () => {
+        scrolls.unshift()
+        if(lastY !== window.scrollY) scrolls.push(window.scrollY)
+        lastY = window.scrollY
+        const sum = scrolls.reduce(function(a, b) { return a + b; });
+        const y = sum / scrolls.length
+
+        lax.update(y)
+        window.requestAnimationFrame(update)
+      }
+
+      window.requestAnimationFrame(update)
+      
+
+
+    }
+  </script>
+
+  <style>
+    body,html {
+      margin:0;
+      padding:0;
+      color: #F3F4F5;
+      background: #191818;
+      overflow-x: hidden;
+      height: 10000vh;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    #letter {
+      width: 10vw; 
+      margin-left: 10vw;
+      position: fixed;
+      top: 20vh;
+    }
+
+  </style>
+</head>
+
+
+<body>
+  <div id="main">
+    <div id="header" class="section">
+      <img src="./img/a.png" id="letter" data-lax-translate-x="0 0, 1000 1000" />
+    </div>
+
+  </div>
+
+</body>

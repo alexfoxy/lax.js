@@ -6,9 +6,9 @@ Simple & light weight (<2kb gzipped) vanilla javascript plugin to create *smooth
 
 ![](https://i.imgur.com/DHhlrM3.gif) 
 
-## Getting started
+## Getting Started
 
-### NPM setup
+### NPM Setup
 
 ```bash
 npm install lax.js
@@ -17,7 +17,7 @@ npm install lax.js
 import lax from 'lax.js'
 ```
 
-### Basic browser setup
+### Basic Browser Betup
 1) Add lax.js to your html
 
 ```html
@@ -29,22 +29,25 @@ import lax from 'lax.js'
 ```javascript
 window.onload = function() {
 	lax.setup() // init
-	  
-	document.addEventListener('scroll', function(e) {
-	  lax.update(window.scrollY) // update every scroll
-	}, false)
+
+	const updateLax = () => {
+		lax.update(window.scrollY)
+		window.requestAnimationFrame(updateLax)
+	}
+
+	window.requestAnimationFrame(updateLax)
 }
 ```
 
 
-3) Add attributes to the HTML tags you want to animate e.g.
+3) Add class and attributes to the HTML tags you want to animate e.g.
 ```html
-<p data-lax-preset="spin fadeInOut">Look at me goooooo!</p>
+<p class="lax" data-lax-preset="spin fadeInOut">Look at me goooooo!</p>
 ```
 
 4) Scroll and enjoy!
 
-### Usage with React, Vue.js & DOM changes
+### Usage With React, Vue.js & DOM Changes
 To increase performance lax.js indexes the list of elements to animate when the page loads. If you're using a library like React or vue.js, it is likely that you are adding elements after the initial `window.onload`. Because of this you will need to call `lax.addElement(domElement)` when you add components to the DOM that you want to animate. 
 
 See below for working examples:
@@ -55,16 +58,15 @@ You can also call `lax.removeElement(domElement)` when the component unmounts.
 
 
 ## Presets
-
-The easiest way to get started is to use the presets via the `data-lax-preset` attribute. You can chain multiple presets together for e.g. `data-lax-preset="blurOut fadeOut spin"`. Some presets also support an optional strength e.g. `data-lax-preset="blurOut-50"`
+The easiest way to get started is to use the presets via the `data-lax-preset` attribute. You can chain multiple presets together for e.g. `data-lax-preset="blurOut fadeOut spin"`. Some presets also support an optional strength e.g. `data-lax-preset="blurOut-50"`.
 
 See the list of [Supported Presets](#supported-presets) for details.
 
 ## Custom Animations
 
-You can easily create your own effects. Just add an attribute to your HTML tag (see [Supported Attribute Keys](#supported-attribute-keys)) with an array of values. These arrays take the format of `scrollPos val, scrollPos val, ...` e.g:
+You can easily create your own effects. Just add an attribute to your HTML tag (see [Supported Attribute Keys](#supported-attribute-keys)) with an array of values. These arrays take the format of `scrollPos val, scrollPos val, ... | option=val` e.g:
 ```html
-<p data-lax-opacity="0 1, 100 1, 200 0">
+<p class="lax" data-lax-opacity="0 1, 100 1, 200 0 | loop=200">
 	I start to fade out after the window scrolls 100px
 	and then I'm gone by 200px!
 </p>
@@ -72,13 +74,13 @@ You can easily create your own effects. Just add an attribute to your HTML tag (
 
 By default the `scrollPos` is `window.scrollY` but you can use an element distance from the top of the screen instead. You can either pass in a selector `data-lax-anchor="#bio"` or set it to use itself `data-lax-anchor="self"` (this is the default for all presets) e.g.
 ```html
-<p data-lax-opacity="200 1, 100 1, 0 0" data-lax-anchor="self">
+<p class="lax" data-lax-opacity="200 1, 100 1, 0 0" data-lax-anchor="self">
 	I start to fade out after I'm 100px away from the top of the window
 	and then I'm gone by the time I reach the top!
 </p>
 ```
 
-There are also some shortcuts for useful values: 
+### Special Values
 
 | Key     	| Value           |
 | ------------- | ------------- |
@@ -89,20 +91,59 @@ There are also some shortcuts for useful values:
 
 You can use these instead of integer values for the scrollPos  e.g.
 ```html
-<p data-lax-opacity="0 1, vh 0">
+<p class="lax" data-lax-opacity="0 1, vh 0">
 	I fade out as the page scrolls down and
 	I'm gone when the page has scrolled the view port height!
 </p>
 ```
 
+### Calculated Values
+
 You can also use vanilla JS within `( )` for calculations and access to more variables e.g.
 ```html
-<p data-lax-opacity="0 1, (document.body.scrollHeight*0.5) 0">
+<p class="lax" data-lax-opacity="0 1, (document.body.scrollHeight*0.5) 0">
 	I fade out as the page scrolls down and
 	I'm gone when the page has scrolled 50%
 	down the entire page height!
 </p>
 ```
+
+### Options
+
+You can pass options into your custom animations for more control e.g. 
+
+```html
+<p class="lax" data-lax-opacity="0 1, 100 0, 200 100 | loop=200 offset=100 speed=2">
+	I start at 0 opacity and
+	fade in and out every 50px
+</p>
+```
+
+| Option     	| Effect  | 
+| ------------- | -------------	| 
+| loop      	| modulus the input scrollY position so the animation will loop every `loop` pixels |
+| offset     	| add `offset` to scrollY position so the animation will begin at this point |
+| speed     	| multiplies the input scrollY position by `speed` to change the speed of the animation |
+
+
+## Responsive Design
+You can set multiple presets and animations for different screen widths. When setting up lax you need to pass in your screen width breakpoints e.g.
+```javascript
+lax.setup({
+    breakpoints: { small: 0, large: 992 }
+})
+```
+Then you can define preseets or transforms per breakpoint. 
+```html
+<p class="lax" data-lax-preset_small="spin">
+	I only spin when the screen is smaller than 992px.
+</p>
+
+<p class="lax" data-lax-scale_small="0 1, 500 0" data-lax-scale_large="0 1, 500 2">
+	I shrink when the screen is smaller than 992px but grow when the screen is larger 992px.
+</p>
+```
+
 ## Supported Presets
 
 | Preset     	| Default Strength | 
@@ -171,6 +212,24 @@ Other
 | background position-x | data-lax-bg-pos-x  |
 | background position-y | data-lax-bg-pos-y |
 
+	
+
+## Sprite Sheet Animations
+You can create animations using sprite sheets. See a demo here!
+
+The `data-lax-sprite-data` is required and formated like so `[frameWidth, frameHeight, frameCount, columnCount, scrollStep]`. You can either set the image using CSS or the `data-lax-sprite-image` attribute. e.g.
+
+```html
+<div 
+	class="lax"
+	data-lax-sprite-data="500,500,36,36,10"
+	data-lax-sprite-image="./spritesheet.png"
+/>
+```
+
+You can turn a gif or a video into a sprite sheet with this tool: https://ezgif.com/gif-to-sprite
+
+Note: current implimentation requires the element to be the same size as the frame width & height.
 
 ## Custom Presets
 To avoid duplicate code you can define your own presets with a list of attributes e.g.
@@ -184,7 +243,7 @@ lax.addPreset("myCoolPreset", function() {
 ```
 You can then access this preset like this:
 ```html
-<p data-lax-preset="myCoolPreset">
+<p class="lax" data-lax-preset="myCoolPreset">
 	I'm the coolest preset in the world 😎
 </p>
 ```
@@ -199,7 +258,7 @@ You can then access this preset like this:
 
 ## Notes
 
-### Screen rotating & resizing 
+### Screen Rotating & Resizing 
 As some values (vh, vw, elh, elw) are calculated on load, when the screen size changes or rotates you might want to recalculate these. E.g.
 ```
 window.addEventListener("resize", function() {
@@ -211,10 +270,11 @@ Be warned, on mobile, a resize event is fired when you scroll and the toolbar is
 ### Scroll Wheels
 Scroll wheels only increment the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
 
+### Merging Existing Styles
+Only inline styles for transforms and filters will be merged in to the animation. Transforms and filters derived from CSS will be overwritten.
+
 ## To Do / Ideas
-* ~~Re-calculate values on rotate / change window size~~
-* Elastic bouncing values at edges of screen (if possible)
-* ~~Optimise: Do not update elements with bounds that are off screen~~
 * Implement a tween for scroll wheels to remove reliance on smoothscroll
-* Add "momentum" option 
+* A way to add weight/momentum to moving objecs
+* ~~Support for sprite sheet animations~~
 

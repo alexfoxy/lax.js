@@ -1,0 +1,12 @@
+- Added responsive stuff
+- Changed demo to use window.animationFrame
+- breaking change - now have to add lax class to elements
+- Now merges in elements original transform and filter // inline 
+- Can add options into e.g. | loop=360 offset=1000 speed=2
+
+todo
+- update change log
+	- usage with vue/react
+
+- add link to my personal site
+
