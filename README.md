@@ -155,7 +155,6 @@ Then you can define presets or transforms per breakpoint.
 | linger      	| n/a 		|
 | lazy     	| 100 		|
 | eager     	| 100 		|
-| lazy     	| 100 		|
 | slalom     	| 50 		|
 | crazy     	| n/a 		|
 | spin     	| 360 		|
