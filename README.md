@@ -21,7 +21,7 @@ npm install lax.js
 import lax from 'lax.js'
 ```
 
-### Basic Browser Betup
+### Basic Browser Setup
 1) Add lax.js to your html
 
 ```html
