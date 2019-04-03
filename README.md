@@ -26,6 +26,8 @@ import lax from 'lax.js'
 
 ```html
 <script src="lib/lax.min.js" >
+<!-- or via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/lax.js" >
 ```
 
 2) Initialize the plugin
