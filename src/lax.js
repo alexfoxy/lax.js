@@ -170,7 +170,7 @@
       }
     }
 
-    lax.addElement = (el) => {
+    lax.createLaxObject = (el) => {
       const o = {
         el: el,
         originalStyle: {
@@ -179,6 +179,12 @@
         },
         transforms: {}
       }
+
+      return o
+    }
+
+    lax.calcTransforms = (o) => {
+      const { el } = o
 
       //find presets in data attributes
       const presets = []
@@ -289,16 +295,32 @@
         }
       }
 
-      lax.elements.push(o)
-      lax.updateElement(o)
+      return o
     }
 
     lax.populateElements = () => {
       lax.elements = []
 
-      document.querySelectorAll(lax.selector).forEach(lax.addElement)
+      document.querySelectorAll(lax.selector).forEach((el) => {
+        const o = lax.calcTransforms(lax.createLaxObject(el))
+        lax.elements.push(o)
+        lax.updateElement(o)
+      })
+
+
+
       currentBreakpoint = lax.getCurrentBreakPoint()
     }
+
+    lax.updateElements = () => {
+      lax.elements.forEach((o) => {
+        lax.calcTransforms(o)
+        lax.updateElement(o)
+      }) 
+
+      currentBreakpoint = lax.getCurrentBreakPoint()
+    }
+
 
     lax.getCurrentBreakPoint = () => {
       let b = 'default'
