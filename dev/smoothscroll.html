@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=0.75, minimum-scale=0.75">
+
+
+  <!-- <script src="./lib/lax.min.js"></script> -->
+  <script src="../src/lax.js"></script>
+
+  <script type="text/javascript">
+    window.onload = function() {
+      document.getElementById("main").classList.add("loaded")
+
+      lax.setup()
+
+      let scrollPosTarget = 0
+      let currentVal = 0
+      const maxStep = 10
+
+      const update = () => {
+        if(scrollPosTarget != window.scrollY) {
+          scrollPosTarget = window.scrollY
+        }
+
+        const d = scrollPosTarget - currentVal
+
+        currentVal += Math.abs(d) > maxStep ? (d > 0 ? maxStep : -maxStep) : d
+        
+        lax.update(currentVal)
+        window.requestAnimationFrame(update)
+      }
+
+      window.requestAnimationFrame(update)
+    }
+  </script>
+
+  <style>
+    body,html {
+      margin:0;
+      padding:0;
+      color: #F3F4F5;
+      background: #191818;
+      overflow-x: hidden;
+      height: 10000vh;
+    }
+
+    #letter {
+      width: 10vw; 
+      margin-left: 10vw;
+      position: fixed;
+      top: 20vh;
+    }
+
+  </style>
+</head>
+
+
+<body>
+  <div id="main">
+    <div id="header" class="section">
+      <img src="../docs/img/a.png" class="lax" id="letter" data-lax-translate-x="0 0, 1000 1000" />
+    </div>
+  </div>
+</body>

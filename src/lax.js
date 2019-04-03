@@ -298,17 +298,15 @@
       return o
     }
 
+    lax.addElement = (el) => {
+      const o = lax.calcTransforms(lax.createLaxObject(el))
+      lax.elements.push(o)
+      lax.updateElement(o)
+    }
+
     lax.populateElements = () => {
       lax.elements = []
-
-      document.querySelectorAll(lax.selector).forEach((el) => {
-        const o = lax.calcTransforms(lax.createLaxObject(el))
-        lax.elements.push(o)
-        lax.updateElement(o)
-      })
-
-
-
+      document.querySelectorAll(lax.selector).forEach(lax.addElement)
       currentBreakpoint = lax.getCurrentBreakPoint()
     }
 
