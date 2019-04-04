@@ -1,5 +1,5 @@
 //
-// lax v0.0.1 (Alex Fox)
+// lax v1.2.2 (Alex Fox)
 // Simple & light weight vanilla javascript plugin to create beautiful animations things when you scrolllll!!
 //
 // Licensed under the terms of the MIT license.
