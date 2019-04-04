@@ -198,6 +198,8 @@ Transforms
 | skewX     | data-lax-skew-x |
 | skewY     | data-lax-skew-y |
 | rotate     | data-lax-rotate |
+| rotateX 	| data-lax-rotate-x |
+| rotateY 	| data-lax-rotate-y |
 
 Filters (note - these may be unperformant on low powered machines)
 

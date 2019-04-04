@@ -1,5 +1,5 @@
 //
-// lax v1.2.2 (Alex Fox)
+// lax v1.2.3 (Alex Fox)
 // Simple & light weight vanilla javascript plugin to create beautiful animations things when you scrolllll!!
 //
 // Licensed under the terms of the MIT license.
@@ -35,6 +35,8 @@
       "data-lax-skew-x": (style, v) => { style.transform += ` skewX(${v}deg)` },
       "data-lax-skew-y": (style, v) => { style.transform += ` skewY(${v}deg)` },
       "data-lax-rotate": (style, v) => { style.transform += ` rotate(${v}deg)` },
+      "data-lax-rotate-x": (style, v) => { style.transform += ` rotateX(${v}deg)` },
+      "data-lax-rotate-y": (style, v) => { style.transform += ` rotateY(${v}deg)` },
       "data-lax-brightness": (style, v) => { style.filter += ` brightness(${v}%)` },
       "data-lax-contrast": (style, v) => { style.filter += ` contrast(${v}%)` },
       "data-lax-hue-rotate": (style, v) => { style.filter += ` hue-rotate(${v}deg)` },
