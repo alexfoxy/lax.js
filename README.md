@@ -269,7 +269,7 @@ You can then access this preset like this:
 As some values (vh, vw, elh, elw) are calculated on load, when the screen size changes or rotates you might want to recalculate these. E.g.
 ```
 window.addEventListener("resize", function() {
-	lax.populateElements()
+	lax.updateElements()
 });
 ```
 Be warned, on mobile, a resize event is fired when you scroll and the toolbar is hidden so you might want to check if the width or orientation has changed.
