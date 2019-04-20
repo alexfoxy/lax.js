@@ -64,6 +64,106 @@ See below for working examples:
 
 You can also call `lax.removeElement(domElement)` when the component unmounts.
 
+### React Setup
+
+1) Add `lax.js` to your React project
+
+```bash
+npm install lax.js
+```
+
+2) Initialize the plugin in your `App` component
+
+```jsx
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+
+import lax from 'lax.js'
+
+class App extends Component {
+	constructor(props) {
+		super(props)
+		lax.setup()
+
+		document.addEventListener('scroll', function(x) {
+			lax.update(window.scrollY)
+		}, false)
+
+		lax.update(window.scrollY)
+	}
+
+    	render() {
+		return (<div className="App"></div>);
+	}
+}
+
+export default App;
+```
+
+3) Use the plugin on a React Component
+
+```jsx
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+
+import lax from 'lax.js'
+
+import './Bubble.css'
+
+class Bubble extends Component {
+ 	componentDidMount() {
+	    this.el = ReactDOM.findDOMNode(this)
+	    lax.addElement(this.el)
+  	}
+
+  	componentWillUnmount() {
+	    lax.removeElement(this.el)
+	}
+  
+  	render() {
+    		return (
+      			<div className="Bubble" data-lax-preset="leftToRight fadeInOut"></div>
+    		)
+  	}
+}
+
+export default Bubble;
+```
+
+The stylesheet for the component above is
+
+```css
+.Bubble {
+  width: 200pt;
+  height: 200pt;
+  background: blue;
+  border-radius: 100pt;
+  margin-top: 50vh;
+  position: absolute;
+}
+```
+
+4) Lastly, include where you want to as usual
+
+```jsx
+import Bubble from './Bubble'
+
+...
+
+class App extends Component {
+	
+	...
+	
+  	render() {
+    		return (
+      			<div className="Bubble" data-lax-preset="leftToRight fadeInOut"></div>
+    		)
+  	}
+}
+
+export default App;
+```
+
 
 ## Presets
 The easiest way to get started is to use the presets via the `data-lax-preset` attribute. You can chain multiple presets together for e.g. `data-lax-preset="blurOut fadeOut spin"`. Some presets also support an optional strength e.g. `data-lax-preset="blurOut-50"`.
