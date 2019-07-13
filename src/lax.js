@@ -1,5 +1,5 @@
 //
-// lax v0.0.1 (Alex Fox)
+// lax v1.2.3 (Alex Fox)
 // Simple & light weight vanilla javascript plugin to create beautiful animations things when you scrolllll!!
 //
 // Licensed under the terms of the MIT license.
@@ -13,9 +13,9 @@
 // without getting a written permission first.
 //
 
-(function() {
-  var lax = (function() {
-    var lax = {
+(() => {
+  const lax = (() => {
+    const lax = {
       elements: []
     }
 
@@ -24,32 +24,34 @@
     const breakpointsSeparator = "_"
 
     const transformFns = {
-      "data-lax-opacity": function(style, v) { style.opacity = v },
-      "data-lax-translate": function(style, v) { style.transform += ` translate(${v}px, ${v}px)` },
-      "data-lax-translate-x": function(style, v) { style.transform += ` translateX(${v}px)` },
-      "data-lax-translate-y": function(style, v) { style.transform += ` translateY(${v}px)` },
-      "data-lax-scale": function(style, v) { style.transform += ` scale(${v})` },
-      "data-lax-scale-x": function(style, v) { style.transform += ` scaleX(${v})` },
-      "data-lax-scale-y": function(style, v) { style.transform += ` scaleY(${v})` },
-      "data-lax-skew": function(style, v) { style.transform += ` skew(${v}deg, ${v}deg)` },
-      "data-lax-skew-x": function(style, v) { style.transform += ` skewX(${v}deg)` },
-      "data-lax-skew-y": function(style, v) { style.transform += ` skewY(${v}deg)` },
-      "data-lax-rotate": function(style, v) { style.transform += ` rotate(${v}deg)` },
-      "data-lax-brightness": function(style, v) { style.filter += ` brightness(${v}%)` },
-      "data-lax-contrast": function(style, v) { style.filter += ` contrast(${v}%)` },
-      "data-lax-hue-rotate": function(style, v) { style.filter += ` hue-rotate(${v}deg)` },
-      "data-lax-blur": function(style, v) { style.filter += ` blur(${v}px)` },
-      "data-lax-invert": function(style, v) { style.filter += `  invert(${v}%)` },
-      "data-lax-saturate": function(style, v) { style.filter += `  saturate(${v}%)` },
-      "data-lax-grayscale": function(style, v) { style.filter += `  grayscale(${v}%)` },
-      "data-lax-bg-pos": function(style, v) { style.backgroundPosition = `${v}px ${v}px` },
-      "data-lax-bg-pos-x": function(style, v) { style.backgroundPositionX = `${v}px` },
-      "data-lax-bg-pos-y": function(style, v) { style.backgroundPositionY = `${v}px` }
+      "data-lax-opacity": (style, v) => { style.opacity = v },
+      "data-lax-translate": (style, v) => { style.transform += ` translate(${v}px, ${v}px)` },
+      "data-lax-translate-x": (style, v) => { style.transform += ` translateX(${v}px)` },
+      "data-lax-translate-y": (style, v) => { style.transform += ` translateY(${v}px)` },
+      "data-lax-scale": (style, v) => { style.transform += ` scale(${v})` },
+      "data-lax-scale-x": (style, v) => { style.transform += ` scaleX(${v})` },
+      "data-lax-scale-y": (style, v) => { style.transform += ` scaleY(${v})` },
+      "data-lax-skew": (style, v) => { style.transform += ` skew(${v}deg, ${v}deg)` },
+      "data-lax-skew-x": (style, v) => { style.transform += ` skewX(${v}deg)` },
+      "data-lax-skew-y": (style, v) => { style.transform += ` skewY(${v}deg)` },
+      "data-lax-rotate": (style, v) => { style.transform += ` rotate(${v}deg)` },
+      "data-lax-rotate-x": (style, v) => { style.transform += ` rotateX(${v}deg)` },
+      "data-lax-rotate-y": (style, v) => { style.transform += ` rotateY(${v}deg)` },
+      "data-lax-brightness": (style, v) => { style.filter += ` brightness(${v}%)` },
+      "data-lax-contrast": (style, v) => { style.filter += ` contrast(${v}%)` },
+      "data-lax-hue-rotate": (style, v) => { style.filter += ` hue-rotate(${v}deg)` },
+      "data-lax-blur": (style, v) => { style.filter += ` blur(${v}px)` },
+      "data-lax-invert": (style, v) => { style.filter += `  invert(${v}%)` },
+      "data-lax-saturate": (style, v) => { style.filter += `  saturate(${v}%)` },
+      "data-lax-grayscale": (style, v) => { style.filter += `  grayscale(${v}%)` },
+      "data-lax-bg-pos": (style, v) => { style.backgroundPosition = `${v}px ${v}px` },
+      "data-lax-bg-pos-x": (style, v) => { style.backgroundPositionX = `${v}px` },
+      "data-lax-bg-pos-y": (style, v) => { style.backgroundPositionY = `${v}px` }
     }
 
     let crazy = ""
 
-    for(var i=0;i<20;i++) {
+    for(let i=0;i<20;i++) {
       crazy += " " + i*5 + " " + (i*47)%360 + ", "
     }
 
@@ -133,20 +135,20 @@
     }
 
     function intrp(t, v) {
-      var i = 0
+      let i = 0
 
       while(t[i][0] <= v && t[i+1] !== undefined) {
         i+=1
       }
 
-      var x = t[i][0]
-      var prevX = t[i-1] === undefined ? x : t[i-1][0]
+      const x = t[i][0]
+      const prevX = t[i-1] === undefined ? x : t[i-1][0]
 
-      var y = t[i][1]
-      var prevY = t[i-1] === undefined ? y : t[i-1][1]
+      const y = t[i][1]
+      const prevY = t[i-1] === undefined ? y : t[i-1][1]
 
-      var xPoint = Math.min(Math.max((v-prevX)/(x-prevX),0),1)
-      var yPoint = (xPoint*(y-prevY)) + prevY
+      const xPoint = Math.min(Math.max((v-prevX)/(x-prevX),0),1)
+      const yPoint = (xPoint*(y-prevY)) + prevY
 
       return yPoint
     }
@@ -156,23 +158,22 @@
       else return parseFloat(s)
     }
 
-    lax.setup = function(o={}) {
+    lax.setup = (o={}) => {
       lax.breakpoints = o.breakpoints || {}
       
       lax.selector = o.selector || '.lax'
       lax.populateElements()
-
     }
 
-    lax.removeElement = function(el) {
-      const i = this.elements.findIndex(o => o.el = el)
+    lax.removeElement = (el) => {
+      const i = lax.elements.findIndex(o => o.el = el)
       if(i > -1) {
-        this.elements.splice(i, 1)
+        lax.elements.splice(i, 1)
       }
     }
 
-    lax.addElement = function(el) {
-      var o = {
+    lax.createLaxObject = (el) => {
+      const o = {
         el: el,
         originalStyle: {
           transform: el.style.transform,
@@ -181,19 +182,25 @@
         transforms: {}
       }
 
+      return o
+    }
+
+    lax.calcTransforms = (o) => {
+      const { el } = o
+
       //find presets in data attributes
-      var presets = []
-      for(var i=0; i<el.attributes.length; i++) {
-          var a = el.attributes[i]
+      const presets = []
+      for(let i=0; i<el.attributes.length; i++) {
+          const a = el.attributes[i]
           if(a.name.indexOf("data-lax-preset") > -1)  {
             presets.push(a);
           }
       }
 
       //unwrap presets into transformations
-      for(var i=0; i<presets.length; i++) {
-          var a = presets[i]
-          var b = a.name.split(breakpointsSeparator)
+      for(let i=0; i<presets.length; i++) {
+          const a = presets[i]
+          const b = a.name.split(breakpointsSeparator)
           const breakpoint = b[1] ? `${breakpointsSeparator}${b[1]}` : ''
           a.value.split(" ").forEach((p) => {
               const bits = p.split("-")
@@ -202,7 +209,7 @@
                   console.log(`lax error: preset ${bits[0]} is not defined`)
               } else {
                   const d = fn(bits[1])
-                  for(var k in d) {
+                  for(let k in d) {
                       el.setAttribute(`${k}${breakpoint}`, d[k])
                   }
               }
@@ -231,13 +238,13 @@
       }
 
       // build transform list
-      for(var i=0; i<el.attributes.length; i++) {
-        var a = el.attributes[i]
+      for(let i=0; i<el.attributes.length; i++) {
+        const a = el.attributes[i]
         if(a.name.indexOf("data-lax") < 0) continue
 
-        var b = a.name.split(breakpointsSeparator)
-        var bits = b[0].split("-")
-        var breakpoint = b[1] || "default"
+        const b = a.name.split(breakpointsSeparator)
+        const bits = b[0].split("-")
+        const breakpoint = b[1] || "default"
         if(bits[1] === "lax") {
           if(a.name === "data-lax-anchor") {
             o["data-lax-anchor"] = a.value === "self" ? el : document.querySelector(a.value)
@@ -245,14 +252,10 @@
             o.anchorTop = Math.floor(rect.top) + window.scrollY
           } else {
             const tString = a.value
-              .replace(new RegExp('-vw', 'g'), -window.innerWidth)
-              .replace(new RegExp('-vh', 'g'), -window.innerHeight)
-              .replace(new RegExp('-elh', 'g'), -el.clientHeight)
-              .replace(new RegExp('-elw', 'g'), -el.clientWidth)
-              .replace(new RegExp('vw', 'g'), window.innerWidth)
-              .replace(new RegExp('vh', 'g'), window.innerHeight)
-              .replace(new RegExp('elh', 'g'), el.clientHeight)
-              .replace(new RegExp('elw', 'g'), el.clientWidth)
+              .replace(/vw/g, window.innerWidth)
+              .replace(/vh/g, window.innerHeight)
+              .replace(/elh/g, el.clientHeight)
+              .replace(/elw/g, el.clientWidth)
               .replace(/\s+/g," ")
 
             const [arrString, optionString] = tString.split("|")
@@ -265,8 +268,8 @@
               }) 
             }
 
-            var name = b[0]
-            var valueMap = arrString.split(",").map((x) => { 
+            const name = b[0]
+            const valueMap = arrString.split(",").map((x) => { 
                 return x.trim().split(" ").map(fnOrVal)
               }).sort((a,b) => {
                 return a[0] - b[0]  
@@ -294,23 +297,37 @@
         }
       }
 
+      return o
+    }
+
+    lax.addElement = (el) => {
+      const o = lax.calcTransforms(lax.createLaxObject(el))
       lax.elements.push(o)
       lax.updateElement(o)
     }
 
-    lax.populateElements = function() {
+    lax.populateElements = () => {
       lax.elements = []
-
-      document.querySelectorAll(lax.selector).forEach(this.addElement)
+      document.querySelectorAll(lax.selector).forEach(lax.addElement)
       currentBreakpoint = lax.getCurrentBreakPoint()
     }
 
-    lax.getCurrentBreakPoint = function() {
+    lax.updateElements = () => {
+      lax.elements.forEach((o) => {
+        lax.calcTransforms(o)
+        lax.updateElement(o)
+      }) 
+
+      currentBreakpoint = lax.getCurrentBreakPoint()
+    }
+
+
+    lax.getCurrentBreakPoint = () => {
       let b = 'default'
       const w = window.innerWidth
 
-      for(var i in lax.breakpoints) {
-        let px = parseFloat(lax.breakpoints[i])
+      for(let i in lax.breakpoints) {
+        const px = parseFloat(lax.breakpoints[i])
         if(px <= w) {
           b = i
         } else {
@@ -321,17 +338,17 @@
       return b
     }
 
-    lax.updateElement = function(o) {
+    lax.updateElement = (o) => {
       const { originalStyle, anchorTop, transforms, spriteData, el } = o
 
       let r = anchorTop ? anchorTop-lastY : lastY
 
-      var style = {
+      const style = {
         transform: originalStyle.transform,
         filter: originalStyle.filter
       }
 
-      for(var i in transforms) {
+      for(let i in transforms) {
         const transformData = transforms[i][currentBreakpoint] || transforms[i]["default"]
 
         if(!transformData) {
@@ -372,7 +389,7 @@
       }
     }
 
-    lax.update = function(y) {
+    lax.update = (y) => {
       if(lastY === y) return
       lastY = y
       lax.elements.forEach(lax.updateElement)

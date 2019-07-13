@@ -21,11 +21,13 @@ npm install lax.js
 import lax from 'lax.js'
 ```
 
-### Basic Browser Betup
+### Basic Browser Setup
 1) Add lax.js to your html
 
 ```html
 <script src="lib/lax.min.js" >
+<!-- or via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/lax.js" >
 ```
 
 2) Initialize the plugin
@@ -51,12 +53,14 @@ window.onload = function() {
 
 4) Scroll and enjoy!
 
-### Usage With React, Vue.js & DOM Changes
-To increase performance lax.js indexes the list of elements to animate when the page loads. If you're using a library like React or vue.js, it is likely that you are adding elements after the initial `window.onload`. Because of this you will need to call `lax.addElement(domElement)` when you add components to the DOM that you want to animate. 
+### Usage With React, Vue.js, EmberJS & DOM Changes
+To increase performance lax.js indexes the list of elements to animate when the page loads. If you're using a library like React, vue.js or EmberJS, it is likely that you are adding elements after the initial `window.onload`. Because of this you will need to call `lax.addElement(domElement)` when you add components to the DOM that you want to animate. 
 
 See below for working examples:
 * [react](https://codepen.io/alexfoxy/pen/PLaKaE)
+* [react (using hooks)](https://github.com/arthurdenner/use-lax)
 * [vue](https://codepen.io/alexfoxy/pen/ZPRZBq)
+* [ember](https://github.com/redpencilio/ember-lax)
 
 You can also call `lax.removeElement(domElement)` when the component unmounts.
 
@@ -195,6 +199,8 @@ Transforms
 | skewX     | data-lax-skew-x |
 | skewY     | data-lax-skew-y |
 | rotate     | data-lax-rotate |
+| rotateX 	| data-lax-rotate-x |
+| rotateY 	| data-lax-rotate-y |
 
 Filters (note - these may be unperformant on low powered machines)
 
@@ -266,13 +272,13 @@ You can then access this preset like this:
 As some values (vh, vw, elh, elw) are calculated on load, when the screen size changes or rotates you might want to recalculate these. E.g.
 ```
 window.addEventListener("resize", function() {
-	lax.populateElements()
+	lax.updateElements()
 });
 ```
 Be warned, on mobile, a resize event is fired when you scroll and the toolbar is hidden so you might want to check if the width or orientation has changed.
 
 ### Scroll Wheels
-Scroll wheels only increment the scroll position in steps which can cause the animations to look janky. You can use the SmoothScroll (http://www.smoothscroll.net/) plugin to smooth this out, however there maybe performance implications that need investigating.
+Scroll wheels only increment the scroll position in steps which can cause the animations to look janky. 
 
 ### Merging Existing Styles
 Only inline styles for transforms and filters will be merged in to the animation. Transforms and filters derived from CSS will be overwritten.
