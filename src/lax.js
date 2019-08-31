@@ -158,6 +158,15 @@
       else return parseFloat(s)
     }
 
+    //If v >= 1, set the classname to true
+    //If v <= 0, set the classname to false
+    //The space in between is the buffer
+    const toggleClass = (o, n, v) => {
+      n = n.replace(/.*?:/, '')
+      if (v >= 1) o[n] = true
+      if (v <= 0) o[n] = false
+    }
+
     lax.setup = (o={}) => {
       lax.breakpoints = o.breakpoints || {}
       
@@ -173,8 +182,13 @@
     }
 
     lax.createLaxObject = (el) => {
+      const classes = el.classList.toString().split(' ').reduce(function(c, e) {
+          c[e] = true;
+          return c;
+      }, {})
       const o = {
-        el: el,
+        el,
+        classes,
         originalStyle: {
           transform: el.style.transform,
           filter: el.style.filter
@@ -339,14 +353,16 @@
     }
 
     lax.updateElement = (o) => {
-      const { originalStyle, anchorTop, transforms, spriteData, el } = o
+      const { originalStyle, anchorTop, transforms, spriteData, el, classes } = o
 
-      let r = anchorTop ? anchorTop-lastY : lastY
+      let r = anchorTop !== undefined ? anchorTop-lastY : lastY
 
       const style = {
         transform: originalStyle.transform,
         filter: originalStyle.filter
       }
+
+      const classNames = {};
 
       for(let i in transforms) {
         const transformData = transforms[i][currentBreakpoint] || transforms[i]["default"]
@@ -363,13 +379,15 @@
 
         const t = transformFns[i]
         const v = intrp(transformData.valueMap, _r)
+        const c = /:/.test(i) // Test if this is a class rule
 
-        if(!t) {
+        if (t) {
+          t(style, v)
+        } else if (c) {
+          toggleClass(classNames, i, v)
+        } else {
           // console.info(`lax: error ${i} is not supported`)
-          continue
         }
-
-        t(style, v)
       }
 
       if(spriteData) {
@@ -385,6 +403,16 @@
       } else {
         for(let k in style) {
           el.style[k] = style[k]
+        }
+      }
+      for (let l in classNames) {
+        if (classNames[l] && !classes[l]) {
+          el.classList.add(l);
+          classes[l] = true;
+        }
+        else if (!classNames[l] && classes[l]) {
+          el.classList.remove(l);
+          classes[l] = false;
         }
       }
     }

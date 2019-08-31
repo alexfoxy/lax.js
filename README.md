@@ -258,6 +258,21 @@ You can then access this preset like this:
 </p>
 ```
 
+## Add or remove classes
+You can tell lax to add or remove a class using `data-lax-class:<classname>`.  
+If the value is >= 1, the class will be added, and if the value is <= 0 it will be removed. The space in between can be used as a buffer. e.g.
+```html
+<p class="lax" data-lax-class:bottom="(document.body.scrollHeight-vh-1) 0, (document.body.scrollHeight-vh) 1">
+	I have the class "bottom" only when we have reached the end of the page 
+</p>
+<p class="lax" data-lax-class:bottom="0 0, (document.body.scrollHeight-vh) 1">
+	I get the class "bottom" when the entire page has been scrolled, and retain it until the page is scrolled to the top again
+</p>
+```
+This is useful for triggering CSS animations with the scroll position, without the animation being driven by the scroll.
+
+Note: Adding or removing the class will cause a reflow, so be mindful of having too many triggers.
+
 ## Performance Tips
 
 * Avoid nesting lax enabled elements within each other, you'll get better performance using lax with smaller elements in the dom tree.
