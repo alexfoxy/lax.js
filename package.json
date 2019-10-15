@@ -1,6 +1,6 @@
 {
 	"name": "lax.js",
-	"version": "1.2.4",
+	"version": "1.2.5",
 	"scripts": {
 		"build": "babel src -d lib; uglifyjs lib/lax.js -o lib/lax.min.js -c -m; gzip < lib/lax.min.js > lib/lax.min.js.gz;"
 	},
