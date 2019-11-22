@@ -132,6 +132,7 @@ You can pass options into your custom animations for more control e.g.
 | loop      	| modulus the input scrollY position so the animation will loop every `loop` pixels |
 | offset     	| add `offset` to scrollY position so the animation will begin at this point |
 | speed     	| multiplies the input scrollY position by `speed` to change the speed of the animation |
+| easing | add easing for value |
 
 
 ## Responsive Design
@@ -151,6 +152,22 @@ Then you can define presets or transforms per breakpoint.
 	I shrink when the screen is smaller than 992px but grow when the screen is larger 992px.
 </p>
 ```
+
+## Supported easings
+
+- linear
+- easeInQuad
+- easeOutQuad
+- easeInOutQuad
+- easeInCubic
+- easeOutCubic
+- easeInOutCubic
+- easeInQuart
+- easeOutQuart
+- easeInOutQuart
+- easeInQuint
+- easeOutQuint
+- easeInOutQuint
 
 ## Supported Presets
 

@@ -23,6 +23,39 @@
     let currentBreakpoint = 'default'
     const breakpointsSeparator = "_"
 
+    /*
+     * Easing Functions - inspired from http://gizma.com/easing/
+     * only considering the t value for the range [0, 1] => [0, 1]
+     */
+    const easings = {
+        // no easing, no acceleration
+        linear: function(t) { return t; },
+        // accelerating from zero velocity
+        easeInQuad: function(t) { return t * t; },
+        // decelerating to zero velocity
+        easeOutQuad: function(t) { return t * (2 - t); },
+        // acceleration until halfway, then deceleration
+        easeInOutQuad: function(t) { return t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t; },
+        // accelerating from zero velocity
+        easeInCubic: function(t) { return t * t * t; },
+        // decelerating to zero velocity
+        easeOutCubic: function(t) { return (--t) * t * t + 1; },
+        // acceleration until halfway, then deceleration
+        easeInOutCubic: function(t) { return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1; },
+        // accelerating from zero velocity
+        easeInQuart: function(t) { return t * t * t * t; },
+        // decelerating to zero velocity
+        easeOutQuart: function(t) { return 1 - (--t) * t * t * t; },
+        // acceleration until halfway, then deceleration
+        easeInOutQuart: function(t) { return t < .5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t; },
+        // accelerating from zero velocity
+        easeInQuint: function(t) { return t * t * t * t * t; },
+        // decelerating to zero velocity
+        easeOutQuint: function(t) { return 1 + (--t) * t * t * t * t; },
+        // acceleration until halfway, then deceleration
+        easeInOutQuint: function(t) { return t < .5 ? 16 * t * t * t * t * t : 1 + 16 * (--t) * t * t * t * t; }
+    }
+
     const transformFns = {
       "data-lax-opacity": (style, v) => { style.opacity = v },
       "data-lax-translate": (style, v) => { style.transform += ` translate(${v}px, ${v}px)` },
@@ -134,7 +167,7 @@
       lax.presets[p] = o
     }
 
-    function intrp(t, v) {
+    function intrp(t, v, easingType) {
       let i = 0
 
       while(t[i][0] <= v && t[i+1] !== undefined) {
@@ -148,6 +181,12 @@
       const prevY = t[i-1] === undefined ? y : t[i-1][1]
 
       const xPoint = Math.min(Math.max((v-prevX)/(x-prevX),0),1)
+
+      if (easingType && easings.hasOwnProperty(easingType)) {
+        // rewrite x point with easing
+        xPoint = easings[easingType](xPoint)
+      }
+
       const yPoint = (xPoint*(y-prevY)) + prevY
 
       return yPoint
@@ -362,8 +401,10 @@
         if(transformData.options.speed) _r = _r*transformData.options.speed
         if(transformData.options.loop) _r = _r%transformData.options.loop
 
+        let easing = transformData.options.easing ? transformData.options.easing : false;
+
         const t = transformFns[i]
-        const v = intrp(transformData.valueMap, _r)
+        const v = intrp(transformData.valueMap, _r, easing)
 
         if(!t) {
           // console.info(`lax: error ${i} is not supported`)
