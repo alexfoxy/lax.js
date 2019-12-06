@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5">
+    <style>
+        body {
+          height: 1000vh;
+        }
+
+        .wrap {
+          display: flex;
+          flex-direction: column;
+          position: sticky;
+          top: 0;
+        }
+
+        .block {
+          width: 50px;
+          height: 50px;
+          background: red;
+          margin: 10px;
+        }
+
+        .item {
+          display: flex;
+        }
+
+        span {
+          font-size: 20px;
+          line-height: 24px;
+          min-width: 200px;
+        }
+    </style>
+    <!-- <script src="./lib/lax.min.js"></script> -->
+    <script src="../src/lax.js"></script>
+    <script type="text/javascript">
+    window.onload = function() {
+        lax.setup()
+
+        const update = () => {
+            lax.update(window.scrollY)
+            window.requestAnimationFrame(update)
+        }
+
+        window.requestAnimationFrame(update)
+    }
+    </script>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="item">
+            <span>None(linear)</span>
+            <div class="block lax" data-lax-translate-x='0 0, (5*vh) 500px'></div>
+        </div>
+        <div class="item">
+            <span>easeInQuad</span>
+            <div class="block lax" data-lax-translate-x='0 0, (5*vh) 500px  | easing="easeInQuad"'></div>
+        </div>
+        <div class="item">
+            <span>easeOutQuad</span>
+            <div class="block lax" data-lax-translate-x='0 0, (5*vh) 500px  | easing="easeOutQuad"'></div>
+        </div>
+        <div class="item">
+            <span>easeInOutQuad</span>
+            <div class="block lax" data-lax-translate-x='0 0, (5*vh) 500px  | easing="easeInOutQuad"'></div>
+        </div>
+        <div class="item">
+            <span>easeInCubic</span>
+            <div class="block lax" data-lax-translate-x='0 0, (5*vh) 500px  | easing="easeInCubic"'></div>
+        </div>
+        <div class="item">
+            <span>easeOutCubic</span>
+            <div class="block lax" data-lax-translate-x='0 0, (5*vh) 500px  | easing="easeOutCubic"'></div>
+        </div>
+        <div class="item">
+            <span>easeInOutCubic</span>
+            <div class="block lax" data-lax-translate-x='0 0, (5*vh) 500px  | easing="easeInOutCubic"'></div>
+        </div>
+        <div class="item">
+            <span>easeInQuart</span>
+            <div class="block lax" data-lax-translate-x='0 0, (5*vh) 500px  | easing="easeInQuart"'></div>
+        </div>
+        <div class="item">
+            <span>easeOutQuart</span>
+            <div class="block lax" data-lax-translate-x='0 0, (5*vh) 500px  | easing="easeOutQuart"'></div>
+        </div>
+        <div class="item">
+            <span>easeInOutQuart</span>
+            <div class="block lax" data-lax-translate-x='0 0, (5*vh) 500px  | easing="easeInOutQuart"'></div>
+        </div>
+        <div class="item">
+            <span>easeInQuint</span>
+            <div class="block lax" data-lax-translate-x='0 0, (5*vh) 500px  | easing="easeInQuint"'></div>
+        </div>
+        <div class="item">
+            <span>easeOutQuint</span>
+            <div class="block lax" data-lax-translate-x='0 0, (5*vh) 500px  | easing="easeOutQuint"'></div>
+        </div>
+        <div class="item">
+            <span>easeInOutQuint</span>
+            <div class="block lax" data-lax-translate-x='0 0, (5*vh) 500px  | easing="easeInOutQuint"'></div>
+        </div>
+    </div>
+</body>
