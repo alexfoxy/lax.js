@@ -180,7 +180,7 @@
       const y = t[i][1]
       const prevY = t[i-1] === undefined ? y : t[i-1][1]
 
-      const xPoint = Math.min(Math.max((v-prevX)/(x-prevX),0),1)
+      let xPoint = Math.min(Math.max((v-prevX)/(x-prevX),0),1)
 
       if (easingType && easings.hasOwnProperty(easingType)) {
         // rewrite x point with easing
@@ -192,9 +192,24 @@
       return yPoint
     }
 
+    function isString(value) {
+        return toString.call(value) === '[object String]';
+    }
+
     function fnOrVal(s) {
       if(s[0] === "(") return eval(s)
       else return parseFloat(s)
+    }
+
+    function valOrString(s) {
+        // replace text for easing
+        s = s.trim().replace(/['"]+/g, '')
+
+        if (!parseFloat(s)) {
+            return s;
+        } else {
+            return parseFloat(s);
+        }
     }
 
     lax.setup = (o={}) => {
@@ -304,7 +319,7 @@
             if(optionString) {
               optionString.split(" ").forEach((o) => {
                 const [key, val] = o.split("=")
-                options[key] = key && fnOrVal(val)
+                options[key] = key && valOrString(val)
               }) 
             }
 
