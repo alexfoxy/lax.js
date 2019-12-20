@@ -1,5 +1,5 @@
 # lax.js
-t3deelyy ana
+t3deelyy ana elgdeed
 
 Simple & light weight (<3kb gzipped) vanilla javascript plugin to create *smooth* & beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
 
