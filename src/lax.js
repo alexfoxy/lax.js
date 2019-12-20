@@ -166,7 +166,7 @@
     }
 
     lax.removeElement = (el) => {
-      const i = lax.elements.findIndex(o => o.el = el)
+      const i = lax.elements.findIndex(o => o.el === el)
       if(i > -1) {
         lax.elements.splice(i, 1)
       }
