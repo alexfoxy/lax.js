@@ -189,6 +189,7 @@ Transforms
 | Transform     | Key           |
 | ------------- | ------------- |
 | opacity       | data-lax-opacity  |
+| fill-opacity	|	data-lax-fill-opacity	|
 | translate     | data-lax-translate |
 | translateX     | data-lax-translate-x |
 | translateY     | data-lax-translate-y |
