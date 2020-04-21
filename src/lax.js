@@ -154,7 +154,7 @@
     }
 
     function fnOrVal(s) {
-      if(s[0] === "(") return eval(s)
+      if(s[0] === "(") return Function(`'use strict'; return (${s})`)()
       else return parseFloat(s)
     }
 
