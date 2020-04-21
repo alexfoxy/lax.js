@@ -160,6 +160,7 @@
 
     lax.setup = (o={}) => {
       lax.breakpoints = o.breakpoints || {}
+      lax.breakpointsKeys = Object.keys(lax.breakpoints)
       
       lax.selector = o.selector || '.lax'
       lax.populateElements()
@@ -350,7 +351,11 @@
       }
 
       for(let i in transforms) {
-        const transformData = transforms[i][currentBreakpoint] || transforms[i]["default"]
+        let transformData
+        for (let j = lax.breakpointsKeys.indexOf(currentBreakpoint); j >= 0 && !transformData; j--) {
+          transformData = transforms[i][lax.breakpointsKeys[j]]
+        }
+        transformData =  transformData || transforms[i]["default"]
 
         if(!transformData) {
           // console.log(`lax error: there is no setting for key ${i} and screen size ${currentBreakpoint}. Try adding a default value!`)

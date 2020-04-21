@@ -97,7 +97,13 @@
     window.onload = function() {
       document.getElementById("main").classList.add("loaded")
 
-      lax.setup()
+      lax.setup({
+        breakpoints: {
+          small: 400,
+          medium: 800,
+          large: 1200
+        }
+      })
 
       const update = () => {
         lax.update(window.scrollY)
@@ -105,6 +111,8 @@
       }
 
       window.requestAnimationFrame(update)
+
+      window.addEventListener("resize", () => lax.updateElements())
     }
   </script>
 
@@ -120,6 +128,7 @@
         data-lax-rotate= "0 -20, 900 20, 2000 -20 | loop=2000 offset=200"
         data-lax-translate-x= "0 110, 800 -100, 900 -110, 1900 100, 2000 110 | loop=2000 offset=200"
         data-lax-translate-y= "0 -elh, (vh*10) (vh+elh) | loop=(vh*10) offset=1000 speed=1"
+        data-lax-scale_small= "(vh*4) 1, 0 0"
       ></div>
 
       <div 
@@ -128,6 +137,7 @@
         data-lax-rotate= "0 -20, 900 20, 2000 -20 | loop=2000 offset=500 speed=1.5"
         data-lax-translate-x= "0 110, 800 -100, 900 -110, 1900 100, 2000 110 | loop=2000 offset=500 speed=1.5"
         data-lax-translate-y= "0 -elh, (vh*10) (vh+elh) | loop=(vh*10) offset=1000 speed=1"
+        data-lax-scale_medium= "(vh*4) 1, 0 0"
       ></div>
 
       <div 
@@ -136,6 +146,7 @@
         data-lax-rotate= "0 -20, 900 20, 2000 -20 | loop=2000 offset=1000"
         data-lax-translate-x= "0 110, 800 -100, 900 -110, 1900 100, 2000 110 | loop=2000 offset=1000"
         data-lax-translate-y= "0 -elh, (vh*10) (vh+elh) | loop=(vh*10) offset=400 speed=1"
+        data-lax-scale_large= "(vh*4) 1, 0 0"
       ></div>
     </div>
 
