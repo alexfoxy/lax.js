@@ -251,7 +251,7 @@
           if(a.name === "data-lax-anchor") {
             o["data-lax-anchor"] = a.value === "self" ? el : document.querySelector(a.value)
             const rect = o["data-lax-anchor"].getBoundingClientRect()
-            o.anchorTop = Math.floor(rect.top) + window.scrollY
+            o.anchorTop = Math.floor(rect.top) + (window.scrollY || window.pageYOffset)
           } else {
             const tString = a.value
               .replace(/vw/g, window.innerWidth)
