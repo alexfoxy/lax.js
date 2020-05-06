@@ -258,6 +258,13 @@ You can then access this preset like this:
 </p>
 ```
 
+## Custom Transform Functions
+Lots of transform functions are already part of lax.js. However, in case you need some other transform you can easily extend the list of transform functions:
+Suppose you've got a navigation and want to only animate its background color opacity (the example below only works for transparent/white)
+```javascript
+lax.addTransformFn("data-lax-bg-opacity", (style, v) => { style.backgroundColor = `rgba(255, 255, 255, ${v})`; });
+```
+
 ## Performance Tips
 
 * Avoid nesting lax enabled elements within each other, you'll get better performance using lax with smaller elements in the dom tree.
