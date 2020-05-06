@@ -396,6 +396,12 @@
       lax.elements.forEach(lax.updateElement)
     }
 
+    lax.addTransformFns = (identifier, fn) => {
+      transformFns[identifier] = fn
+
+      lax.updateElements();
+    }
+
     return lax;
   })();
 
