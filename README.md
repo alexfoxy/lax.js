@@ -260,9 +260,9 @@ You can then access this preset like this:
 
 ## Custom Transform Functions
 Lots of transform functions are already part of lax.js. However, in case you need some other transform you can easily extend the list of transform functions:
-Suppose you've got a navigation and want to only animate its background color opacity (the example below only works for transparent/white)
+Suppose you've got a div and want to only animate its backdrop-filter blur value
 ```javascript
-lax.addTransformFn("data-lax-bg-opacity", (style, v) => { style.backgroundColor = `rgba(255, 255, 255, ${v})`; });
+lax.addTransformFn("data-lax-backdrop-blur", (style, v) => { style.filter += `backdrop-filter(${v}px)` });
 ```
 
 ## Performance Tips
