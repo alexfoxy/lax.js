@@ -86,10 +86,10 @@
       Object.keys(styles).forEach((key) => {
         const val = styles[key]
 
-        const transforms = ["translateX", "translateY", "translate", "scaleX", "scaleY", "scale", "skewX", "skewY", "skew", "rotateX", "rotateY", "rotate"]
-        const filters = ["blur", "hue-rotate"]
+        const transforms = ["perspective", "translateX", "translateY", "translate", "scaleX", "scaleY", "scale", "skewX", "skewY", "skew", "rotateX", "rotateY", "rotate"]
+        const filters = ["blur", "hue-rotate", "brightness"]
 
-        const pxUnits = ["translateX", "translateY", "translate", "border-radius"]
+        const pxUnits = ["perspective", "translateX", "translateY", "translate", "border-radius"]
         const degUnits = ["hue-rotate", "rotate", "rotateX", "rotateY", "skew", "skewX", "skewY"]
 
         const unit = pxUnits.includes(key) ? 'px' : (degUnits.includes(key) ? 'deg' : '')
@@ -133,6 +133,12 @@
       name = ''
       lastValue = 0
       frameStep = 1
+      m1 = 0
+
+      m2 = 0
+      momentum = 0
+      momentumEnabled = "off"
+
 
       constructor(name, getValueFn, options = {}) {
         this.name = name
@@ -141,14 +147,31 @@
         Object.keys(options).forEach((key) => {
           this[key] = options[key]
         })
+
+        this.lastValue = this.getValueFn()
       }
 
       getValue = (frame) => {
+        let value = this.lastValue
+
         if (frame % this.frameStep === 0) {
-          this.lastValue = this.getValueFn()
+          value = this.getValueFn()
         }
 
-        return this.lastValue
+        if (this.momentumEnabled !== "off") {
+          const delta = value - this.lastValue
+          const damping = 0.8
+
+          this.m1 = this.m1 * damping + delta * (1 - damping)
+          this.m2 = this.m2 * damping + this.m1 * (1 - damping)
+          this.momentum = Math.round(this.m2 * 5000) / 10000
+          if (this.momentumEnabled === "absolute") {
+            this.momentum = Math.abs(this.momentum)
+          }
+        }
+
+        this.lastValue = value
+        return [this.lastValue, this.momentum]
       }
     }
 
@@ -181,17 +204,20 @@
         for (let driverName in animations) {
           const styleBindings = animations[driverName]
 
-          const value = driverValues[driverName]
+          const [value, momentumValue] = driverValues[driverName]
 
           for (let key in styleBindings) {
             const [arr1, arr2, options = {}] = styleBindings[key]
-            const { loopFrame, frameStep = 1, easing, cssFn } = options
+            const { loopFrame, frameStep = 1, easing, momentum, cssFn } = options
 
             const easingFn = easings[easing]
 
             if (frame % frameStep === 0) {
               const v = loopFrame ? value % loopFrame : value
-              const interpolatedValue = interpolate(arr1, arr2, v, easingFn)
+              let interpolatedValue = interpolate(arr1, arr2, v, easingFn)
+
+              if (momentum) interpolatedValue += (momentumValue * momentum)
+
               styles[key] = cssFn ? cssFn(interpolatedValue) : interpolatedValue
             }
           }

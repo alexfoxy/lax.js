@@ -1,0 +1,84 @@
+<head>
+  <script type="application/javascript" src="../lib/lax.js"></script>
+
+  <script type="application/javascript">
+
+    window.onload = () => {
+      lax.init()
+
+      lax.addDriver('scrollY', () => {
+        return document.body.scrollTop
+      }, { momentumEnabled: "linear" })
+
+      lax.addElements(".circle", {
+        scrollY: {
+          perspective: [
+            [0],
+            [1000],
+          ],
+          rotateX: [
+            [0],
+            [0],
+            {
+              momentum: -1
+            }
+          ],
+          "box-shadow": [
+            [0],
+            [0],
+            {
+              // easing: 'easeInOutQuint',
+              momentum: -1,
+              cssFn: (val) => {
+                return `0px ${Math.abs(val)}px 30px rgba(0,0,0,0.2)`
+              }
+            }
+          ],
+          translateY: [
+            [0],
+            [0],
+            {
+              momentum: -1
+            }
+          ],
+          brightness: [
+            [0],
+            [1],
+            {
+              momentum: -0.01
+            }
+          ]
+        },
+      })
+    }
+  </script>
+</head>
+
+<style>
+  .circle {
+    height: 200px;
+    width: 200px;
+    background-color: #566c9c;
+    margin-bottom: 0px;
+    margin-left: -100px;
+    margin-top: -100px;
+    border-radius: 20px;
+    left: 50vw;
+    top: 50vh;
+    position: fixed;
+  }
+
+  body {
+    padding: 0;
+    background-color: #dedbde;
+    background-image: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+    margin: 0;
+    background-size: 700px 700px;
+    height: 1000000px;
+  }
+</style>
+
+<body>
+  <div class="circle">
+  </div>
+</body>

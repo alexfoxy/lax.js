@@ -1,5 +1,5 @@
 <head>
-  <script type="application/javascript" src="../src/lax.js"></script>
+  <script type="application/javascript" src="../lib/lax.js"></script>
 
   <script type="application/javascript">
 
@@ -12,25 +12,25 @@
       }, false)
 
       lax.addDriver('cursorX', () => {
-        return lax.__cursorX
-      })
+        return lax.__cursorX || 0
+      }, { momentumEnabled: "absolute" })
 
       lax.addDriver('cursorY', () => {
-        return lax.__cursorY
-      })
+        return lax.__cursorY || 0
+      }, { momentumEnabled: "absolute" })
 
       lax.addElements(".cursor", {
         'cursorX': {
           "translateX": [
             [0, 'screenWidth'],
             [0, 'screenWidth'],
-          ]
+          ],
         },
         'cursorY': {
           "translateY": [
             [0, 'screenHeight'],
             [0, 'screenHeight'],
-          ]
+          ],
         },
         'frame': {
           "rotate": [
