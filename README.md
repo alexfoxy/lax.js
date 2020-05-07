@@ -1,24 +1,51 @@
 # lax.js 2.0
-This is a work in progress re-write of lax.js
-
-The goals were to iron out some of the bugs in version 1.0 and add a few nice features. I also wanted to create a cleaner implimentation so it was easier to work on moving forward.
+This is a work in progress re-write of lax.js. The primary goals are to iron out some of the bugs in version 1.0 and add a few nice features. I also wanted to create a cleaner implimentation so it was easier to work on moving forward.
 
 ### Main improvements
 - You can now add several "drivers" to control different animations, for example scroll-x and scroll-y
-- Momentum on driver values (see example/momentum)
+- Momentum on driver values (see momentum example)
 - Updated the syntax for declaring animations, allowing for more advanced combinations
 - Declare animations in JS as well as inline HTML
 - Add custom CSS values
 - Easings 
 
-### Updated animation interface
+### Getting started
+I am yet to complete a proper readme so the best thing to do is play around with the examples in the `/examples` folder.
 
-You can now write your animations in javascript. e.g.
+If you have any questions or issues please report them so I can improve the code before finishing up the release.
 
+Below is a very simple example to get started:
 ```
-// Javascript 
+    // JS
+    window.onload = () => {
+      lax.init()
 
-lax.addElements(".myelement", {
+      lax.addDriver('scrollY', () => {
+        return document.body.scrollTop
+      })
+      
+      lax.addElements('.selector', {
+        scrollY: {
+            translateX: [
+                [0, "screenHeight"],
+                [0, "screenWidth"]
+            ]
+        }
+    })
+    
+    // HTML
+    <div class="selector">Hello</div>
+```
+
+### Updated animation interface
+I wanted to change the way you declared animations for a few reasons:
+- Javascript implimentation to enable the creation of many lax enabled elements easilly.
+- Clearer value maps, taking influence from React Native animated implimentation
+- Allow multiple css keys per driver
+
+You can create lax elements with Javascript like this:
+```
+lax.addElements(".myelement", { // HTML Selector
   "scroll-y": { // Driver value to bind to 
     "translateX": [ // CSS property name
       [0, "screenHeight"], // Driver value map
@@ -35,8 +62,7 @@ lax.addElements(".myelement", {
 ]
 ```
 
-Or within the HTML like lax 1.0, e.g.
-
+Or inline like lax 1.0 like this:
 ```
 <div class="myblock" data-lax='{ 
   scrollY: {
