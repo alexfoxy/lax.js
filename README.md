@@ -10,6 +10,13 @@ Simple & light weight (<3kb gzipped) vanilla javascript plugin to create *smooth
 
 ![](https://i.imgur.com/GGQFucZ.gif)
 
+---
+
+## lax 2.0
+For those daring enough ;) there is an alpha version of lax.js 2.0 available. Have a play:  https://github.com/alexfoxy/laxxx/tree/version-2 
+
+---
+
 ## Getting Started
 
 ### NPM Setup
