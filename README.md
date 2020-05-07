@@ -5,6 +5,7 @@ The goals were to iron out some of the bugs in version 1.0 and add a few nice fe
 
 ### Main improvements
 - You can now add several "drivers" to control different animations, for example scroll-x and scroll-y
+- Momentum on driver values (see example/momentum)
 - Updated the syntax for declaring animations, allowing for more advanced combinations
 - Declare animations in JS as well as inline HTML
 - Add custom CSS values
