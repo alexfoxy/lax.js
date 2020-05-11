@@ -2,18 +2,18 @@
 
 Simple & light weight (<3kb gzipped) vanilla javascript plugin to create *smooth* & beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
 
-[>>> DEMO <<<](https://alexfox.dev/laxxx/)
+[>>> DEMO <<<](https://alexfox.dev/lax.js/)
 
 ![](https://i.imgur.com/Jbkna80.gif) 
 
-[>>> MARIO DEMO <<<](https://alexfox.dev/laxxx/sprite.html)
+[>>> MARIO DEMO <<<](https://alexfox.dev/lax.js/sprite.html)
 
 ![](https://i.imgur.com/GGQFucZ.gif)
 
 ---
 
 ## lax 2.0
-For those daring enough ;) there is an alpha version of lax.js 2.0 available. Have a play:  https://github.com/alexfoxy/laxxx/tree/version-2 
+For those daring enough ;) there is an alpha version of lax.js 2.0 available. Have a play:  https://github.com/alexfoxy/lax.js/tree/version-2 
 
 ---
 
@@ -232,7 +232,7 @@ Other
 	
 
 ## Sprite Sheet Animations
-You can create animations using sprite sheets. See a demo [here](https://alexfox.dev/laxxx/sprite.html).
+You can create animations using sprite sheets. See a demo [here](https://alexfox.dev/lax.js/sprite.html).
 
 The `data-lax-sprite-data` is required and formated like so `[frameWidth, frameHeight, frameCount, columnCount, scrollStep]`. You can either set the image using CSS or the `data-lax-sprite-image` attribute. e.g.
 
