@@ -1,0 +1,181 @@
+<head>
+  <script type="application/javascript" src="../lib/lax.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scallable=no">
+  <script type="application/javascript">
+
+    window.onload = () => {
+      lax.init()
+
+      const container = document.querySelector('.container')
+
+      lax.addDriver('containerScrollX', () => {
+        return container.scrollLeft
+      })
+
+      lax.addElements(".background", {
+        containerScrollX: {
+          "hue-rotate": [
+            [0, 10000],
+            [0, 1000],
+          ],
+        }
+      })
+
+      const imageAnimationMap = ["elCenterHoriz-elWidth", "elCenterHoriz", "elCenterHoriz+elWidth"]
+      const textAnimationMap = ["elCenterHoriz-(elWidth/3)", "elCenterHoriz", "elCenterHoriz+(elWidth/3)"]
+
+      lax.addElements(".page h1", {
+        containerScrollX: {
+          translateY: [
+            textAnimationMap,
+            [200, 0, 200],
+            {
+              easing: 'easeInOutQuad',
+            }
+          ],
+          opacity: [
+            textAnimationMap,
+            [0, 1, 0],
+          ],
+        }
+      }, {
+        willChange: ["transform"] // Only use if you are experience graphical issues
+      })
+
+      lax.addElements(".page .image", {
+        containerScrollX: {
+          translateY: [
+            imageAnimationMap,
+            [-50, 0, -50],
+            {
+              easing: 'easeInOutQuad',
+            }
+          ],
+          scale: [
+            imageAnimationMap,
+            [0.8, 1, 0.8],
+            {
+              easing: 'easeInOutQuad',
+            }
+          ],
+        }
+      }, {
+        willChange: ["transform"] // Only use if you are experience graphical issues
+      })
+    }
+  </script>
+</head>
+
+<style>
+  .background {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    background: linear-gradient(58deg, rgba(118, 176, 177, 1) 0%, rgba(157, 212, 208, 1) 100%);
+  }
+
+  .page {
+    flex-shrink: 0;
+    width: 100vw;
+    height: 100vh;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    position: relative;
+    display: inline-block;
+  }
+
+  .image {
+    background-color: yellow;
+    height: 70vh;
+    width: 80%;
+    left: 10%;
+    position: absolute;
+    transform-origin: center top;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center top;
+  }
+
+  .container {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    direction: ltr;
+    width: 100vw;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* .content {
+    padding-left: 10vw;
+    width: 10000vw;
+  } */
+
+  h1 {
+    top: calc(70vh + 20px);
+    position: absolute;
+    width: 100%;
+    font-family: helvetica;
+    font-weight: 100;
+    text-align: center;
+    color: white;
+    font-size: 60px;
+  }
+
+  body {
+    padding: 0;
+    margin: 0;
+    background-color: black;
+    overflow-y: hidden;
+    overflow-x: hidden;
+  }
+
+  html {
+    height: 100vh;
+    overflow: hidden;
+  }
+</style>
+
+<body>
+  <div class="background"></div>
+
+  <div class="container">
+    <div class="page">
+      <div class="image"></div>
+      <h1>Hubert Pendant</h1>
+    </div>
+
+    <div class="page">
+      <div class="image"></div>
+      <h1>Brunsta Pendant</h1>
+    </div>
+
+    <div class="page">
+      <div class="image"></div>
+      <p>
+        Donec turpis purus, suscipit vel malesuada quis, dictum sit amet risus. Ut bibendum libero ac justo semper,
+        nec
+        finibus quam molestie.
+      </p>
+    </div>
+
+    <div class="page">
+      <div class="image"></div>
+      <p>
+        Donec turpis purus, suscipit vel malesuada quis, dictum sit amet risus. Ut bibendum libero ac justo semper,
+        nec
+        finibus quam molestie.
+      </p>
+    </div>
+
+    <div class="page">
+      <div class="image"></div>
+      <p>
+        Donec turpis purus, suscipit vel malesuada quis, dictum sit amet risus. Ut bibendum libero ac justo semper,
+        nec
+        finibus quam molestie.
+      </p>
+    </div>
+  </div>
+</body>
