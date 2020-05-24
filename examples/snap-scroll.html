@@ -3,12 +3,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scallable=no">
   <script type="application/javascript">
 
-    window.onload = () => {
+    window.onload = function () {
       lax.init()
 
       const container = document.querySelector('.container')
 
-      lax.addDriver('containerScrollX', () => {
+      lax.addDriver('containerScrollX', function () {
         return container.scrollLeft
       })
 
@@ -21,8 +21,8 @@
         }
       })
 
-      const imageAnimationMap = ["elCenterHoriz-elWidth", "elCenterHoriz", "elCenterHoriz+elWidth"]
-      const textAnimationMap = ["elCenterHoriz-(elWidth/3)", "elCenterHoriz", "elCenterHoriz+(elWidth/3)"]
+      const imageAnimationMap = ["elCenterX-elWidth", "elCenterX", "elCenterX+elWidth"]
+      const textAnimationMap = ["elCenterX-(elWidth/3)", "elCenterX", "elCenterX+(elWidth/3)"]
 
       lax.addElements(".page h1", {
         containerScrollX: {

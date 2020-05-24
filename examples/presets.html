@@ -1,22 +1,197 @@
 <head>
 
-  <script type="application/javascript" src="../lib/lax-presets.js"></script>
-  <script type="application/javascript" src="../lib/lax.js"></script>
+  <script type="application/javascript" src="../src/lax-presets.js"></script>
+  <script type="application/javascript" src="../src/lax.js"></script>
 
   <script type="application/javascript">
 
-    window.onload = () => {
+    window.onload = function () {
       lax.init(window.laxPresets)
 
-      lax.addDriver('scrollY', () => {
+      lax.addDriver('scrollY', function () {
         return document.body.scrollTop
       })
 
-      lax.addElements(".myblock", {
-        scrollY: {
-          presets: ["fadeInOut", "panHorizontal screenWidth", "scaleInOut 0.2,0.2"]
-        }
-      })
+      // Settings
+      const settingsEl = document.querySelector('#settings')
+
+      function onSettingChange() {
+        const presets = []
+
+        settings.forEach(function (setting) {
+          if (setting.selectedPreset) {
+            presets.push(`${setting.selectedPreset} ${setting.sliderA.value},${setting.sliderB.value}`)
+          }
+        })
+
+        lax.removeElements(".myblock")
+
+        lax.addElements(".myblock", {
+          scrollY: {
+            presets
+            // presets: ["fadeInOut 0,0.2", "panHorizontal screenWidth", "scaleInOut 0.2,0.1", "lightspeed"]
+          }
+        })
+      }
+
+      const settings = [
+        {
+          group: 'fade',
+          presets: ["", "fadeInOut", "fadeIn", "fadeOut"],
+          selectedPreset: "",
+          sliderA: {
+            value: 0,
+            sliderALabel: 'minOpacity',
+            min: 0,
+            max: 1
+          },
+          sliderB: {
+            value: 0.2,
+            sliderALabel: 'speed',
+            min: 0,
+            max: 1
+          },
+        },
+        {
+          group: 'scale',
+          presets: ["", "scaleInOut", "scaleIn", "scaleOut"],
+          selectedPreset: "",
+          sliderA: {
+            value: 0.2,
+            sliderALabel: 'minScale',
+            min: 0,
+            max: 1
+          },
+          sliderB: {
+            value: 0.1,
+            sliderALabel: 'speed',
+            min: 0,
+            max: 1
+          },
+        },
+        {
+          group: 'scale',
+          presets: ["", "blurInOut", "blurIn", "blurOur"],
+          selectedPreset: "",
+          sliderA: {
+            value: 50,
+            sliderALabel: 'minScale',
+            min: 1,
+            max: 100
+          },
+          sliderB: {
+            value: 0.1,
+            sliderALabel: 'speed',
+            min: 0,
+            max: 1
+          },
+        },
+        {
+          group: 'rotate',
+          presets: ["", "spin"],
+          selectedPreset: "",
+          sliderA: {
+            value: 100,
+            sliderALabel: 'minScale',
+            min: 0,
+            max: 500
+          },
+          sliderB: {
+            value: 0,
+            sliderALabel: 'speed',
+            min: 0,
+            max: 1
+          },
+        },
+        {
+          group: 'rotate',
+          presets: ["", "lightspeed"],
+          selectedPreset: "",
+          sliderA: {
+            value: 20,
+            sliderALabel: 'minScale',
+            min: 0,
+            max: 50
+          },
+          sliderB: {
+            value: 0.5,
+            sliderALabel: 'speed',
+            min: 0,
+            max: 1
+          },
+        },
+        {
+          group: 'rotate',
+          presets: ["", "panHorizontal"],
+          selectedPreset: "",
+          sliderA: {
+            value: 100,
+            sliderALabel: 'minScale',
+            min: 0,
+            max: window.innerWidthr
+          },
+          sliderB: {
+            value: 0.5,
+            sliderALabel: 'speed',
+            min: 0,
+            max: 1
+          },
+        },
+      ]
+
+      function renderSettings(setting) {
+        setting.presets.forEach(function (preset) {
+          const radio = document.createElement('input')
+          radio.type = 'radio'
+          radio.value = preset
+          radio.checked = preset === ""
+          radio.name = setting.group
+          radio.id = preset === '' ? 'none' + setting.group : preset
+
+          radio.addEventListener('change', function (event) {
+            setting.selectedPreset = event.target.value
+            onSettingChange()
+          })
+
+          const label = document.createElement('label')
+          label.setAttribute('for', preset === '' ? 'none' + setting.group : preset)
+          label.innerHTML = preset === '' ? 'none' : preset
+
+          settingsEl.appendChild(radio)
+          settingsEl.appendChild(label)
+        })
+
+        const sliderA = document.createElement('input')
+        sliderA.type = "range"
+        sliderA.min = setting.sliderA.min
+        sliderA.max = setting.sliderA.max
+        sliderA.step = 0.01
+        sliderA.value = setting.sliderA.value
+
+        sliderA.addEventListener('change', function (event) {
+          setting.sliderA.value = event.target.value
+          onSettingChange()
+        })
+
+        settingsEl.appendChild(sliderA)
+
+        const sliderB = document.createElement('input')
+        sliderB.type = "range"
+        sliderB.min = setting.sliderB.min
+        sliderB.max = setting.sliderB.max
+        sliderB.step = 0.01
+        sliderB.value = setting.sliderB.value
+
+        sliderB.addEventListener('change', function (event) {
+          setting.sliderB.value = event.target.value
+          onSettingChange()
+        })
+
+        settingsEl.appendChild(sliderB)
+      }
+
+      settings.forEach(renderSettings)
+
     }
   </script>
 </head>
@@ -27,19 +202,32 @@
     height: 100px;
     position: absolute;
     top: 100vh;
+    margin-top: -50px;
+    border: 50px yellow solid;
     left: 0;
-    margin-left: -50px;
+    margin-left: 0px;
     background-color: red;
   }
 
   body {
     padding: 0;
+    background-color: #dedbde;
+    background-image: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
     margin: 0;
-    background-color: black;
-    height: 10000px;
+    background-size: 100px 100px;
+    height: calc(200vh + 100px);
+  }
+
+  #settings {
+    background-color: gray;
+    position: fixed;
   }
 </style>
 
 <body>
+  <div id="settings">
+  </div>
+
+
   <div class="myblock"></div>
 </body>

@@ -10,6 +10,23 @@
       return v === "" ? undefined : v
     }
 
+    function getArrayValues(arr, windowWidth) {
+      if (Array.isArray(arr)) return arr
+
+      const keys = Object.keys(arr).map(x => parseInt(x)).sort((a, b) => a > b ? 1 : -1)
+
+      let retKey = keys[keys.length - 1]
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        if (windowWidth < key) {
+          retKey = key
+          break
+        }
+      }
+
+      return arr[retKey]
+    }
+
     function lerp(start, end, t) {
       return start * (1 - t) + end * t
     }
@@ -113,6 +130,8 @@
         return val
       }
 
+      const pageHeight = document.body.scrollHeight
+      const pageWidth = document.body.scrollWidth
       const screenWidth = document.body.clientWidth
       const screenHeight = document.body.clientHeight
       const scrollTop = document.body.scrollTop
@@ -126,14 +145,16 @@
       return Function(`return ${val
         .replace(/screenWidth/g, screenWidth)
         .replace(/screenHeight/g, screenHeight)
+        .replace(/pageHeight/g, pageHeight)
+        .replace(/pageWidth/g, pageWidth)
         .replace(/elWidth/g, width)
         .replace(/elHeight/g, height)
-        .replace(/elInBottom/g, top - screenHeight)
-        .replace(/elOutTop/g, bottom)
-        .replace(/elCenterVert/g, top + (height / 2) - (screenHeight / 2))
-        .replace(/elInRight/g, left - screenWidth)
-        .replace(/elOutLeft/g, right)
-        .replace(/elCenterHoriz/g, left + (width / 2) - (screenWidth / 2))
+        .replace(/elInY/g, top - screenHeight)
+        .replace(/elOutY/g, bottom)
+        .replace(/elCenterY/g, top + (height / 2) - (screenHeight / 2))
+        .replace(/elInX/g, left - screenWidth)
+        .replace(/elOutX/g, right)
+        .replace(/elCenterX/g, left + (width / 2) - (screenWidth / 2))
         .replace(/index/g, index)
         }`)()
     }
@@ -147,7 +168,7 @@
 
       m2 = 0
       momentum = 0
-      momentumEnabled = "off"
+      momentumEnabled = false
 
 
       constructor(name, getValueFn, options = {}) {
@@ -168,16 +189,13 @@
           value = this.getValueFn()
         }
 
-        if (this.momentumEnabled !== "off") {
+        if (this.momentumEnabled) {
           const delta = value - this.lastValue
           const damping = 0.8
 
           this.m1 = this.m1 * damping + delta * (1 - damping)
           this.m2 = this.m2 * damping + this.m1 * (1 - damping)
           this.momentum = Math.round(this.m2 * 5000) / 10000
-          if (this.momentumEnabled === "absolute") {
-            this.momentum = Math.abs(this.momentum)
-          }
         }
 
         this.lastValue = value
@@ -187,40 +205,36 @@
 
     class LaxElement {
       domElement
-      animationsData
+      transformsData
       styles = {}
       selector = ''
 
       groupIndex = 0
       laxInstance
 
-      constructor(selector, laxInstance, domElement, animationData, groupIndex = 0, options = {}) {
+      constructor(selector, laxInstance, domElement, transformsData, groupIndex = 0, options = {}) {
         this.selector = selector
         this.laxInstance = laxInstance
         this.domElement = domElement
-        this.animationsData = animationData
+        this.transformsData = transformsData
         this.groupIndex = groupIndex
 
-        const { transition, willChange } = options
+        const { style = {} } = options
 
-        if (transition) {
-          domElement.style.transition = transition
-        }
+        Object.keys(style).forEach(key => {
+          domElement.style[key] = style[key]
+        })
 
-        if (willChange) {
-          domElement.style.willChange = willChange
-        }
-
-        this.calculateAnimations()
+        this.calculateTransforms()
       }
 
       update = (driverValues, frame) => {
-        const { animations } = this
+        const { transforms } = this
 
         const styles = {}
 
-        for (let driverName in animations) {
-          const styleBindings = animations[driverName]
+        for (let driverName in transforms) {
+          const styleBindings = transforms[driverName]
 
           if (!driverValues[driverName]) {
             console.error("No lax driver with name: ", driverName)
@@ -230,15 +244,19 @@
 
           for (let key in styleBindings) {
             const [arr1, arr2, options = {}] = styleBindings[key]
-            const { loopFrame, frameStep = 1, easing, momentum, cssFn } = options
+            const { modValue, frameStep = 1, easing, momentum, momentumMode, cssFn } = options
 
             const easingFn = easings[easing]
 
             if (frame % frameStep === 0) {
-              const v = loopFrame ? value % loopFrame : value
+              const v = modValue ? value % modValue : value
               let interpolatedValue = interpolate(arr1, arr2, v, easingFn)
 
-              if (momentum) interpolatedValue += (momentumValue * momentum)
+              if (momentum) {
+                let momentumExtra = momentumValue * momentum
+                if (momentumMode === 'absolute') momentumExtra = Math.abs((momentumExtra))
+                interpolatedValue += momentumExtra
+              }
 
               styles[key] = cssFn ? cssFn(interpolatedValue) : interpolatedValue
             }
@@ -248,11 +266,12 @@
         this.applyStyles(styles)
       }
 
-      calculateAnimations = () => {
-        this.animations = {}
+      calculateTransforms = () => {
+        this.transforms = {}
+        const windowWidth = this.laxInstance.windowWidth
 
-        for (let driverName in this.animationsData) {
-          let styleBindings = this.animationsData[driverName]
+        for (let driverName in this.transformsData) {
+          let styleBindings = this.transformsData[driverName]
 
           const parsedStyleBindings = {}
 
@@ -280,13 +299,13 @@
             let [arr1, arr2, options = {}] = styleBindings[key]
 
             const bounds = this.domElement.getBoundingClientRect()
-            const parsedArr1 = arr1.map(i => parseValue(i, bounds, this.groupIndex))
-            const parsedArr2 = arr2.map(i => parseValue(i, bounds, this.groupIndex))
+            const parsedArr1 = getArrayValues(arr1, windowWidth).map(i => parseValue(i, bounds, this.groupIndex))
+            const parsedArr2 = getArrayValues(arr2, windowWidth).map(i => parseValue(i, bounds, this.groupIndex))
 
             parsedStyleBindings[key] = [parsedArr1, parsedArr2, options]
           }
 
-          this.animations[driverName] = parsedStyleBindings
+          this.transforms[driverName] = parsedStyleBindings
         }
       }
 
@@ -315,10 +334,6 @@
       }
 
       init = (presets = {}) => {
-        this.addDriver('frame', () => {
-          return this.frame
-        })
-
         this.presets = presets
 
         this.findAndAddElements()
@@ -337,7 +352,7 @@
         if (changed) {
           this.windowWidth = document.body.clientWidth
           this.windowHeight = document.body.clientHeight
-          this.elements.forEach(el => el.calculateAnimations())
+          this.elements.forEach(el => el.calculateTransforms())
         }
       }
 
@@ -386,16 +401,16 @@
         const elements = document.querySelectorAll("[data-lax]")
 
         elements.forEach((domElement) => {
-          const animations = Function(`return ${domElement.getAttribute('data-lax')}`)()
-          this.elements.push(new LaxElement('[data-lax]', this, domElement, animations, 0, {}))
+          const transforms = Function(`return ${domElement.getAttribute('data-lax')}`)()
+          this.elements.push(new LaxElement('[data-lax]', this, domElement, transforms, 0, {}))
         })
       }
 
-      addElements = (selector, animations, options) => {
+      addElements = (selector, transforms, options) => {
         const domElements = document.querySelectorAll(selector)
 
         domElements.forEach((domElement, i) => {
-          this.elements.push(new LaxElement(selector, this, domElement, animations, i, options))
+          this.elements.push(new LaxElement(selector, this, domElement, transforms, i, options))
         })
       }
 

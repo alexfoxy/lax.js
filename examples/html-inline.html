@@ -3,12 +3,14 @@
 
   <script type="application/javascript">
 
-    window.onload = () => {
+    window.onload = function () {
       lax.init()
 
-      lax.addDriver('scrollY', () => {
+      lax.addDriver('scrollY', function () {
         return document.body.scrollTop
       })
+
+      lax.findAndAddElements()
     }
   </script>
 </head>

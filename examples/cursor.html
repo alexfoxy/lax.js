@@ -3,21 +3,21 @@
 
   <script type="application/javascript">
 
-    window.onload = () => {
+    window.onload = function () {
       lax.init()
 
-      document.addEventListener('mousemove', (e) => {
+      document.addEventListener('mousemove', function (e) {
         lax.__cursorX = e.clientX
         lax.__cursorY = e.clientY
       }, false)
 
-      lax.addDriver('cursorX', () => {
+      lax.addDriver('cursorX', function () {
         return lax.__cursorX || 0
-      }, { momentumEnabled: "absolute" })
+      })
 
-      lax.addDriver('cursorY', () => {
+      lax.addDriver('cursorY', function () {
         return lax.__cursorY || 0
-      }, { momentumEnabled: "absolute" })
+      })
 
       lax.addElements(".cursor", {
         'cursorX': {
@@ -37,7 +37,7 @@
             [0, 6000],
             [0, 36000],
             {
-              loopFrame: 6000
+              modValue: 6000
             }
           ]
         }

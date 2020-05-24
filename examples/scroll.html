@@ -3,10 +3,10 @@
 
   <script type="application/javascript">
 
-    window.onload = () => {
+    window.onload = function () {
       lax.init()
 
-      lax.addDriver('scrollY', () => {
+      lax.addDriver('scrollY', function () {
         return document.body.scrollTop
       })
 
@@ -22,28 +22,28 @@
       lax.addElements(".circle", {
         scrollY: {
           translateX: [
-            ["elInBottom", "elCenterVert", "elOutTop"],
+            ["elInY", "elCenterY", "elOutY"],
             [0, 'screenWidth/2', 'screenWidth'],
             {
               easing: 'easeInOutQuart',
             }
           ],
           opacity: [
-            ["elInBottom", "elCenterVert", "elOutTop"],
+            ["elInY", "elCenterY", "elOutY"],
             [0, 1, 0],
             {
               easing: 'easeInOutCubic'
             }
           ],
           "border-radius": [
-            ["elInBottom+200", "elCenterVert", "elOutTop-200"],
+            ["elInY+200", "elCenterY", "elOutY-200"],
             [0, 100, 0],
             {
               easing: 'easeInOutQuint',
             }
           ],
           "box-shadow": [
-            ["elInBottom+200", "elCenterVert", "elOutTop-200"],
+            ["elInY+200", "elCenterY", "elOutY-200"],
             [50, 0, 50],
             {
               easing: 'easeInOutQuint',
@@ -53,7 +53,7 @@
             }
           ],
           // "hue-rotate": [
-          //   ["elInBottom", "elOutTop"],
+          //   ["elInY", "elOutY"],
           //   ['index*40', "360+index*40"],
           // ],
         }
