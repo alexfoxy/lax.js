@@ -1,9 +1,10 @@
 (() => {
   const laxInstance = (() => {
-    const transforms = ["perspective", "translateX", "translateY", "translate", "scaleX", "scaleY", "scale", "skewX", "skewY", "skew", "rotateX", "rotateY", "rotate"]
-    const filters = ["blur", "hue-rotate", "brightness"]
+    const transformKeys = ["perspective", "scaleX", "scaleY", "scale", "skewX", "skewY", "skew", "rotateX", "rotateY", "rotate"]
+    const filterKeys = ["blur", "hue-rotate", "brightness"]
+    const translate3dKeys = ["translateX", "translateY", "translateZ"]
 
-    const pxUnits = ["perspective", "translateX", "translateY", "translate", "border-radius", "blur"]
+    const pxUnits = ["perspective", "border-radius", "blur", "translateX", "translateY", "translateZ"]
     const degUnits = ["hue-rotate", "rotate", "rotateX", "rotateY", "skew", "skewX", "skewY"]
 
     function floatOrNull(v = "") {
@@ -108,19 +109,28 @@
         filter: ''
       }
 
+      const translate3dValues = {
+        translateX: 0,
+        translateY: 0,
+        translateZ: 0
+      }
+
       Object.keys(styles).forEach((key) => {
         const val = styles[key]
-
         const unit = pxUnits.includes(key) ? 'px' : (degUnits.includes(key) ? 'deg' : '')
 
-        if (transforms.includes(key)) {
+        if (translate3dKeys.includes(key)) {
+          translate3dValues[key] = val
+        } else if (transformKeys.includes(key)) {
           flattenedStyles.transform += `${key}(${val}${unit}) `
-        } else if (filters.includes(key)) {
+        } else if (filterKeys.includes(key)) {
           flattenedStyles.filter += `${key}(${val}${unit}) `
         } else {
           flattenedStyles[key] = `${val}${unit} `
         }
       })
+
+      flattenedStyles.transform = `translate3d(${translate3dValues.translateX}px, ${translate3dValues.translateY}px, ${translate3dValues.translateZ}px) ${flattenedStyles.transform}`
 
       return flattenedStyles
     }
@@ -132,8 +142,8 @@
 
       const pageHeight = document.body.scrollHeight
       const pageWidth = document.body.scrollWidth
-      const screenWidth = document.body.clientWidth
-      const screenHeight = document.body.clientHeight
+      const screenWidth = window.innerWidth
+      const screenHeight = window.innerHeight
       const scrollTop = document.body.scrollTop
       const scrollLeft = document.body.scrollLeft
 
@@ -244,7 +254,7 @@
 
           for (let key in styleBindings) {
             const [arr1, arr2, options = {}] = styleBindings[key]
-            const { modValue, frameStep = 1, easing, momentum, momentumMode, cssFn } = options
+            const { modValue, frameStep = 1, easing, momentum, momentumMode, cssFn, cssUnit = '' } = options
 
             const easingFn = easings[easing]
 
@@ -258,7 +268,11 @@
                 interpolatedValue += momentumExtra
               }
 
-              styles[key] = cssFn ? cssFn(interpolatedValue) : interpolatedValue
+              const unit = cssUnit || pxUnits.includes(key) ? 'px' : (degUnits.includes(key) ? 'deg' : '')
+              const dp = unit === 'px' ? 0 : 3
+              const val = interpolatedValue.toFixed(dp)
+
+              styles[key] = cssFn ? cssFn(val) : val + cssUnit
             }
           }
         }

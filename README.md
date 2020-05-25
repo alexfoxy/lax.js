@@ -17,9 +17,7 @@ Simple & light weight (<3kb gzipped) vanilla javascript plugin to create smooth 
 - [Adding elements](#adding-elements)
 ### 2. Going deeper
 - [Custom animations](#custom-animations)
-- [Momentum](#momentum)
 - [Optimising performance](#optimising-performance)
-- [Quirks & tips](#quirks)
 ### 3. Glossary
 - [Presets](#presets)
 - [CSS properties](#css-properties)
@@ -233,6 +231,12 @@ See momentum in action [here](https://codesandbox.io/embed/lax-examples-momentum
 #### `momentumMode: "normal" | "absolute"`
 Use in combination with `momentum`. If set to `absolute` the momentum value will always be a positive number via the `Math.abs` operator.
 
+#### cssUnit: string = ""
+[TODO]
+
+#### round
+[TODO]
+
 #### `cssFn: (value: number) => string`
 Some css properties require more complex strings as values. For example `box-shadow` has multiple values that could be modified by a lax animation.
 
@@ -242,6 +246,9 @@ Some css properties require more complex strings as values. For example `box-sha
     return `${val}px ${val}px ${val}px rgba(0,0,0,0.5)`
   }
 ```
+
+## Optimising performance
+
 
 ## Presets
 
