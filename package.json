@@ -28,6 +28,6 @@
   ],
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "uglifyjs": "^2.4.11"
+    "uglify-js": "^3.9.4"
   }
 }
