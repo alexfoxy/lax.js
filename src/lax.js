@@ -232,7 +232,7 @@
         const { style = {} } = options
 
         Object.keys(style).forEach(key => {
-          domElement.style[key] = style[key]
+          domElement.style.setProperty(key, style[key])
         })
 
         this.calculateTransforms()
@@ -327,7 +327,7 @@
         const mergedStyles = flattenStyles(styles)
 
         Object.keys(mergedStyles).forEach((key) => {
-          this.domElement.style[key] = mergedStyles[key]
+          this.domElement.style.setProperty(key, mergedStyles[key])
         })
       }
     }
