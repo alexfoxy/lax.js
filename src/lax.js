@@ -431,6 +431,10 @@
       removeElements = (selector) => {
         this.elements.filter(element => element.selector !== selector)
       }
+
+      addElement = (domElement, transforms, options) => {
+        this.elements.push(new LaxElement('', this, domElement, transforms, 0, options))
+      }
     }
 
     return new Lax()
