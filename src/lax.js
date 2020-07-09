@@ -435,6 +435,10 @@
       addElement = (domElement, transforms, options) => {
         this.elements.push(new LaxElement('', this, domElement, transforms, 0, options))
       }
+
+      removeElement = (domElement) => {
+        this.elements = this.elements.filter(element => element.domElement !== domElement)
+      }
     }
 
     return new Lax()
