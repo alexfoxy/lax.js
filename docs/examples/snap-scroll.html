@@ -1,5 +1,5 @@
 <head>
-  <script type="application/javascript" src="../lib/lax.js"></script>
+  <script type="application/javascript" src="../../lib/lax.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scallable=no">
   <script type="application/javascript">
 
@@ -29,6 +29,24 @@
           translateY: [
             textAnimationMap,
             [200, 0, 200],
+            {
+              easing: 'easeInOutQuad',
+            }
+          ],
+          opacity: [
+            textAnimationMap,
+            [0, 1, 0],
+          ],
+        }
+      }, {
+        willChange: ["transform"] // Only use if you are experience graphical issues
+      })
+
+      lax.addElements(".page p", {
+        containerScrollX: {
+          translateY: [
+            textAnimationMap,
+            [500, 0, 500],
             {
               easing: 'easeInOutQuad',
             }
@@ -123,6 +141,19 @@
     font-size: 60px;
   }
 
+  p {
+    top: calc(70vh + 20px);
+    position: absolute;
+    width: 100%;
+    font-family: helvetica;
+    font-weight: 100;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    padding: 100px 20vw;
+    box-sizing: border-box;
+  }
+
   body {
     padding: 0;
     margin: 0;
@@ -144,15 +175,16 @@
     <div class="page">
       <div class="image"></div>
       <h1>Hubert Pendant</h1>
+      <p>
+        Donec turpis purus, suscipit vel malesuada quis, dictum sit amet risus. Ut bibendum libero ac justo semper,
+        nec
+        finibus quam molestie.
+      </p>
     </div>
 
     <div class="page">
       <div class="image"></div>
       <h1>Brunsta Pendant</h1>
-    </div>
-
-    <div class="page">
-      <div class="image"></div>
       <p>
         Donec turpis purus, suscipit vel malesuada quis, dictum sit amet risus. Ut bibendum libero ac justo semper,
         nec
@@ -162,15 +194,7 @@
 
     <div class="page">
       <div class="image"></div>
-      <p>
-        Donec turpis purus, suscipit vel malesuada quis, dictum sit amet risus. Ut bibendum libero ac justo semper,
-        nec
-        finibus quam molestie.
-      </p>
-    </div>
-
-    <div class="page">
-      <div class="image"></div>
+      <h1>Brunsta Pendant</h1>
       <p>
         Donec turpis purus, suscipit vel malesuada quis, dictum sit amet risus. Ut bibendum libero ac justo semper,
         nec

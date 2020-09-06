@@ -174,11 +174,10 @@ The name of the driver you want to use as a source of values to map to your anim
 ### CSS property
 The name of the CSS property you want to animate, for example `opacity` or `rotate`. See a list of supporter properties [here](#css-properties).
 
-### Custom properties using `cssFn`
-Some css properties, for example `box-shadow`, require a custom function to build the style string. To do this use the [cssFn](#cssfn-value-number--string) element option.
+> Some css properties, for example `box-shadow`, require a custom function to build the style string. To do this use the [cssFn](#cssfn-value-number--string) element option.
 
-### Value Maps
-The value maps are used to interpolate the driver value and output a value for your CSS property. See an example below:
+### Value maps
+The value maps are used to interpolate the driver value and output a value for your CSS property. For example:
 
 ```javascript
 [0, 200, 800]  // Driver map
@@ -212,14 +211,14 @@ You can also use mobile breakpoints within animation maps for more flexibility.
         900: [30,40,60], // Screen width > 500 and < 900
         1400: [30,40,60] // Screen width > 900
       }
-    ]
+    ],
   }
 ```
 
 ### Options
 
 #### `modValue: number | undefined`
-Set this option to modulus the value from the driver, for example if you want to loop an animation while the driver value increases.
+Set this option to modulus the value from the driver, for example if you want to loop the animation value as the driver value continues to increase.
 
 #### `frameStep: number = 1`
 By default each animation updates its value every animation frame, around ~60 times per second. You can use the `frameStep` to reduce frequency of the animation updating. For example a value of `2` would only update ~30 times per second and a value of `60` would only update about once per second.
