@@ -1,121 +1,142 @@
 (() => {
-  const elInOutY = (x) => {
-    return ["elInY", `elCenterY-${x}`, "elCenterY", `elCenterY+${x}`, "elOutY"]
+  const inOutMap = (y = 30) => {
+    return ["elInY+elHeight", `elCenterY-${y}`, "elCenterY", `elCenterY+${y}`, "elOutY-elHeight"]
   }
 
-  const elInOutX = (x) => {
-    return ["elInX", `elCenterX-${x}`, "elCenterX", `elCenterX+${x}`, "elOutX"]
-  }
-
-  const axisToInOutMap = (axis) => {
-    return axis === 'y' ? ["elInY", "elOutY"] : ["elInX", "elOutX"]
-  }
-
-  const speedToOffset = (speed, axis) => {
-    const screenAxis = axis === "y" ? "screenHeight" : "screenWidth"
-    let s = Math.max(Math.min(speed, 1), 0) / 2
-    return `((${s}*${screenAxis}))`
-  }
-
-  const inOutHelper = (key, s, e, speed, axis, [sliceStart, sliceEnd]) => {
-    const offset = speedToOffset(speed, axis)
-    const arr1 = axis === 'y' ? elInOutY(offset) : elInOutX(offset)
-    const arr2 = [s, e, e, e, s]
-
-    return {
-      [key]: [
-        arr1.slice(sliceStart, sliceEnd),
-        arr2.slice(sliceStart, sliceEnd),
+  const laxPresets = {
+    fadeInOut: (y = 30, str = 0) => ({
+      "opacity": [
+        inOutMap(y),
+        [str, 1, 1, 1, str],
+      ],
+    }),
+    fadeIn: (y = 'elCenterY', str = 0) => ({
+      "opacity": [
+        ["elInY+elHeight", y],
+        [str, 1],
+      ],
+    }),
+    fadeOut: (y = 'elCenterY', str = 0) => ({
+      "opacity": [
+        [y, "elOutY-elHeight"],
+        [1, str],
+      ],
+    }),
+    blurInOut: (y = 100, str = 20) => ({
+      "blur": [
+        inOutMap(y),
+        [str, 0, 0, 0, str],
+      ],
+    }),
+    blurIn: (y = 'elCenterY', str = 20) => ({
+      "blur": [
+        ["elInY+elHeight", y],
+        [str, 0],
+      ],
+    }),
+    blurOut: (y = 'elCenterY', str = 20) => ({
+      "opacity": [
+        [y, "elOutY-elHeight"],
+        [0, str],
+      ],
+    }),
+    scaleInOut: (y = 100, str = 0.6) => ({
+      "scale": [
+        inOutMap(y),
+        [str, 1, 1, 1, str],
+      ],
+    }),
+    scaleIn: (y = 'elCenterY', str = 0.6) => ({
+      "scale": [
+        ["elInY+elHeight", y],
+        [str, 1],
+      ],
+    }),
+    scaleOut: (y = 'elCenterY', str = 0.6) => ({
+      "scale": [
+        [y, "elOutY-elHeight"],
+        [1, str],
+      ],
+    }),
+    slideX: (y = 0, str = 500) => ({
+      "translateX": [
+        ['elInY', y],
+        [0, str],
+      ],
+    }),
+    slideY: (y = 0, str = 500) => ({
+      "translateY": [
+        ['elInY', y],
+        [0, str],
+      ],
+    }),
+    spin: (y = 1000, str = 360) => ({
+      "rotate": [
+        [0, y],
+        [0, str],
         {
-          easing: 'easeInOutQuad',
+          modValue: y,
         }
       ],
-    }
-  }
-
-  const presets = {
-    // Fade
-    fadeIn: (v = 0, speed = 0.2, axis = 'y') => {
-      return inOutHelper('opacity', v, 1, speed, axis, [0, 3])
-    },
-    fadeOut: (v = 0, speed = 0.2, axis = 'y') => {
-      return inOutHelper('opacity', v, 1, speed, axis, [3, 5])
-    },
-    fadeInOut: (v = 0, speed = 0.2, axis = 'y') => {
-      return inOutHelper('opacity', v, 1, speed, axis, [0, 5])
-    },
-
-    // Scale
-    scaleIn: (v = 0.2, speed = 0.2, axis = 'y') => {
-      return inOutHelper('scale', v, 1, speed, axis, [0, 3])
-    },
-    scaleOut: (v = 0.2, speed = 0.2, axis = 'y') => {
-      return inOutHelper('scale', v, 1, speed, axis, [3, 5])
-    },
-    scaleInOut: (v = 0.2, speed = 0.2, axis = 'y') => {
-      return inOutHelper('scale', v, 1, speed, axis, [0, 5])
-    },
-
-    // Blur
-    blurIn: (v = 50, speed = 0.2, axis = 'y') => {
-      return inOutHelper('blur', v, 0, speed, axis, [0, 3])
-    },
-    blurOut: (v = 50, speed = 0.2, axis = 'y') => {
-      return inOutHelper('blur', v, 0, speed, axis, [3, 5])
-    },
-    blurInOut: (v = 50, speed = 0.2, axis = 'y') => {
-      return inOutHelper('blur', v, 0, speed, axis, [0, 5])
-    },
-
-    // Rotate 
-    spin: (v = 500) => {
-      return {
-        rotate: [
-          [0, v],
-          [0, 360],
-          {
-            modValue: v
-          }
-        ],
-      }
-    },
-
-    // Skew
-    lightspeed: (v = 20, speed = 0.5, axis = 'y') => {
-      const offset = speedToOffset(speed, axis)
-      const arr1 = axis === 'y' ? elInOutY(offset) : elInOutX(offset)
-
-      return {
-        skewX: [
-          arr1,
-          [-v, -v, 0, v, v],
-          {
-            easing: 'easeInOutQuad',
-          }
-        ],
-      }
-    },
-
-    panHorizontal: (v = 500, speed = 0.2, axis = 'y') => {
-      return {
-        translateX: [
-          axisToInOutMap(axis),
-          [0, v],
-        ],
-      }
-    },
-    panVertical: (v = 500, speed = 0.2, axis = 'y') => {
-      return {
-        translateY: [
-          axisToInOutMap(axis),
-          [0, v],
-        ],
-      }
-    }
+    }),
+    flipX: (y = 1000, str = 360) => ({
+      "rotateX": [
+        [0, y],
+        [0, str],
+        {
+          modValue: y
+        }
+      ],
+    }),
+    flipY: (y = 1000, str = 360) => ({
+      "rotateY": [
+        [0, y],
+        [0, str],
+        {
+          modValue: y
+        }
+      ],
+    }),
+    jiggle: (y = 50, str = 40) => ({
+      "skewX": [
+        [0, y * 1, y * 2, y * 3, y * 4],
+        [0, str, 0, -str, 0],
+        {
+          modValue: y * 4
+        }
+      ],
+    }),
+    seesaw: (y = 50, str = 40) => ({
+      "skewY": [
+        [0, y * 1, y * 2, y * 3, y * 4],
+        [0, str, 0, -str, 0],
+        {
+          modValue: y * 4,
+        }
+      ],
+    }),
+    zigzag: (y = 100, str = 100) => ({
+      "translateX": [
+        [0, y * 1, y * 2, y * 3, y * 4],
+        [0, str, 0, -str, 0],
+        {
+          modValue: y * 4,
+        }
+      ],
+    }),
+    hueRotate: (y = 600, str = 360) => ({
+      "hue-rotate": [
+        [0, y],
+        [0, str],
+        {
+          modValue: y,
+        }
+      ],
+    }),
   }
 
   if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-    module.exports = presets
+    module.exports = laxPresets;
   else
-    window.laxPresets = presets
+    window.laxPresets = laxPresets;
 })()

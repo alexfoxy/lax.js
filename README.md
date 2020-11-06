@@ -341,3 +341,4 @@ Some CSS properties require more complex strings as values. For example, `box-sh
 - Declare animations in JS as well as inline HTML
 - Add custom CSS values
 - Easings
+- easingFn

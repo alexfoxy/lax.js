@@ -1,5 +1,7 @@
 <head>
   <script type="application/javascript" src="../../lib/lax.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scallable=no">
   <script type="application/javascript">
 
@@ -64,7 +66,7 @@
         containerScrollX: {
           translateY: [
             imageAnimationMap,
-            [-50, 0, -50],
+            [-200, 0, -200],
             {
               easing: 'easeInOutQuad',
             }
@@ -90,7 +92,7 @@
     height: 100vh;
     position: fixed;
     left: 0;
-    background: linear-gradient(58deg, rgba(118, 176, 177, 1) 0%, rgba(157, 212, 208, 1) 100%);
+    background-size: cover;
   }
 
   .page {
@@ -101,18 +103,19 @@
     scroll-snap-stop: always;
     position: relative;
     display: inline-block;
+    background-size: cover;
   }
 
   .image {
-    background-color: yellow;
-    height: 70vh;
+    height: 80vh;
     width: 80%;
     left: 10%;
     position: absolute;
     transform-origin: center top;
-    background-size: contain;
     background-repeat: no-repeat;
-    background-position: center top;
+    background-position: center center;
+    background-size: 50vh;
+    top: -3vh;
   }
 
   .container {
@@ -125,31 +128,26 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  /* .content {
-    padding-left: 10vw;
-    width: 10000vw;
-  } */
-
   h1 {
-    top: calc(70vh + 20px);
+    top: calc(67vh + 10px);
     position: absolute;
     width: 100%;
-    font-family: helvetica;
     font-weight: 100;
     text-align: center;
     color: white;
+    font-weight: 800;
     font-size: 60px;
   }
 
   p {
-    top: calc(70vh + 20px);
+    top: calc(67vh + 20px);
     position: absolute;
     width: 100%;
-    font-family: helvetica;
     font-weight: 100;
     text-align: center;
     color: white;
-    font-size: 20px;
+    font-size: 18px;
+    line-height: 28px;
     padding: 100px 20vw;
     box-sizing: border-box;
   }
@@ -160,6 +158,7 @@
     background-color: black;
     overflow-y: hidden;
     overflow-x: hidden;
+    font-family: 'Comfortaa', arial;
   }
 
   html {
@@ -172,33 +171,30 @@
   <div class="background"></div>
 
   <div class="container">
-    <div class="page">
-      <div class="image"></div>
-      <h1>Hubert Pendant</h1>
+    <div class="page" style="background-image: url('../assets/bg3.jpg');">
+      <div class="image" style="background-image: url('../assets/shoe3.png');"></div>
+      <h1>Superstar</h1>
       <p>
-        Donec turpis purus, suscipit vel malesuada quis, dictum sit amet risus. Ut bibendum libero ac justo semper,
-        nec
-        finibus quam molestie.
+        Classics never go out of style. An instant icon since their debut, adidas Superstar Shoes first rose to fame on
+        the basketball courts of the '70s and haven't slowed their roll since.
       </p>
     </div>
 
-    <div class="page">
-      <div class="image"></div>
-      <h1>Brunsta Pendant</h1>
+    <div class="page" style="background-image: url('../assets/bg2.jpg');">
+      <div class="image" style="background-image: url('../assets/shoe1.png');"></div>
+      <h1>Retrorun</h1>
       <p>
-        Donec turpis purus, suscipit vel malesuada quis, dictum sit amet risus. Ut bibendum libero ac justo semper,
-        nec
-        finibus quam molestie.
+        Retro design with a modern twist. Check out a busy side street or stroll to the corner store in these adidas
+        running-inspired shoes. Suede overlays and contrast 3-Stripes give the flexible upper a sleek, sporty finish.
       </p>
     </div>
 
-    <div class="page">
-      <div class="image"></div>
-      <h1>Brunsta Pendant</h1>
+    <div class="page" style="background-image: url('../assets/bg1.jpg');">
+      <div class="image" style="background-image: url('../assets/shoe2.png');"></div>
+      <h1>Grand Court</h1>
       <p>
-        Donec turpis purus, suscipit vel malesuada quis, dictum sit amet risus. Ut bibendum libero ac justo semper,
-        nec
-        finibus quam molestie.
+        A '70s style reborn. These shoes take inspiration from iconic sport styles of the past and move them into the
+        future. The shoes craft an everyday look with a leather-like upper.
       </p>
     </div>
   </div>

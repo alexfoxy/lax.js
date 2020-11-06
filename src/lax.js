@@ -205,7 +205,7 @@
 
           this.m1 = this.m1 * damping + delta * (1 - damping)
           this.m2 = this.m2 * damping + this.m1 * (1 - damping)
-          this.momentum = Math.round(this.m2 * 5000) / 10000
+          this.momentum = Math.round(this.m2 * 5000) / 15000
         }
 
         this.lastValue = value
@@ -292,14 +292,15 @@
           const { presets = [] } = styleBindings
 
           presets.forEach((presetString) => {
-            const [presetName, opts = ''] = presetString.split(" ")
-            const presetFn = this.laxInstance.presets[presetName]
+
+            const [presetName, y, str] = presetString.split(":")
+
+            const presetFn = window.lax.presets[presetName]
 
             if (!presetFn) {
               console.error("Lax preset cannot be found with name: ", presetName)
             } else {
-              const [v, speed, axis] = opts.split(',')
-              const preset = presetFn(floatOrNull(v), floatOrNull(speed), axis)
+              const preset = presetFn(y, str)
 
               Object.keys(preset).forEach((key) => {
                 styleBindings[key] = preset[key]
@@ -429,7 +430,7 @@
       }
 
       removeElements = (selector) => {
-        this.elements.filter(element => element.selector !== selector)
+        this.elements = this.elements.filter(element => element.selector !== selector)
       }
 
       addElement = (domElement, transforms, options) => {

@@ -1,0 +1,488 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+  <script type="application/javascript" src="../../src/lax-presets.js"></script>
+  <script type="application/javascript" src="../../src/lax.js"></script>
+  <script type="application/javascript">
+
+
+    window.copyPreset = function () {
+      const input = document.getElementById("presetString")
+
+      input.select()
+      input.setSelectionRange(0, 99999)
+
+      document.execCommand("copy")
+
+      alert("Copied the text: " + input.value)
+    }
+
+    window.onload = function () {
+
+      /*
+        Setup control data
+      */
+
+      const baseSettings = {
+        fade: [
+          {
+            name: 'Distance',
+            limits: [100, window.innerHeight / 3],
+            value: window.innerHeight / 4
+          },
+          {
+            name: 'Starting Opacity',
+            limits: [0, 0.9],
+            step: 0.1,
+            value: 0
+          }
+        ],
+        blur: [
+          {
+            name: 'Distance',
+            limits: [100, window.innerHeight / 3],
+            value: window.innerHeight / 4
+          },
+          {
+            name: 'Strength',
+            limits: [0, 50],
+            value: 20
+          }
+        ],
+        spin: [
+          {
+            name: 'Distance',
+            limits: [10, 3000],
+            value: window.innerHeight
+          },
+          {
+            name: 'Stength',
+            limits: [1, 360],
+            value: 360
+          }
+        ],
+        scale: [
+          {
+            name: 'Distance',
+            limits: [50, window.innerHeight / 3],
+            value: window.innerHeight / 4
+          },
+          {
+            name: 'Starting Scale',
+            limits: [0, 1],
+            step: 0.1,
+            value: 0.6
+          }
+        ],
+        slide: [
+          {
+            name: 'Distance',
+            limits: [50, window.innerHeight],
+            value: window.innerHeight / 4
+          },
+          {
+            name: 'Amount',
+            limits: [-1000, 1000],
+            value: 500
+          }
+        ]
+      }
+
+      const enabledPresets = ["fadeInOut"]
+
+      const controlData = {
+        fadeIn: [...baseSettings.fade],
+        fadeOut: [...baseSettings.fade],
+        fadeInOut: [...baseSettings.fade],
+        scaleIn: [...baseSettings.scale],
+        scaleOut: [...baseSettings.scale],
+        scaleInOut: [...baseSettings.scale],
+        slideX: [...baseSettings.slide],
+        slideY: [...baseSettings.slide],
+        jiggle: [
+          {
+            name: 'Distance',
+            limits: [40, 200],
+            value: 50
+          },
+          {
+            name: 'Stength',
+            limits: [1, 100],
+            value: 20
+          }
+        ],
+        seesaw: [
+          {
+            name: 'Distance',
+            limits: [40, 200],
+            value: 140
+          },
+          {
+            name: 'Stength',
+            limits: [1, 40],
+            value: 20
+          }
+        ],
+        zigzag: [
+          {
+            name: 'Distance',
+            limits: [40, 200],
+            value: 170
+          },
+          {
+            name: 'Stength',
+            limits: [1, 500],
+            value: 200
+          }
+        ],
+        hueRotate: [...baseSettings.spin],
+        spin: [...baseSettings.spin],
+        flipX: [...baseSettings.spin],
+        flipY: [...baseSettings.spin],
+        blurIn: [...baseSettings.blur],
+        blurOur: [...baseSettings.blur],
+        blurInOut: [...baseSettings.blur],
+      }
+
+      /* 
+        UI Update methods
+      */
+
+      function updateLaxSettings() {
+        lax.removeElements("#laxLogo")
+
+        const presets = []
+
+        enabledPresets.forEach((presetName) => {
+          const control = controlData[presetName]
+          const controlStr = control ? ":" + control.map(c => c.value).join(":") : ''
+          const settingString = `${presetName}${controlStr}`
+          presets.push(settingString)
+        })
+
+        lax.addElements("#laxLogo", {
+          scrollY: {
+            presets
+          }
+        })
+
+        presetString.value = presets.join(", ")
+      }
+
+      function onSliderUpdate(name, value) {
+        const valueEl = document.getElementById(name + '-value')
+        if (valueEl) valueEl.innerHTML = value
+        updateLaxSettings()
+      }
+
+      function onCheckBoxUpdate(controlName) {
+        const index = enabledPresets.indexOf(controlName)
+        const enabled = index >= 0
+        const sliders = document.getElementById(controlName + "-controls")
+
+        if (enabled) {
+          enabledPresets.splice(index, 1)
+          if (sliders) sliders.classList.remove('visible')
+        } else {
+          enabledPresets.push(controlName)
+          if (sliders) sliders.classList.add('visible')
+        }
+
+        const checkbox = document.getElementById(controlName + "-checkbox")
+        if (checkbox) checkbox.checked = !enabled
+      }
+
+      /*
+        Build UI
+      */
+
+      const controlsContainer = document.getElementById('controlsContainer')
+      const presetString = document.getElementById('presetString')
+
+      function renderSlider(control, controlName) {
+        const container = document.createElement('div')
+        container.className = "slider"
+
+        const slider = document.createElement('input')
+        const id = [controlName.toLowerCase(), control.name.toLowerCase()].join(":")
+
+        slider.type = 'range'
+        slider.min = control.limits[0]
+        slider.max = control.limits[1]
+        slider.step = control.step || 1
+        slider.value = control.value
+        slider.oninput = function (el) {
+          control.value = el.target.value
+          onSliderUpdate(id, el.target.value)
+        }
+
+        const labelContainer = document.createElement('div')
+        labelContainer.className = "labelContainer"
+
+        const label = document.createElement('label')
+        label.innerHTML = control.name
+
+        const value = document.createElement('label')
+        value.innerHTML = control.value
+        value.id = id + "-value"
+
+        labelContainer.appendChild(label)
+        labelContainer.appendChild(value)
+        container.appendChild(labelContainer)
+        container.appendChild(slider)
+
+        return container
+      }
+
+      function renderCheckbox(controlName) {
+        const container = document.createElement('div')
+        container.className = "checkBox"
+
+        const checkbox = document.createElement('input')
+        checkbox.id = controlName + "-checkbox"
+        checkbox.type = "checkbox"
+
+        const enabled = enabledPresets.indexOf(controlName) > -1
+        checkbox.checked = enabled
+
+        const id = [controlName.toLowerCase(), name.toLowerCase()].join()
+
+        checkbox.oninput = function (el) {
+          ["blur", "scale", "fade"].forEach((type) => {
+            if (controlName.includes(type)) {
+              enabledPresets.forEach((presetName) => {
+                if (presetName !== controlName && presetName.includes(type)) {
+                  onCheckBoxUpdate(presetName, true)
+                }
+              })
+            }
+          })
+
+          onCheckBoxUpdate(controlName, enabled)
+          updateLaxSettings()
+        }
+
+        const label = document.createElement('label')
+        label.innerHTML = controlName
+
+        container.appendChild(label)
+        container.appendChild(checkbox)
+
+        return container
+      }
+
+      function renderControl(controlName) {
+        const controls = controlData[controlName]
+        const container = document.createElement('div')
+        container.className = 'control'
+
+        const checkbox = renderCheckbox(controlName)
+        container.appendChild(checkbox)
+
+        const sliderControls = document.createElement('div')
+        sliderControls.className = 'sliderControls'
+        sliderControls.id = controlName + "-controls"
+
+        controls.forEach((control, i) => {
+          const slider = renderSlider(control, controlName)
+          sliderControls.appendChild(slider)
+        })
+
+        const enabled = enabledPresets.indexOf(controlName) > -1
+        if (enabled) sliderControls.classList.add("visible")
+
+        container.appendChild(sliderControls)
+        controlsContainer.appendChild(container)
+      }
+
+      Object.keys(controlData).forEach((controlName) => renderControl(controlName))
+
+      /*
+        Initialise lax
+      */
+
+      lax.init(window.laxPresets)
+
+      lax.addDriver('scrollY', function () {
+        return document.body.scrollTop
+      })
+
+      updateLaxSettings()
+    }
+
+  </script>
+</head>
+
+<style>
+  body {
+    padding: 0;
+    background-color: #dedbde;
+    background-image: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+    margin: 0;
+    background-size: 700px 700px;
+    height: 220vh;
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+  }
+
+  #laxLogo {
+    margin-top: 100vh;
+    left: 0;
+    z-index: 1000;
+    font-size: 100px;
+    text-align: center;
+    transform-origin: 50% 50%;
+    color: #a94fe4;
+    width: 240px;
+    margin-left: calc(50vw - 150px - 120px);
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .hint {
+    left: 0;
+    width: 100%;
+    opacity: 0.2;
+    z-index: 1000;
+    font-size: 24px;
+    text-align: center;
+    position: absolute;
+    margin-bottom: 0;
+  }
+
+  #controlsContainer {
+    position: fixed;
+    width: 300px;
+    background: white;
+    height: 100vh;
+    box-shadow: 0px 0px 15px 3px rgba(0, 0, 0, 0.2);
+    padding: 20;
+    box-sizing: border-box;
+    overflow-y: auto;
+    padding-bottom: 100px;
+  }
+
+  #controlsContainer h1 {
+    margin: 0;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  #canvas {
+    width: calc(100vw - 300px);
+    margin-left: 300px;
+    position: relative;
+    height: 220vh;
+  }
+
+  #presetString {
+    background: #4a525a;
+    color: white;
+    font-family: monospace;
+    padding: 10px;
+    border: 0;
+    border-radius: 10px;
+    width: 195px;
+    margin-right: 5px;
+    outline: none;
+  }
+
+  #presetStringContainer {
+    position: fixed;
+    bottom: 0;
+    background: #e1e8e8;
+    left: 0;
+    width: 260px;
+    padding: 20px 20px;
+  }
+
+  .control {
+    border-top: 1px solid #d8d7d7;
+  }
+
+  .checkBox,
+  .labelContainer {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    ;
+  }
+
+  .sliderControls {
+    height: 0px;
+    overflow-y: hidden;
+    overflow-x: visible;
+    transition: height 200ms ease-out;
+  }
+
+  .sliderControls.visible {
+    height: 105px;
+  }
+
+  .slider input {
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 5px;
+  }
+
+  label {
+    font-weight: lighter;
+    font-size: 14px;
+  }
+
+  .checkBox label {
+    font-weight: 800;
+    margin-bottom: 15px;
+    margin-top: 15px;
+  }
+
+  #copyButton {
+    border: 0;
+    width: 55px;
+    height: 36px;
+    padding: 0;
+    margin: 0;
+    background: #a26ddc;
+    border-radius: 10px;
+    font-family: inherit;
+    font-weight: bold;
+    color: white;
+    outline: none;
+  }
+
+  #copyButton:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+
+  #presetTextHelper {
+    margin-bottom: 10px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+
+<body>
+  <div id="controlsContainer">
+    <h1>Lax preset explorer</h1>
+
+    <div id="presetStringContainer">
+      <div id="presetTextHelper">
+        <span>Preset code</span>
+        <a href="">How to use</a>
+      </div>
+
+      <input id="presetString" />
+      <button onclick="copyPreset()" id="copyButton">Copy</button>
+    </div>
+  </div>
+
+  <div id="canvas">
+    <h4 class='hint' style="top: 120px;">Scroll Down..</h4>
+    <h4 class='hint' style="bottom: 140px;">Scroll Up..</h4>
+
+    <img src="../assets/lax.png" id="laxLogo" />
+  </div>
+
+</body>
