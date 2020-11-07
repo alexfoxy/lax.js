@@ -1,27 +1,26 @@
-<head>
-  <script type="application/javascript" src="../../lib/lax.js"></script>
+<!-- <head>
+  <script type="application/javascript" src="../../src/lax-presets.js"></script>
+  <script type="application/javascript" src="../../src/lax.js"></script>
 
   <script type="application/javascript">
 
     window.onload = function () {
-      lax.init()
+      lax.init(window.laxPresets)
 
       lax.addDriver('scrollY', function () {
         return document.body.scrollTop
       })
-
-      lax.findAndAddElements()
     }
   </script>
 </head>
 
 <style>
-  .myblock {
+  .square {
     width: 100px;
     height: 100px;
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 50vh;
+    left: 50vw;
     background-color: red;
   }
 
@@ -34,12 +33,50 @@
 </style>
 
 <body>
-  <div class="myblock" data-lax='{ 
-    scrollY: {
-      translateX: [
-        [0, "screenHeight"],
-        [0, "screenWidth"]
-      ]
+  <div class="square lax lax_driverName_scrollY lax_preset_spin"></div>
+</body> -->
+
+<head>
+  <script type="application/javascript" src="../../src/lax-presets.js"></script>
+  <script type="application/javascript" src="../../src/lax.js"></script>
+
+  <script type="application/javascript">
+
+    window.onload = function () {
+      lax.init(window.laxPresets)
+
+      lax.addDriver('scrollY', function () {
+        return document.body.scrollTop
+      })
     }
-  }'></div>
+
+  </script>
+</head>
+
+<style>
+  .square {
+    height: 200px;
+    width: 200px;
+    background-color: #a26ddc;
+    margin-bottom: 0px;
+    margin-left: -100px;
+    margin-top: -100px;
+    left: 50vw;
+    top: 50vh;
+    position: fixed;
+  }
+
+  body {
+    padding: 0;
+    background-color: #dedbde;
+    background-image: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+    margin: 0;
+    background-size: 700px 700px;
+    height: 1000000px;
+  }
+</style>
+
+<body>
+  <div class="square lax lax_preset_spin-400-360 lax_preset_flipX">
+  </div>
 </body>

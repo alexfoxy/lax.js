@@ -222,6 +222,8 @@
       groupIndex = 0
       laxInstance
 
+      onUpdate
+
       constructor(selector, laxInstance, domElement, transformsData, groupIndex = 0, options = {}) {
         this.selector = selector
         this.laxInstance = laxInstance
@@ -229,11 +231,13 @@
         this.transformsData = transformsData
         this.groupIndex = groupIndex
 
-        const { style = {} } = options
+        const { style = {}, onUpdate } = options
 
         Object.keys(style).forEach(key => {
           domElement.style.setProperty(key, style[key])
         })
+
+        if (onUpdate) this.onUpdate = onUpdate
 
         this.calculateTransforms()
       }
@@ -260,6 +264,7 @@
 
             if (frame % frameStep === 0) {
               const v = modValue ? value % modValue : value
+
               let interpolatedValue = interpolate(arr1, arr2, v, easingFn)
 
               if (momentum) {
@@ -271,13 +276,13 @@
               const unit = cssUnit || pxUnits.includes(key) ? 'px' : (degUnits.includes(key) ? 'deg' : '')
               const dp = unit === 'px' ? 0 : 3
               const val = interpolatedValue.toFixed(dp)
-
-              styles[key] = cssFn ? cssFn(val) : val + cssUnit
+              styles[key] = cssFn ? cssFn(val, this.domElement) : val + cssUnit
             }
           }
         }
 
         this.applyStyles(styles)
+        if (this.onUpdate) this.onUpdate(driverValues, this.domElement)
       }
 
       calculateTransforms = () => {
@@ -293,7 +298,7 @@
 
           presets.forEach((presetString) => {
 
-            const [presetName, y, str] = presetString.split(":")
+            const [presetName, y, str] = presetString.split("-")
 
             const presetFn = window.lax.presets[presetName]
 
@@ -311,7 +316,7 @@
           delete styleBindings.presets
 
           for (let key in styleBindings) {
-            let [arr1, arr2, options = {}] = styleBindings[key]
+            let [arr1 = [-1e9, 1e9], arr2 = [-1e9, 1e9], options = {}] = styleBindings[key]
 
             const bounds = this.domElement.getBoundingClientRect()
             const parsedArr1 = getArrayValues(arr1, windowWidth).map(i => parseValue(i, bounds, this.groupIndex))
@@ -413,11 +418,26 @@
 
       findAndAddElements = () => {
         this.elements = []
-        const elements = document.querySelectorAll("[data-lax]")
+        const elements = document.querySelectorAll(".lax")
 
         elements.forEach((domElement) => {
-          const transforms = Function(`return ${domElement.getAttribute('data-lax')}`)()
-          this.elements.push(new LaxElement('[data-lax]', this, domElement, transforms, 0, {}))
+          const driverName = "scrollY"
+          const presets = []
+
+          domElement.classList.forEach((className) => {
+            if (className.includes("lax_preset")) {
+              const preset = className.replace("lax_preset_", "")
+              presets.push(preset)
+            }
+          })
+
+          const transforms = {
+            [driverName]: {
+              presets
+            }
+          }
+
+          this.elements.push(new LaxElement('.lax', this, domElement, transforms, 0, {}))
         })
       }
 

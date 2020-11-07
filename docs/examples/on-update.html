@@ -1,0 +1,67 @@
+<head>
+  <script type="application/javascript" src="../../src/lax.js"></script>
+
+  <script type="application/javascript">
+
+    window.onload = function () {
+      lax.init()
+
+      lax.addDriver('scrollY', function () {
+        return document.body.scrollTop
+      })
+
+      lax.addElements(".circle", {}, {
+        onUpdate: function (driverValues, domElement) {
+          const scrollY = driverValues.scrollY[0]
+
+          domElement.innerHTML = scrollY
+
+          if (scrollY > 400) {
+            domElement.classList.add('pink')
+            domElement.innerHTML = "PINK"
+          } else {
+            domElement.classList.remove('pink')
+          }
+        }
+      })
+    }
+  </script>
+</head>
+
+<style>
+  .circle {
+    height: 200px;
+    width: 200px;
+    background-color: #a26ddc;
+    margin-bottom: 0px;
+    margin-left: -100px;
+    margin-top: -100px;
+    border-radius: 100px;
+    left: 50vw;
+    top: 50vh;
+    position: fixed;
+    text-align: center;
+    line-height: 200px;
+    font-size: 40px;
+    font-family: sans-serif;
+    color: white;
+  }
+
+  .circle.pink {
+    background-color: #ff568c;
+  }
+
+  body {
+    padding: 0;
+    background-color: #dedbde;
+    background-image: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+    margin: 0;
+    background-size: 700px 700px;
+    height: 1000000px;
+  }
+</style>
+
+<body>
+  <div class="circle">
+  </div>
+</body>

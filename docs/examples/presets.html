@@ -155,7 +155,7 @@
 
         enabledPresets.forEach((presetName) => {
           const control = controlData[presetName]
-          const controlStr = control ? ":" + control.map(c => c.value).join(":") : ''
+          const controlStr = control ? "-" + control.map(c => c.value).join("-") : ''
           const settingString = `${presetName}${controlStr}`
           presets.push(settingString)
         })
@@ -204,7 +204,7 @@
         container.className = "slider"
 
         const slider = document.createElement('input')
-        const id = [controlName.toLowerCase(), control.name.toLowerCase()].join(":")
+        const id = [controlName.toLowerCase(), control.name.toLowerCase()].join("-")
 
         slider.type = 'range'
         slider.min = control.limits[0]
