@@ -2,7 +2,7 @@
 
 Simple & lightweight (<4kb gzipped) vanilla JavaScript plugin to create smooth & beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
 
-### [Version 2.0 improvements](#version-20-improvements)
+### [What's new with 2.0](#version-20-improvements)
 
 ## Examples
 
@@ -110,7 +110,7 @@ By default each driver updates its value every animation frame, around ~60 times
 
 You can add lax animations to an element using JavaScript or inline HTML.
 
-Using the `addElements` method in JavaScript:
+Using the `addElements` method:
 
 ```javascript
 lax.addElements(
@@ -147,6 +147,7 @@ Add static CSS to each element, for example:
 Custom animations are defined using an object.
 
 ```javascript
+// Animation data
 {
   scrollY: {                // Driver name
     translateX: [           // CSS property
