@@ -1,8 +1,8 @@
 <head>
-  <script type="application/javascript" src="../../lib/lax.js"></script>
+  <script type="application/javascript" src="../../lib/lax.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
 
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;700&display=swap" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scallable=no">
   <script type="application/javascript">
 
     window.onload = function () {
@@ -40,8 +40,6 @@
             [0, 1, 0],
           ],
         }
-      }, {
-        willChange: ["transform"] // Only use if you are experience graphical issues
       })
 
       lax.addElements(".page p", {
@@ -58,8 +56,6 @@
             [0, 1, 0],
           ],
         }
-      }, {
-        willChange: ["transform"] // Only use if you are experience graphical issues
       })
 
       lax.addElements(".page .image", {
@@ -79,9 +75,23 @@
             }
           ],
         }
-      }, {
-        willChange: ["transform"] // Only use if you are experience graphical issues
       })
+
+      let index = 0
+
+      window.goto = function (direction) {
+        const scroller = document.getElementById('scroller')
+
+        index += direction
+        if (index < 0) index = 0
+        if (index > 2) index = 2
+
+        scroller.scroll({
+          top: 0,
+          left: index * window.innerWidth,
+          behavior: 'smooth'
+        });
+      }
     }
   </script>
 </head>
@@ -107,15 +117,15 @@
   }
 
   .image {
-    height: 80vh;
+    height: 60vh;
     width: 80%;
     left: 10%;
     position: absolute;
     transform-origin: center top;
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 50vh;
-    top: -3vh;
+    background-size: contain;
+    top: 5vh;
   }
 
   .container {
@@ -140,7 +150,8 @@
   }
 
   p {
-    top: calc(67vh + 20px);
+    bottom: 0;
+    max-width: 800px;
     position: absolute;
     width: 100%;
     font-weight: 100;
@@ -148,7 +159,7 @@
     color: white;
     font-size: 18px;
     line-height: 28px;
-    padding: 100px 20vw;
+    padding: 50px;
     box-sizing: border-box;
   }
 
@@ -165,12 +176,18 @@
     height: 100vh;
     overflow: hidden;
   }
+
+  #controls {
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
 </style>
 
 <body>
   <div class="background"></div>
 
-  <div class="container">
+  <div class="container" id="scroller">
     <div class="page" style="background-image: url('../assets/bg3.jpg');">
       <div class="image" style="background-image: url('../assets/shoe3.png');"></div>
       <h1>Superstar</h1>
@@ -196,6 +213,11 @@
         A '70s style reborn. These shoes take inspiration from iconic sport styles of the past and move them into the
         future. The shoes craft an everyday look with a leather-like upper.
       </p>
+    </div>
+
+    <div id="controls">
+      <button onclick="window.goto(-1)">Prev</button>
+      <button onclick="window.goto(1)">Next</button>
     </div>
   </div>
 </body>

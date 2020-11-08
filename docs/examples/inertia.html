@@ -1,5 +1,5 @@
 <head>
-  <script type="application/javascript" src="../../src/lax.js"></script>
+  <script type="application/javascript" src="../../lib/lax.min.js"></script>
 
   <script type="application/javascript">
 
@@ -8,7 +8,7 @@
 
       lax.addDriver('scrollY', function () {
         return document.body.scrollTop
-      }, { momentumEnabled: true })
+      }, { inertiaEnabled: true })
 
       lax.addElements(".circle", {
         scrollY: {
@@ -20,14 +20,14 @@
             [0],
             [0],
             {
-              momentum: -1
+              inertia: -1
             }
           ],
           "box-shadow": [
             [0],
             [0],
             {
-              momentum: -1,
+              inertia: -1,
               cssFn: (val) => {
                 return `0px ${Math.abs(val)}px 30px rgba(0,0,0,0.2)`
               }
@@ -37,14 +37,14 @@
             [0],
             [0],
             {
-              momentum: -1
+              inertia: -1
             }
           ],
           brightness: [
             [0],
             [1],
             {
-              momentum: -0.01
+              inertia: -0.01
             }
           ]
         },

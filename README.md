@@ -1,12 +1,11 @@
 # lax.js
 
-Simple & lightweight (<3kb gzipped) vanilla JavaScript plugin to create smooth & beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
+Simple & lightweight (<4kb gzipped) vanilla JavaScript plugin to create smooth & beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
 
 ### [Version 2.0 improvements](#version-20-improvements)
 
 ## Examples
 
-[Momentum scrolling](https://codesandbox.io/embed/lax-examples-momentum-tisoc?fontsize=14&hidenavigation=1&theme=dark&view=preview)
 [TODO]
 
 # Documentation
@@ -26,7 +25,6 @@ Simple & lightweight (<3kb gzipped) vanilla JavaScript plugin to create smooth &
 
 ### 3. Glossary
 
-- [Presets](#presets)
 - [CSS properties](#css-properties)
 - [Special values](#special-values)
 - [Supported easings](#supported-easings)
@@ -51,7 +49,10 @@ To implement lax you need to create at least one _driver_, to provide values for
     // Add animation bindings to elements
     lax.addElements('.selector', {
       scrollY: {
-        presets: ['fadeInOut']
+        translateX: [
+          ["elInY", "elCenterY", "elOutY"],
+          [0, 'screenWidth/2', 'screenWidth'],
+        ]
       }
     }
   })
@@ -61,31 +62,27 @@ To implement lax you need to create at least one _driver_, to provide values for
 <div class="selector">Hello</div>
 ```
 
-## Usage With React, Vue, EmberJS & DOM Changes
+## Using presets
+
+The easiest way to get started is to use presets via html classes. For example: 
+
+```html
+<div class="lax lax_preset_fadeIn-50-100 lax_preset_spin"></div>
+```
+
+Multiple presets can be chained together and they can be customised to suit your needs. Use the [preset explorer](docs/preset-explorer) to explore effects and see a simple example [here](docs/examples/html-inline.html).
+
+## DOM behavior and usage with Frameworks 
 
 To increase performance, `lax.js` indexes the list of elements to animate when the page loads. If you're using a library like React, Vue or EmberJS, it is likely that you are adding elements after the initial window.onload. Because of this you will need to call `lax.addElements` when you add components to the DOM that you want to animate, and `lax.removeElements` when the component unmounts.
 
-- React - use-lax ?
-- Vue.js: [TODO]
-- Angular.js[TODO]
-
-## Using presets
-
-The easiest way to get started is to use presets. Multiple presets can be chained together and they can be customised to suit your needs. See a full list of presets [here](#presets).
-
-See an example below:
-
-```javascript
-lax.addElements('.selector', {
-  scrollY: {
-    presets: ['fadeInOut', 'scaleInOut 0.2,0.1']
-  }
-}
-```
+- React - Coming soon
+- Vue.js - Coming soon
+- Angular.js - Coming soon
 
 ## Adding drivers
 
-Drivers provide the values that _drive_ your animations. To set up a driver just call `lax.addDriver` with a name and a method which returns a numerical value. This method is called every frame to calculate the animations so keep the method as _light_ as possible. The example below will be the most common use case for lax which returns the scrollY position of the window.
+Drivers provide the values that _drive_ your animations. To set up a driver just call `lax.addDriver` with a name and a method which returns a number. This method is called every frame to calculate the animations so keep the method as computationally _light_ as possible. The example below will be the most common use case for lax which returns the scrollY position of the window.
 
 ```javascript
 lax.addDriver(
@@ -99,20 +96,15 @@ lax.addDriver(
 
 ### Driver options
 
-#### `momentumEnabled: boolean = false`
+#### `inertiaEnabled: boolean = false`
 
-If enabled, the driver will calculate the speed at which its value is changing. Used to add momentum to elements using the [momentum element option](#momentum-number).
+If enabled, the driver will calculate the speed at which its value is changing. Used to add inertia to elements using the [inertia element option](#inertia-number).
 
-See this in action in the [momentum example](#).
+See this in action in the [inertia example](#).
 
 #### `frameStep: number = 1`
 
 By default each driver updates its value every animation frame, around ~60 times per second. You can use the `frameStep` to reduce frequency of the driver value updating. For example a value of `2` would only update ~30 times per second and a value of `60` would only update about once per second.
-
-### Driver examples
-
-[TODO]
-Take a look at [examples/drivers](examples/drivers.html) to see more.
 
 ## Adding elements
 
@@ -132,35 +124,19 @@ lax.addElements(
     }
   },
   {             
-    style: {}   // Options
+    style: {}   // Element options
   }
 )
 ```
 
-Using inline HTML, use the `data-lax` attribute:
-
-```html
-<div
-  class="selector"
-  data-lax="{
-  scrollY: {
-    opacity: [
-      [0, 100],
-      [1, 0]
-    ]
-  }
-}, {}"
-></div>
-```
-
 ### Element options
 
-#### `style: {}`
+#### `style: StyleObject`
 
 Add static CSS to each element, for example:
 
 ```css
- {
+{
   transform: '200ms scale ease-in-out';
 }
 ```
@@ -168,7 +144,6 @@ Add static CSS to each element, for example:
 # Going deeper
 
 ## Custom animations
-
 Custom animations are defined using an object.
 
 ```javascript
@@ -178,7 +153,7 @@ Custom animations are defined using an object.
       ['elInY', 'elOutY'],  // Driver value map
       [0, 'screenWidth'],   // Animation value map
       {
-        momentum: 10        // Options
+        inertia: 10        // Options
       }
     ],
     opacity: [
@@ -189,12 +164,10 @@ Custom animations are defined using an object.
 ```
 
 ### Driver name
-
 The name of the driver you want to use as a source of values to map to your animation, for example, the `document`'s scrollY position. Read about adding drivers [here](#adding-drivers).
 
 ### CSS property
-
-The name of the CSS property you want to animate, for example `opacity` or `rotate`. See a list of supporter properties [here](#css-properties).
+The name of the CSS property you want to animate, for example `opacity` or `rotate`. See a list of supported properties [here](#css-properties).
 
 > Some css properties, for example `box-shadow`, require a custom function to build the style string. To do this use the [cssFn](#cssfn-value-number--string) element option.
 
@@ -202,8 +175,8 @@ The name of the CSS property you want to animate, for example `opacity` or `rota
 The value maps are used to interpolate the driver value and output a value for your CSS property. For example:
 
 ```javascript
-[0, 200, 800]  // Driver map
-[0, 10,  20]   // Animation map
+[0, 200, 800]  // Driver value map
+[0, 10,  20]   // Animation value map
 
 // Result
 
@@ -245,28 +218,34 @@ scrollY: {
 Set this option to modulus the value from the driver, for example if you want to loop the animation value as the driver value continues to increase.
 
 #### `frameStep: number = 1`
-
 By default each animation updates its value every animation frame, around ~60 times per second. You can use the `frameStep` to reduce frequency of the animation updating. For example a value of `2` would only update ~30 times per second and a value of `60` would only update about once per second.
 
-#### `momentum: number`
+#### `inertia: number`
+Use to add inertia to your animations. Use in combination with the [inertiaEnabled](#inertiaenabled-boolean--false) driver option.
 
-[TODO]
-See momentum in action [here](https://codesandbox.io/embed/lax-examples-momentum-tisoc?fontsize=14&hidenavigation=1&theme=dark&view=preview).
+See inertia in action [here](/docs/examples/inertia.html).
 
-#### `momentumMode: "normal" | "absolute"`
+#### `inertiaMode: "normal" | "absolute"`
+Use in combination with `inertia`. If set to `absolute` the inertia value will always be a positive number via the `Math.abs` operator.
 
-Use in combination with `momentum`. If set to `absolute` the momentum value will always be a positive number via the `Math.abs` operator.
+#### `cssUnit: string = ""`
+Define the unit to be appended to the end of the value, for example 
+For example `px` `deg`
 
-#### cssUnit: string = ""
+#### `onUpdate: (driverValues: Object, domElement: DomElement) => void`
+A method called every frame with the current driverValues and domElement. For example This can be used to toggle classes on an element. See this in action [here](/docs/examples/on-update.html).
 
-[TODO]
-
-#### round
-
-[TODO]
+The driver values are formatted as follows:
+```js
+{
+  scrollY: [  // driverName
+    100,      // driverValue
+    0         // driverInertia
+  ]
+}
+```
 
 #### `cssFn: (value: number) => string`
-
 Some CSS properties require more complex strings as values. For example, `box-shadow` has multiple values that could be modified by a lax animation.
 
 ```javascript
@@ -276,23 +255,28 @@ Some CSS properties require more complex strings as values. For example, `box-sh
 };
 ```
 
-## Optimising performance
-
 # Glossary
-
-## Presets
-
-[TODO]
-
-| name      | paramA       | paramB |
-| --------- | ------------ | ------ |
-| fadeInOut | startOpacity | speed  |
-| fadeInOut | startOpacity | speed  |
-| fadeInOut | startOpacity | speed  |
 
 ## CSS properties
 
-[TODO]
+| name       |
+| ---------- |
+| opacity    |
+| scaleX     |
+| scaleY     |
+| scale      |
+| skewX      |
+| skewY      |
+| skew       |
+| rotateX    |
+| rotateY    |
+| rotate     |
+| translateX |
+| translateY |
+| translateZ |
+| blur       |
+| hue-rotate |
+| brightness |
 
 ## Special values
 
@@ -332,13 +316,3 @@ Some CSS properties require more complex strings as values. For example, `box-sh
 | easeInBounce   |
 | easeOutBack    |
 | easeInBack     |
-
-## Version 2.0 improvements
-
-- You can now add several "drivers" to control different animations, for example scroll-x and scroll-y
-- Momentum on driver values (see momentum example)
-- Updated the syntax for declaring animations, allowing for more advanced combinations
-- Declare animations in JS as well as inline HTML
-- Add custom CSS values
-- Easings
-- easingFn

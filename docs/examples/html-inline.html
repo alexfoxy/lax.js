@@ -1,49 +1,10 @@
-<!-- <head>
-  <script type="application/javascript" src="../../src/lax-presets.js"></script>
-  <script type="application/javascript" src="../../src/lax.js"></script>
-
-  <script type="application/javascript">
-
-    window.onload = function () {
-      lax.init(window.laxPresets)
-
-      lax.addDriver('scrollY', function () {
-        return document.body.scrollTop
-      })
-    }
-  </script>
-</head>
-
-<style>
-  .square {
-    width: 100px;
-    height: 100px;
-    position: fixed;
-    top: 50vh;
-    left: 50vw;
-    background-color: red;
-  }
-
-  body {
-    padding: 0;
-    margin: 0;
-    background-color: black;
-    height: 10000px;
-  }
-</style>
-
-<body>
-  <div class="square lax lax_driverName_scrollY lax_preset_spin"></div>
-</body> -->
-
 <head>
-  <script type="application/javascript" src="../../src/lax-presets.js"></script>
-  <script type="application/javascript" src="../../src/lax.js"></script>
+  <script type="application/javascript" src="../../lib/lax.min.js"></script>
 
   <script type="application/javascript">
 
     window.onload = function () {
-      lax.init(window.laxPresets)
+      lax.init()
 
       lax.addDriver('scrollY', function () {
         return document.body.scrollTop

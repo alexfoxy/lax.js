@@ -1,4 +1,140 @@
 (() => {
+  const inOutMap = (y = 30) => {
+    return ["elInY+elHeight", `elCenterY-${y}`, "elCenterY", `elCenterY+${y}`, "elOutY-elHeight"]
+  }
+
+  const laxPresets = {
+    fadeInOut: (y = 30, str = 0) => ({
+      "opacity": [
+        inOutMap(y),
+        [str, 1, 1, 1, str]
+      ],
+    }),
+    fadeIn: (y = 'elCenterY', str = 0) => ({
+      "opacity": [
+        ["elInY+elHeight", y],
+        [str, 1],
+      ],
+    }),
+    fadeOut: (y = 'elCenterY', str = 0) => ({
+      "opacity": [
+        [y, "elOutY-elHeight"],
+        [1, str],
+      ],
+    }),
+    blurInOut: (y = 100, str = 20) => ({
+      "blur": [
+        inOutMap(y),
+        [str, 0, 0, 0, str],
+      ],
+    }),
+    blurIn: (y = 'elCenterY', str = 20) => ({
+      "blur": [
+        ["elInY+elHeight", y],
+        [str, 0],
+      ],
+    }),
+    blurOut: (y = 'elCenterY', str = 20) => ({
+      "opacity": [
+        [y, "elOutY-elHeight"],
+        [0, str],
+      ],
+    }),
+    scaleInOut: (y = 100, str = 0.6) => ({
+      "scale": [
+        inOutMap(y),
+        [str, 1, 1, 1, str],
+      ],
+    }),
+    scaleIn: (y = 'elCenterY', str = 0.6) => ({
+      "scale": [
+        ["elInY+elHeight", y],
+        [str, 1],
+      ],
+    }),
+    scaleOut: (y = 'elCenterY', str = 0.6) => ({
+      "scale": [
+        [y, "elOutY-elHeight"],
+        [1, str],
+      ],
+    }),
+    slideX: (y = 0, str = 500) => ({
+      "translateX": [
+        ['elInY', y],
+        [0, str],
+      ],
+    }),
+    slideY: (y = 0, str = 500) => ({
+      "translateY": [
+        ['elInY', y],
+        [0, str],
+      ],
+    }),
+    spin: (y = 1000, str = 360) => ({
+      "rotate": [
+        [0, y],
+        [0, str],
+        {
+          modValue: y,
+        }
+      ],
+    }),
+    flipX: (y = 1000, str = 360) => ({
+      "rotateX": [
+        [0, y],
+        [0, str],
+        {
+          modValue: y
+        }
+      ],
+    }),
+    flipY: (y = 1000, str = 360) => ({
+      "rotateY": [
+        [0, y],
+        [0, str],
+        {
+          modValue: y
+        }
+      ],
+    }),
+    jiggle: (y = 50, str = 40) => ({
+      "skewX": [
+        [0, y * 1, y * 2, y * 3, y * 4],
+        [0, str, 0, -str, 0],
+        {
+          modValue: y * 4,
+        }
+      ],
+    }),
+    seesaw: (y = 50, str = 40) => ({
+      "skewY": [
+        [0, y * 1, y * 2, y * 3, y * 4],
+        [0, str, 0, -str, 0],
+        {
+          modValue: y * 4,
+        }
+      ],
+    }),
+    zigzag: (y = 100, str = 100) => ({
+      "translateX": [
+        [0, y * 1, y * 2, y * 3, y * 4],
+        [0, str, 0, -str, 0],
+        {
+          modValue: y * 4,
+        }
+      ],
+    }),
+    hueRotate: (y = 600, str = 360) => ({
+      "hue-rotate": [
+        [0, y],
+        [0, str],
+        {
+          modValue: y,
+        }
+      ],
+    }),
+  }
+
   const laxInstance = (() => {
     const transformKeys = ["perspective", "scaleX", "scaleY", "scale", "skewX", "skewY", "skew", "rotateX", "rotateY", "rotate"]
     const filterKeys = ["blur", "hue-rotate", "brightness"]
@@ -6,10 +142,6 @@
 
     const pxUnits = ["perspective", "border-radius", "blur", "translateX", "translateY", "translateZ"]
     const degUnits = ["hue-rotate", "rotate", "rotateX", "rotateY", "skew", "skewX", "skewY"]
-
-    function floatOrNull(v = "") {
-      return v === "" ? undefined : v
-    }
 
     function getArrayValues(arr, windowWidth) {
       if (Array.isArray(arr)) return arr
@@ -177,8 +309,8 @@
       m1 = 0
 
       m2 = 0
-      momentum = 0
-      momentumEnabled = false
+      inertia = 0
+      inertiaEnabled = false
 
 
       constructor(name, getValueFn, options = {}) {
@@ -199,17 +331,17 @@
           value = this.getValueFn()
         }
 
-        if (this.momentumEnabled) {
+        if (this.inertiaEnabled) {
           const delta = value - this.lastValue
           const damping = 0.8
 
           this.m1 = this.m1 * damping + delta * (1 - damping)
           this.m2 = this.m2 * damping + this.m1 * (1 - damping)
-          this.momentum = Math.round(this.m2 * 5000) / 15000
+          this.inertia = Math.round(this.m2 * 5000) / 15000
         }
 
         this.lastValue = value
-        return [this.lastValue, this.momentum]
+        return [this.lastValue, this.inertia]
       }
     }
 
@@ -254,11 +386,11 @@
             console.error("No lax driver with name: ", driverName)
           }
 
-          const [value, momentumValue] = driverValues[driverName]
+          const [value, inertiaValue] = driverValues[driverName]
 
           for (let key in styleBindings) {
             const [arr1, arr2, options = {}] = styleBindings[key]
-            const { modValue, frameStep = 1, easing, momentum, momentumMode, cssFn, cssUnit = '' } = options
+            const { modValue, frameStep = 1, easing, inertia, inertiaMode, cssFn, cssUnit = '' } = options
 
             const easingFn = easings[easing]
 
@@ -267,10 +399,10 @@
 
               let interpolatedValue = interpolate(arr1, arr2, v, easingFn)
 
-              if (momentum) {
-                let momentumExtra = momentumValue * momentum
-                if (momentumMode === 'absolute') momentumExtra = Math.abs((momentumExtra))
-                interpolatedValue += momentumExtra
+              if (inertia) {
+                let inertiaExtra = inertiaValue * inertia
+                if (inertiaMode === 'absolute') inertiaExtra = Math.abs((inertiaExtra))
+                interpolatedValue += inertiaExtra
               }
 
               const unit = cssUnit || pxUnits.includes(key) ? 'px' : (degUnits.includes(key) ? 'deg' : '')
@@ -347,15 +479,13 @@
 
       windowWidth = 0
       windowHeight = 0
-      presets = {}
+      presets = laxPresets
 
       debugData = {
         frameLengths: []
       }
 
-      init = (presets = {}) => {
-        this.presets = presets
-
+      init = () => {
         this.findAndAddElements()
 
         window.requestAnimationFrame(this.onAnimationFrame)

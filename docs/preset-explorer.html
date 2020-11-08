@@ -1,10 +1,8 @@
 <head>
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
 
-  <script type="application/javascript" src="../../src/lax-presets.js"></script>
-  <script type="application/javascript" src="../../src/lax.js"></script>
+  <script type="application/javascript" src="../../lib/lax.min.js"></script>
   <script type="application/javascript">
-
 
     window.copyPreset = function () {
       const input = document.getElementById("presetString")
@@ -88,7 +86,7 @@
         ]
       }
 
-      const enabledPresets = ["fadeInOut"]
+      const enabledPresets = ["fadeInOut", "seesaw"]
 
       const controlData = {
         fadeIn: [...baseSettings.fade],
@@ -166,7 +164,9 @@
           }
         })
 
-        presetString.value = presets.join(", ")
+        presetString.value = presets.map((p) => {
+          return `lax_preset_${p}`
+        }).join(" ")
       }
 
       function onSliderUpdate(name, value) {
@@ -301,7 +301,7 @@
         Initialise lax
       */
 
-      lax.init(window.laxPresets)
+      lax.init()
 
       lax.addDriver('scrollY', function () {
         return document.body.scrollTop
@@ -482,7 +482,7 @@
     <h4 class='hint' style="top: 120px;">Scroll Down..</h4>
     <h4 class='hint' style="bottom: 140px;">Scroll Up..</h4>
 
-    <img src="../assets/lax.png" id="laxLogo" />
+    <img src="assets/lax.png" id="laxLogo" />
   </div>
 
 </body>
