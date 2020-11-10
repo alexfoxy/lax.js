@@ -242,9 +242,9 @@
       }
 
       const translate3dValues = {
-        translateX: 0,
-        translateY: 0,
-        translateZ: 0
+        translateX: 0.00001,
+        translateY: 0.00001,
+        translateZ: 0.00001
       }
 
       Object.keys(styles).forEach((key) => {

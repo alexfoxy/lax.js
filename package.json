@@ -7,9 +7,11 @@
   "devDependencies": {
     "@babel/cli": "^7.12.1",
     "@babel/core": "^7.12.3",
-    "@babel/preset-env": "^7.12.1"
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "uglify-js": "^3.9.4"
   },
-  "description": "Simple & light weight (4kb minified & zipped) vanilla javascript plugin to create smooth & beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!",
+  "description": "Simple & lightweight (<4kb gzipped) vanilla JavaScript plugin to create smooth & beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!",
   "license": "MIT",
   "author": "alexfoxy@gmail.com",
   "repository": {
@@ -26,8 +28,5 @@
     "css",
     "html"
   ],
-  "dependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "uglify-js": "^3.9.4"
-  }
+  "dependencies": {}
 }
