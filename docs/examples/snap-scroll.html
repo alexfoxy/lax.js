@@ -1,6 +1,6 @@
 <head>
   <script type="application/javascript" src="../../lib/lax.min.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9, minimum-scale=0.9">
 
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;700&display=swap" rel="stylesheet">
   <script type="application/javascript">
@@ -14,11 +14,11 @@
         return container.scrollLeft
       })
 
-      lax.addElements(".background", {
+      lax.addElements(".bg", {
         containerScrollX: {
-          "hue-rotate": [
-            [0, 10000],
-            [0, 1000],
+          "opacity": [
+            ["screenWidth * (index-1)", "screenWidth * index", "screenWidth * (index+1)"],
+            [0, 1, 0],
           ],
         }
       })
@@ -62,7 +62,7 @@
         containerScrollX: {
           translateY: [
             imageAnimationMap,
-            [-200, 0, -200],
+            [-100, 0, -100],
             {
               easing: 'easeInOutQuad',
             }
@@ -113,6 +113,13 @@
     scroll-snap-stop: always;
     position: relative;
     display: inline-block;
+    background-size: cover;
+  }
+
+  .bg {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
     background-size: cover;
   }
 
@@ -185,10 +192,14 @@
 </style>
 
 <body>
-  <div class="background"></div>
+  <div class="background">
+    <div class="bg" style="background-image: url('../assets/bg3.jpg');"></div>
+    <div class="bg" style="background-image: url('../assets/bg1.jpg');"></div>
+    <div class="bg" style="background-image: url('../assets/bg2.jpg');"></div>
+  </div>
 
   <div class="container" id="scroller">
-    <div class="page" style="background-image: url('../assets/bg3.jpg');">
+    <div class="page">
       <div class="image" style="background-image: url('../assets/shoe3.png');"></div>
       <h1>Superstar</h1>
       <p>
@@ -197,27 +208,27 @@
       </p>
     </div>
 
-    <div class="page" style="background-image: url('../assets/bg2.jpg');">
-      <div class="image" style="background-image: url('../assets/shoe1.png');"></div>
-      <h1>Retrorun</h1>
-      <p>
-        Retro design with a modern twist. Check out a busy side street or stroll to the corner store in these adidas
-        running-inspired shoes. Suede overlays and contrast 3-Stripes give the flexible upper a sleek, sporty finish.
-      </p>
-    </div>
+    <div class="page"">
+      <div class=" image" style="background-image: url('../assets/shoe1.png');"></div>
+    <h1>Retrorun</h1>
+    <p>
+      Retro design with a modern twist. Check out a busy side street or stroll to the corner store in these adidas
+      running-inspired shoes. Suede overlays and contrast 3-Stripes give the flexible upper a sleek, sporty finish.
+    </p>
+  </div>
 
-    <div class="page" style="background-image: url('../assets/bg1.jpg');">
-      <div class="image" style="background-image: url('../assets/shoe2.png');"></div>
-      <h1>Grand Court</h1>
-      <p>
-        A '70s style reborn. These shoes take inspiration from iconic sport styles of the past and move them into the
-        future. The shoes craft an everyday look with a leather-like upper.
-      </p>
-    </div>
+  <div class="page">
+    <div class="image" style="background-image: url('../assets/shoe2.png');"></div>
+    <h1>Grand Court</h1>
+    <p>
+      A '70s style reborn. These shoes take inspiration from iconic sport styles of the past and move them into the
+      future. The shoes craft an everyday look with a leather-like upper.
+    </p>
+  </div>
 
-    <div id="controls">
-      <button onclick="window.goto(-1)">Prev</button>
-      <button onclick="window.goto(1)">Next</button>
-    </div>
+  <div id="controls">
+    <button onclick="window.goto(-1)">Prev</button>
+    <button onclick="window.goto(1)">Next</button>
+  </div>
   </div>
 </body>

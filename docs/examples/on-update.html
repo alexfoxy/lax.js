@@ -10,15 +10,16 @@
         return document.body.scrollTop
       })
 
-      lax.addElements(".circle", {}, {
+      lax.addElements("#text", {}, {
         onUpdate: function (driverValues, domElement) {
           const scrollY = driverValues.scrollY[0]
 
-          domElement.innerHTML = scrollY
+          const oCount = Math.floor((scrollY / 10) + 1)
+          const oString = Array.from({ length: oCount }, (v, i) => "o").join("")
+          domElement.innerHTML = "scr" + oString + "ll"
 
-          if (scrollY > 400) {
+          if (scrollY > 1000) {
             domElement.classList.add('pink')
-            domElement.innerHTML = "PINK"
           } else {
             domElement.classList.remove('pink')
           }
@@ -29,26 +30,20 @@
 </head>
 
 <style>
-  .circle {
-    height: 200px;
-    width: 200px;
-    background-color: #a26ddc;
-    margin-bottom: 0px;
-    margin-left: -100px;
-    margin-top: -100px;
-    border-radius: 100px;
-    left: 50vw;
-    top: 50vh;
+  #text {
+    width: calc(100vw - 40px);
+    left: 20;
+    top: 20;
     position: fixed;
-    text-align: center;
-    line-height: 200px;
-    font-size: 40px;
+    font-size: 60px;
     font-family: sans-serif;
-    color: white;
+    color: #a26ddc;
+    overflow-wrap: anywhere;
+    font-weight: bold;
   }
 
-  .circle.pink {
-    background-color: #ff568c;
+  #text.pink {
+    color: #ff568c;
   }
 
   body {
@@ -62,6 +57,6 @@
 </style>
 
 <body>
-  <div class="circle">
+  <div id="text">
   </div>
 </body>
