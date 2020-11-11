@@ -1,6 +1,6 @@
 <head>
   <script type="application/javascript" src="../../lib/lax.min.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9, minimum-scale=0.9">
+  <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=0.8, minimum-scale=0.8">
 
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;700&display=swap" rel="stylesheet">
   <script type="application/javascript">
@@ -76,22 +76,6 @@
           ],
         }
       })
-
-      let index = 0
-
-      window.goto = function (direction) {
-        const scroller = document.getElementById('scroller')
-
-        index += direction
-        if (index < 0) index = 0
-        if (index > 2) index = 2
-
-        scroller.scroll({
-          top: 0,
-          left: index * window.innerWidth,
-          behavior: 'smooth'
-        });
-      }
     }
   </script>
 </head>
@@ -146,7 +130,7 @@
   }
 
   h1 {
-    top: calc(67vh + 10px);
+    top: 67vh;
     position: absolute;
     width: 100%;
     font-weight: 100;
@@ -157,8 +141,7 @@
   }
 
   p {
-    bottom: 0;
-    max-width: 800px;
+    top: 70vh;
     position: absolute;
     width: 100%;
     font-weight: 100;
@@ -166,8 +149,21 @@
     color: white;
     font-size: 18px;
     line-height: 28px;
-    padding: 50px;
+    padding: 10vh;
+    padding-left: 200px;
+    padding-right: 200px;
     box-sizing: border-box;
+  }
+
+  @media only screen and (max-width: 600px) {
+    p {
+      padding: 50px;
+      top: 6vh;
+    }
+
+    h1 {
+      top: 60vh;
+    }
   }
 
   body {
@@ -224,11 +220,5 @@
       A '70s style reborn. These shoes take inspiration from iconic sport styles of the past and move them into the
       future. The shoes craft an everyday look with a leather-like upper.
     </p>
-  </div>
-
-  <div id="controls">
-    <button onclick="window.goto(-1)">Prev</button>
-    <button onclick="window.goto(1)">Next</button>
-  </div>
   </div>
 </body>
