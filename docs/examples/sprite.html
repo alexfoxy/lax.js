@@ -9,8 +9,8 @@
         return document.body.scrollTop
       })
 
-      const frameWidth = 400
-      const frameCount = 49
+      const frameWidth = 370
+      const frameCount = 12
 
       lax.addElements(".sprite", {
         scrollY: {
@@ -34,13 +34,13 @@
 
 <style>
   .sprite {
-    height: 250px;
-    width: 400px;
-    background-image: url('../assets/lego.jpg');
+    height: 370px;
+    width: 370px;
+    background-image: url('../assets/spritesheet.jpg');
     background-repeat: no-repeat;
     position: fixed;
-    left: calc(50vw - 200px);
-    top: calc(50vh - 125px);
+    left: calc(50vw - 185px);
+    top: calc(50vh - 185px);
   }
 
   body {

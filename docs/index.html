@@ -26,12 +26,7 @@
         scrollY: {
           translateY: [[-400, 0, 100], [300, 0, 100]],
           scale: [[100, "screenHeight"], [0.25, 10]],
-        }
-      });
-
-      lax.addElements(".blue-x", {
-        scrollY: {
-          opacity: [[0, "screenHeight/2"], [0, 1]],
+          opacity: [[0, "screenHeight/2", "screenHeight"], [1, 1, 0]],
         }
       });
 
@@ -39,7 +34,7 @@
         scrollY: {
           translateY: [[-400, 0], [100, 0]],
           translateX: [[0, "screenHeight"], [0, 400]],
-          opacity: [[0, "screenHeight"], [1, 0]]
+          opacity: [[0, "screenHeight/2"], [1, 0]]
         }
       });
 
@@ -47,7 +42,7 @@
         scrollY: {
           translateY: [[-400, 0], [200, 0]],
           translateX: [[0, "screenHeight"], [0, -400]],
-          opacity: [[0, "screenHeight"], [1, 0]]
+          opacity: [[0, "screenHeight/2"], [1, 0]]
         }
       });
 
@@ -87,13 +82,57 @@
       lax.addElements(".bubble", {
         scrollY: {
           translateY: [
-            ["elInY", "elOutY+screenHeight"],
-            ["Math.random()*screenHeight", "-Math.random()*-screenHeight*1.5"]
+            ["screenHeight/4", "screenHeight * 3"],
+            ["Math.random()*screenHeight", "Math.random()*screenHeight*3"]
           ],
-          scale: [[0], ["Math.random()*0.8+0.2"]],
-          translateX: [[0], ["index*(screenWidth/25)-50"]]
+          opacity: [
+            ["screenHeight/4", "screenHeight/2"],
+            [0, 1]
+          ],
+          scale: [[0], ["(Math.random()*0.8)+0.2"]],
+          translateX: [[0], ["index*(screenWidth/25)-50"]],
+          transform: [
+            [0, 4000],
+            [0, "(Math.random() + 0.8) * 1000"],
+            {
+              cssFn: function (val) {
+                return `rotateX(${val % 360}deg)`
+              }
+            }
+          ],
+          rotate: [
+            [0, 4000],
+            [0, "(Math.random() - 0.5) * 1000"],
+          ],
         }
       });
+
+      lax.addElements('#pinkZag', {
+        scrollY: {
+          translateY: [
+            ["elInY", "elOutY"],
+            [0, -300]
+          ],
+        }
+      })
+
+      lax.addElements('#tealZag', {
+        scrollY: {
+          translateY: [
+            ["elInY", "elOutY"],
+            [0, 200]
+          ],
+        }
+      })
+
+      lax.addElements('#purpleZag', {
+        scrollY: {
+          translateY: [
+            ["elInY", "elOutY"],
+            [0, 700]
+          ],
+        }
+      })
 
       lax.addElements(".downarrows img", {
         scrollY: {
@@ -118,8 +157,13 @@
                 return `${val}px 0`
               }
             }
+          ],
+          scale: [
+            ["elInY", "elCenterY"],
+            [3, 1],
           ]
-        }
+        },
+
       })
     }
   </script>
@@ -136,7 +180,7 @@
       width: 100%;
       background-color: #242224;
       margin: 0;
-      height: 390vh;
+      height: 480vh;
       color: white;
       font-family: "Montserrat", sans-serif;
       position: relative;
@@ -154,17 +198,21 @@
       font-size: 30px;
       text-decoration: none;
       position: absolute;
-      top: 340vh;
+      top: 425vh;
       border-radius: 20px;
       left: 50vw;
       margin-left: -125px;
+      z-index: 100;
+      pointer-events: all;
+      cursor: pointer;
     }
 
     .bottombg {
-      background-color: #ffe773;
+      background-color: #8d77ed;
       width: 100vw;
       height: 100vh;
-      top: 290vh;
+      top: 380vh;
+      z-index: 50;
       position: absolute;
     }
 
@@ -226,7 +274,7 @@
     }
 
     .wheee {
-      top: 220vh;
+      top: 230vh;
       position: absolute;
       left: 0;
       height: 50px;
@@ -248,14 +296,16 @@
     }
 
     .bubbles {
-      top: 120vh;
-      position: absolute;
+      top: -100vh;
+      position: fixed;
+      -webkit-transform: translate3d(0, 0, 0);
+      z-index: 5;
     }
 
     .bubble {
-      width: 200px;
-      height: 200px;
-      border-radius: 100px;
+      width: 140px;
+      height: 140px;
+      opacity: 1;
       position: absolute;
     }
 
@@ -271,6 +321,41 @@
       background: #ffe773;
     }
 
+    .zags {
+      margin-top: 250vh;
+      z-index: 100;
+      position: relative;
+      overflow: hidden;
+      height: 150vh;
+    }
+
+    .zag {
+      width: 100vw;
+      height: 150vh;
+      position: absolute;
+    }
+
+    #pinkZag {
+      background-image: url(./assets/pink-zag.png);
+      background-size: 200px;
+      background-repeat: repeat-x;
+      background-position-y: bottom;
+    }
+
+    #tealZag {
+      background-image: url(./assets/teal-zag.png);
+      background-size: 200px;
+      background-repeat: repeat-x;
+      background-position-y: bottom;
+    }
+
+    #purpleZag {
+      background-image: url(./assets/purple-zag.png);
+      background-size: 200px;
+      background-repeat: repeat-x;
+      background-position-y: bottom;
+    }
+
     .bottom {
       margin-top: 400vh;
     }
@@ -283,13 +368,18 @@
   <img src="./assets/a.png" class="letter-a" />
   <div class="letter-x">
     <img src="./assets/x.png" />
-    <img src="./assets/x-pink.png" class="blue-x" />
   </div>
 
   <h2 class="scrolldown">scroll down</h2>
 
   <div class="downarrows">
     <img src="./assets/downarrow.png" />
+  </div>
+
+  <div class="zags">
+    <div id="pinkZag" class="zag"></div>
+    <div id="tealZag" class="zag"></div>
+    <div id="purpleZag" class="zag"></div>
   </div>
 
   <div class="bubbles">
