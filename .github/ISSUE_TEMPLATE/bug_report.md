@@ -7,6 +7,9 @@ assignees: ''
 
 ---
 
+**lax.js version**
+Please note, only bugs in v2.0 or later will be fixed.
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
