@@ -11,7 +11,7 @@ Simple & lightweight (<4kb gzipped) vanilla JavaScript library to create smooth 
 Lax.js 2.0 has been completely re-written with a focus on modularity and flexibility giving you more tools to create awesome animations.
 - New javascript animation syntax, allowing for more advanced effect combos
 - Use any value to drive animations, for example mouse position, time of day .. and of course scroll!
-- Animations can be given inertia when scrolling (see inertia example)
+- Animations can be given inertia when scrolling
 - Create custom CSS bindings 
 - Animation easings
 - And much more..
@@ -117,7 +117,7 @@ lax.addDriver(
 
 If enabled, the driver will calculate the speed at which its value is changing. Used to add inertia to elements using the [inertia element option](#inertia-number).
 
-See this in action in the [inertia example](#).
+See this in action in the [here](https://alexfox.dev/lax.js/examples/inertia).
 
 #### `frameStep: number = 1`
 
@@ -239,7 +239,8 @@ By default each animation updates its value every animation frame, around ~60 ti
 #### `inertia: number`
 Use to add inertia to your animations. Use in combination with the [inertiaEnabled](#inertiaenabled-boolean--false) driver option.
 
-See inertia in action [here](/docs/examples/inertia.html).
+See inertia in action [here](https://alexfox.dev/lax.js/examples/inertia).
+
 
 #### `inertiaMode: "normal" | "absolute"`
 Use in combination with `inertia`. If set to `absolute` the inertia value will always be a positive number via the `Math.abs` operator.
@@ -249,7 +250,7 @@ Define the unit to be appended to the end of the value, for example
 For example `px` `deg`
 
 #### `onUpdate: (driverValues: Object, domElement: DomElement) => void`
-A method called every frame with the current driverValues and domElement. This could be used to toggle classes on an element or set innerHTML. See it in action [here](/docs/examples/on-update.html).
+A method called every frame with the current driverValues and domElement. This could be used to toggle classes on an element or set innerHTML. See it in action [here](https://alexfox.dev/lax.js/examples/on-update).
 
 The driver values are formatted as follows:
 ```js
