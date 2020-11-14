@@ -50,6 +50,27 @@ Lax.js 2.0 has been completely re-written with a focus on modularity and flexibi
 
 # Getting started
 
+### NPM Setup
+
+```bash
+# https://www.npmjs.com/package/lax.js
+
+npm install lax.js
+yarn add lax.js
+```
+```js
+import lax from 'lax.js'
+```
+
+### HTML setup
+
+```html
+<script src="path-to-lax.min.js"></script>
+<!-- or via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/lax.js" ></script>
+```
+
+
 ## Setup
 
 To implement lax you need to create at least one _driver_, to provide values for animations, as well as the element animation bindings. Below is a simple example:
