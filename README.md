@@ -1,20 +1,32 @@
 # lax.js
 
-Simple & lightweight (<4kb gzipped) vanilla JavaScript plugin to create smooth & beautiful animations when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!
+Simple & lightweight (<4kb gzipped) vanilla JavaScript library to create smooth & beautiful animations when you scroll. 
 
-### [What's new with 2.0](#version-20-improvements)
+![Lax 2.0 Gif](https://i.imgur.com/XNvvAOv.gif)
+
+[>> DEMO <<](https://alexfox.dev/lax.js/)
+
+---
+## What's new with Lax.js 2.0
+Lax.js 2.0 has been completely re-written with a focus on modularity and flexibility giving you more tools to create awesome animations.
+- New javascript animation syntax, allowing for more advanced effect combos
+- Use any value to drive animations, for example mouse position, time of day .. and of course scroll!
+- Animations can be given inertia when scrolling (see inertia example)
+- Create custom CSS bindings 
+- Animation easings
+- And much more..
 
 ## Examples
+[Here](https://alexfox.dev/lax.js/)
 
-[TODO]
 
 # Documentation
 
 ### 1. Getting started
 
 - [Setup](#setup)
-- [Usage with UI frameworks](#usage-with-react-vue-emberjs--dom-changes)
 - [Using presets](#using-presets)
+- [Usage with UI frameworks](#dom-behavior-and-usage-with-frameworks)
 - [Adding drivers](#adding-drivers)
 - [Adding elements](#adding-elements)
 
@@ -76,13 +88,11 @@ Multiple presets can be chained together and they can be customised to suit your
 
 To increase performance, `lax.js` indexes the list of elements to animate when the page loads. If you're using a library like React, Vue or EmberJS, it is likely that you are adding elements after the initial window.onload. Because of this you will need to call `lax.addElements` when you add components to the DOM that you want to animate, and `lax.removeElements` when the component unmounts.
 
-- React - Coming soon
-- Vue.js - Coming soon
-- Angular.js - Coming soon
+Please find a React example [here](https://codesandbox.io/s/laxjs-react-example-nc4h7). Other examples will be available soon for Vue.js and Angular.
 
 ## Adding drivers
 
-Drivers provide the values that _drive_ your animations. To set up a driver just call `lax.addDriver` with a name and a method which returns a number. This method is called every frame to calculate the animations so keep the method as computationally _light_ as possible. The example below will be the most common use case for lax which returns the scrollY position of the window.
+Drivers provide the values that _drive_ your animations. To set up a driver just call `lax.addDriver` with a name and a function which returns a number. This method is called every frame to calculate the animations so keep the method as computationally _light_ as possible. The example below will be the most common use case for lax which returns the scrollY position of the window.
 
 ```javascript
 lax.addDriver(
@@ -108,9 +118,7 @@ By default each driver updates its value every animation frame, around ~60 times
 
 ## Adding elements
 
-You can add lax animations to an element using JavaScript or inline HTML.
-
-Using the `addElements` method:
+You can add lax animations to an element using the `addElements` method:
 
 ```javascript
 lax.addElements(
@@ -165,7 +173,7 @@ Custom animations are defined using an object.
 ```
 
 ### Driver name
-The name of the driver you want to use as a source of values to map to your animation, for example, the `document`'s scrollY position. Read about adding drivers [here](#adding-drivers).
+The name of the driver you want to use as a source of values to map to your animation, for example, the document's scrollY position. Read about adding drivers [here](#adding-drivers).
 
 ### CSS property
 The name of the CSS property you want to animate, for example `opacity` or `rotate`. See a list of supported properties [here](#css-properties).
@@ -234,14 +242,14 @@ Define the unit to be appended to the end of the value, for example
 For example `px` `deg`
 
 #### `onUpdate: (driverValues: Object, domElement: DomElement) => void`
-A method called every frame with the current driverValues and domElement. For example This can be used to toggle classes on an element. See this in action [here](/docs/examples/on-update.html).
+A method called every frame with the current driverValues and domElement. This could be used to toggle classes on an element or set innerHTML. See it in action [here](/docs/examples/on-update.html).
 
 The driver values are formatted as follows:
 ```js
 {
-  scrollY: [  // driverName
-    100,      // driverValue
-    0         // driverInertia
+  scrollY: [  // Drivr name
+    100,      // Driver value
+    0         // Driver inertia
   ]
 }
 ```
@@ -255,6 +263,13 @@ Some CSS properties require more complex strings as values. For example, `box-sh
   return `${val}px ${val}px ${val}px rgba(0,0,0,0.5)`;
 };
 ```
+
+## Optimising performance
+Lax.js has been designed to be performant but there are a few things to bare in mind when creating your websites.
+- Smaller elements perform better. 
+- Postion `fixed` and `absolute` elements perform best as they do not trigger a layout change when updated.
+- Off-screen elements do not need to be updated so consider that when creating your animation value maps.
+- The css properties `blur`, `hue-rotate` and `brightness` are graphically intensive and do not run as smoothly as the other available properties.
 
 # Glossary
 

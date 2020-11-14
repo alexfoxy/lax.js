@@ -11,7 +11,7 @@
     "@babel/preset-env": "^7.12.1",
     "uglify-js": "^3.9.4"
   },
-  "description": "Simple & lightweight (<4kb gzipped) vanilla JavaScript plugin to create smooth & beautiful animations from user interactions when you scrolllll! Harness the power of the most intuitive interaction and make your websites come alive!",
+  "description": "Simple & lightweight (<4kb gzipped) vanilla JavaScript library to create smooth & beautiful animations when you scroll.",
   "license": "MIT",
   "author": "alexfoxy@gmail.com",
   "repository": {
