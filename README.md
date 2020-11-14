@@ -19,10 +19,10 @@ Lax.js 2.0 has been completely re-written with a focus on modularity and flexibi
 ## Examples
 - [Scroll effect](https://alexfox.dev/lax.js/examples/scroll)
 - [Horizontal snap scroll](https://alexfox.dev/lax.js/examples/snap-scroll)
+- [Inertia](https://alexfox.dev/lax.js/examples/inertia)
 - [Video/Gif playback](https://alexfox.dev/lax.js/examples/sprite)
 - [Cursor position](https://alexfox.dev/lax.js/examples/cursor)
 - [Text input](https://alexfox.dev/lax.js/examples/input)
-- [Inertia](https://alexfox.dev/lax.js/examples/inertia)
 - [Update HTML content](https://alexfox.dev/lax.js/examples/on-update)
 - [Preset Explorer](https://alexfox.dev/lax.js/preset-explorer)
 
