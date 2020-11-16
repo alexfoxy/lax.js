@@ -78,11 +78,11 @@ To implement lax you need to create at least one _driver_, to provide values for
 ```html
 <!-- JS -->
 <script>
-  window.onload = function() {
+  window.onload = function () {
     lax.init()
 
     // Add a driver that we use to control our animations
-    lax.addDriver('scrollY', function() {
+    lax.addDriver('scrollY', function () {
       return window.scrollY
     })
 
@@ -94,8 +94,8 @@ To implement lax you need to create at least one _driver_, to provide values for
           [0, 'screenWidth/2', 'screenWidth'],
         ]
       }
-    }
-  })
+    })
+  }
 </script>
 
 <!-- HTML -->
