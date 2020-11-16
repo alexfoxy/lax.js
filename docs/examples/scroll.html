@@ -6,7 +6,7 @@
       lax.init()
 
       lax.addDriver('scrollY', function () {
-        return document.body.scrollTop
+        return window.scrollY
       })
 
       const container = document.querySelector('.container')

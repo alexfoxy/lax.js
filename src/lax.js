@@ -276,8 +276,8 @@
       const pageWidth = document.body.scrollWidth
       const screenWidth = window.innerWidth
       const screenHeight = window.innerHeight
-      const scrollTop = document.body.scrollTop
-      const scrollLeft = document.body.scrollLeft
+      const scrollTop = window.scrollY
+      const scrollLeft = window.scrollX
 
       const left = x + scrollLeft
       const right = left + width

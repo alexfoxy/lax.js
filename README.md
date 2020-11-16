@@ -83,7 +83,7 @@ To implement lax you need to create at least one _driver_, to provide values for
 
     // Add a driver that we use to control our animations
     lax.addDriver('scrollY', function() {
-      return document.body.scrollTop
+      return window.scrollY
     })
 
     // Add animation bindings to elements
@@ -126,7 +126,7 @@ Drivers provide the values that _drive_ your animations. To set up a driver just
 lax.addDriver(
   'scrollY',                          // Driver name
   function(laxFrame) {                     
-    return document.body.scrollTop    // Value method
+    return window.scrollY    // Value method
   },
   { }                                 // Options
 )
