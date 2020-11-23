@@ -430,7 +430,7 @@
 
           presets.forEach((presetString) => {
 
-            const [presetName, y, str] = presetString.split("-")
+            const [presetName, y, str] = presetString.split("_")
 
             const presetFn = window.lax.presets[presetName]
 
