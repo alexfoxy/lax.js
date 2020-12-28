@@ -1,0 +1,55 @@
+<head>
+  <script type="application/javascript" src="../lib/lax.min.js"></script>
+  <script type="application/javascript">
+
+    window.onload = function () {
+      lax.init()
+
+      const input = document.getElementById('input')
+
+      // Add lax driver for inputLength
+      lax.addDriver('inputLength', function () {
+        return input.value.length
+      })
+
+      lax.addElements("#input", {
+        'inputLength': {
+          "rotate": [
+            [0, 100],
+            [0, 360],
+          ],
+        }
+      })
+    }
+
+  </script>
+</head>
+
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  #input {
+    text-align: center;
+    width: calc(100vw - 200px);
+    transform-origin: center;
+    margin-left: 100px;
+    margin-top: calc(50vh - 50px);
+    position: fixed;
+    font-size: 40px;
+    border: 0;
+    outline: 0;
+    background-color: #f544ad;
+    padding: 20px;
+    box-sizing: border-box;
+    color: white;
+    border-radius: 50px;
+  }
+</style>
+
+<body>
+  <input id='input' placeholder="type something..." autocomplete="false" autofocus />
+</body>

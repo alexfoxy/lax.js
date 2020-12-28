@@ -1,0 +1,91 @@
+<head>
+  <script type="application/javascript" src="../lib/lax.min.js"></script>
+  <script type="application/javascript">
+
+    window.onload = function () {
+      lax.init()
+
+      lax.addDriver('scrollY', function () {
+        return window.scrollY
+      })
+
+      const container = document.querySelector('.container')
+      const count = 100
+
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('div')
+        el.className = "circle"
+        container.appendChild(el)
+      }
+
+      lax.addElements(".circle", {
+        scrollY: {
+          translateX: [
+            ["elInY", "elCenterY", "elOutY"],
+            [0, 'screenWidth/2', 'screenWidth'],
+            {
+              easing: 'easeInOutQuart',
+            }
+          ],
+          opacity: [
+            ["elInY", "elCenterY", "elOutY"],
+            [0, 1, 0],
+            {
+              easing: 'easeInOutCubic'
+            }
+          ],
+          "border-radius": [
+            ["elInY+200", "elCenterY", "elOutY-200"],
+            [0, 100, 0],
+            {
+              easing: 'easeInOutQuint',
+            }
+          ],
+          "box-shadow": [
+            ["elInY+200", "elCenterY", "elOutY-200"],
+            [50, 0, 50],
+            {
+              easing: 'easeInOutQuint',
+              cssFn: (val) => {
+                return `${val}px ${val}px ${val}px rgba(0,0,0,0.5)`
+              }
+            }
+          ],
+        }
+      })
+    }
+  </script>
+</head>
+
+<style>
+  .circle {
+    height: 100px;
+    width: 100px;
+    background-color: #a26ddc;
+    margin-bottom: 0px;
+    margin-left: -50px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .container {
+    padding-top: 50vh;
+    width: 100vw;
+    overflow-y: hidden;
+  }
+
+  body {
+    padding: 0;
+    margin: 0;
+    padding: 0;
+    background-color: #dedbde;
+    background-image: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+    margin: 0;
+    background-size: 700px 700px;
+  }
+</style>
+
+<body>
+  <div class="container">
+  </div>
+</body>

@@ -1,0 +1,228 @@
+<head>
+  <script type="application/javascript" src="../lib/lax.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=0.8, minimum-scale=0.8">
+
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;700&display=swap" rel="stylesheet">
+  <script type="application/javascript">
+
+    window.onload = function () {
+      lax.init()
+
+      const container = document.querySelector('.container')
+
+      lax.addDriver('containerScrollX', function () {
+        return container.scrollLeft
+      })
+
+      lax.addElements(".bg", {
+        containerScrollX: {
+          "opacity": [
+            ["screenWidth * (index-1)", "screenWidth * index", "screenWidth * (index+1)"],
+            [0, 1, 0],
+          ],
+        }
+      })
+
+      const imageAnimationMap = ["elCenterX-elWidth", "elCenterX", "elCenterX+elWidth"]
+      const textAnimationMap = ["elCenterX-(elWidth/3)", "elCenterX", "elCenterX+(elWidth/3)"]
+
+      lax.addElements(".page h1", {
+        containerScrollX: {
+          translateY: [
+            textAnimationMap,
+            [200, 0, 200],
+            {
+              easing: 'easeInOutQuad',
+            }
+          ],
+          opacity: [
+            textAnimationMap,
+            [0, 1, 0],
+          ],
+        }
+      })
+
+      lax.addElements(".page p", {
+        containerScrollX: {
+          translateY: [
+            textAnimationMap,
+            [500, 0, 500],
+            {
+              easing: 'easeInOutQuad',
+            }
+          ],
+          opacity: [
+            textAnimationMap,
+            [0, 1, 0],
+          ],
+        }
+      })
+
+      lax.addElements(".page .image", {
+        containerScrollX: {
+          translateY: [
+            imageAnimationMap,
+            [-100, 0, -100],
+            {
+              easing: 'easeInOutQuad',
+            }
+          ],
+          scale: [
+            imageAnimationMap,
+            [0.8, 1, 0.8],
+            {
+              easing: 'easeInOutQuad',
+            }
+          ],
+        }
+      })
+    }
+  </script>
+</head>
+
+<style>
+  .background {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    background-size: cover;
+  }
+
+  .page {
+    flex-shrink: 0;
+    width: 100vw;
+    height: 100vh;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    position: relative;
+    display: inline-block;
+    background-size: cover;
+  }
+
+  .bg {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-size: cover;
+  }
+
+  .image {
+    height: 60vh;
+    width: 80%;
+    left: 10%;
+    position: absolute;
+    transform-origin: center top;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    top: 5vh;
+  }
+
+  .container {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    direction: ltr;
+    width: 100vw;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  h1 {
+    top: 67vh;
+    position: absolute;
+    width: 100%;
+    font-weight: 100;
+    text-align: center;
+    color: white;
+    font-weight: 800;
+    font-size: 60px;
+  }
+
+  p {
+    top: 70vh;
+    position: absolute;
+    width: 100%;
+    font-weight: 100;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    line-height: 28px;
+    padding: 10vh;
+    padding-left: 200px;
+    padding-right: 200px;
+    box-sizing: border-box;
+  }
+
+  @media only screen and (max-width: 600px) {
+    p {
+      padding: 50px;
+      top: 55vh;
+    }
+
+    h1 {
+      top: 48vh;
+    }
+
+    .image {
+      top: -2vh;
+    }
+  }
+
+  body {
+    padding: 0;
+    margin: 0;
+    background-color: black;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    font-family: 'Comfortaa', arial;
+  }
+
+  html {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #controls {
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+</style>
+
+<body>
+  <div class="background">
+    <div class="bg" style="background-image: url('../assets/bg3.jpg');"></div>
+    <div class="bg" style="background-image: url('../assets/bg1.jpg');"></div>
+    <div class="bg" style="background-image: url('../assets/bg2.jpg');"></div>
+  </div>
+
+  <div class="container" id="scroller">
+    <div class="page">
+      <div class="image" style="background-image: url('../assets/shoe3.png');"></div>
+      <h1>Superstar</h1>
+      <p>
+        Classics never go out of style. An instant icon since their debut, adidas Superstar Shoes first rose to fame on
+        the basketball courts of the '70s and haven't slowed their roll since.
+      </p>
+    </div>
+
+    <div class="page"">
+      <div class=" image" style="background-image: url('../assets/shoe1.png');"></div>
+    <h1>Retrorun</h1>
+    <p>
+      Retro design with a modern twist. Check out a busy side street or stroll to the corner store in these adidas
+      running-inspired shoes. Suede overlays and contrast 3-Stripes give the flexible upper a sleek, sporty finish.
+    </p>
+  </div>
+
+  <div class="page">
+    <div class="image" style="background-image: url('../assets/shoe2.png');"></div>
+    <h1>Grand Court</h1>
+    <p>
+      A '70s style reborn. These shoes take inspiration from iconic sport styles of the past and move them into the
+      future. The shoes craft an everyday look with a leather-like upper.
+    </p>
+  </div>
+</body>

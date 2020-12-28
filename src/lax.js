@@ -1,406 +1,602 @@
-//
-// lax v1.2.3 (Alex Fox)
-// Simple & light weight vanilla javascript plugin to create beautiful animations things when you scrolllll!!
-//
-// Licensed under the terms of the MIT license.
-//
-// You may use it in your theme if you credit me. 
-// It is also free to use on any individual website.
-//
-// Exception:
-// The only restriction is to not publish any  
-// extension for browsers or native application
-// without getting a written permission first.
-//
-
 (() => {
-  const lax = (() => {
-    const lax = {
-      elements: []
-    }
+  const inOutMap = (y = 30) => {
+    return ["elInY+elHeight", `elCenterY-${y}`, "elCenterY", `elCenterY+${y}`, "elOutY-elHeight"]
+  }
 
-    let lastY = 0;
-    let currentBreakpoint = 'default'
-    const breakpointsSeparator = "_"
-
-    const transformFns = {
-      "data-lax-opacity": (style, v) => { style.opacity = v },
-      "data-lax-translate": (style, v) => { style.transform += ` translate(${v}px, ${v}px)` },
-      "data-lax-translate-x": (style, v) => { style.transform += ` translateX(${v}px)` },
-      "data-lax-translate-y": (style, v) => { style.transform += ` translateY(${v}px)` },
-      "data-lax-scale": (style, v) => { style.transform += ` scale(${v})` },
-      "data-lax-scale-x": (style, v) => { style.transform += ` scaleX(${v})` },
-      "data-lax-scale-y": (style, v) => { style.transform += ` scaleY(${v})` },
-      "data-lax-skew": (style, v) => { style.transform += ` skew(${v}deg, ${v}deg)` },
-      "data-lax-skew-x": (style, v) => { style.transform += ` skewX(${v}deg)` },
-      "data-lax-skew-y": (style, v) => { style.transform += ` skewY(${v}deg)` },
-      "data-lax-rotate": (style, v) => { style.transform += ` rotate(${v}deg)` },
-      "data-lax-rotate-x": (style, v) => { style.transform += ` rotateX(${v}deg)` },
-      "data-lax-rotate-y": (style, v) => { style.transform += ` rotateY(${v}deg)` },
-      "data-lax-brightness": (style, v) => { style.filter += ` brightness(${v}%)` },
-      "data-lax-contrast": (style, v) => { style.filter += ` contrast(${v}%)` },
-      "data-lax-hue-rotate": (style, v) => { style.filter += ` hue-rotate(${v}deg)` },
-      "data-lax-blur": (style, v) => { style.filter += ` blur(${v}px)` },
-      "data-lax-invert": (style, v) => { style.filter += `  invert(${v}%)` },
-      "data-lax-saturate": (style, v) => { style.filter += `  saturate(${v}%)` },
-      "data-lax-grayscale": (style, v) => { style.filter += `  grayscale(${v}%)` },
-      "data-lax-bg-pos": (style, v) => { style.backgroundPosition = `${v}px ${v}px` },
-      "data-lax-bg-pos-x": (style, v) => { style.backgroundPositionX = `${v}px` },
-      "data-lax-bg-pos-y": (style, v) => { style.backgroundPositionY = `${v}px` }
-    }
-
-    let crazy = ""
-
-    for(let i=0;i<20;i++) {
-      crazy += " " + i*5 + " " + (i*47)%360 + ", "
-    }
-
-    lax.presets = {
-      linger: (v) => {
-        return { "data-lax-translate-y": `(vh*0.7) 0, 0 200, -500 0` }
-      },
-      lazy: (v=100) => {
-        return { "data-lax-translate-y": `(vh) 0, (-elh) ${v}` }
-      },
-      eager: (v=100) => {
-        return { "data-lax-translate-y": `(vh) 0, (-elh) -${v}` }
-      },
-      slalom: (v=50) => {
-        return { "data-lax-translate-x": `vh ${v}, (vh*0.8) ${-v}, (vh*0.6) ${v}, (vh*0.4) ${-v}, (vh*0.2) ${v}, (vh*0) ${-v}, (-elh) ${v}` }
-      },
-      crazy: (v) => {
-        return { "data-lax-hue-rotate": `${crazy} | loop=20` }
-      },
-      spin: (v=360) => {
-        return { "data-lax-rotate": `(vh) 0, (-elh) ${v}` }
-      },
-      spinRev: (v=360) => {
-        return { "data-lax-rotate": `(vh) 0, (-elh) ${-v}` }
-      },
-      spinIn: (v=360) => {
-        return { "data-lax-rotate": `vh ${v}, (vh*0.5) 0` }
-      },
-      spinOut: (v=360) => {
-        return { "data-lax-rotate": `(vh*0.5) 0, -elh ${v}` }
-      },
-      blurInOut: (v=40) => {
-        return { "data-lax-blur": `(vh) ${v}, (vh*0.8) 0, (vh*0.2) 0, 0 ${v}` }
-      },
-      blurIn: (v=40) => {
-        return { "data-lax-blur": `(vh) ${v}, (vh*0.7) 0` }
-      },
-      blurOut: (v=40) => {
-        return { "data-lax-blur": `(vh*0.3) 0, 0 ${v}` }
-      },
-      fadeInOut: () => {
-        return { "data-lax-opacity": "(vh) 0, (vh*0.8) 1, (vh*0.2) 1, 0 0" }
-      },
-      fadeIn: () => {
-        return { "data-lax-opacity": "(vh) 0, (vh*0.7) 1" }
-      },
-      fadeOut: () => {
-        return { "data-lax-opacity": "(vh*0.3) 1, 0 0" }
-      },
-      driftLeft: (v=100) => {
-        return { "data-lax-translate-x": `vh ${v}, -elh ${-v}` }
-      },
-      driftRight: (v=100) => {
-        return { "data-lax-translate-x": `vh ${-v}, -elh ${v}` }
-      },
-      leftToRight: (v=1) => {
-        return { "data-lax-translate-x": `vh 0, -elh (vw*${v})` }
-      },
-      rightToLeft: (v=1) => {
-        return { "data-lax-translate-x": `vh 0, -elh (vw*${-v})` }
-      },
-      zoomInOut: (v=0.2) => {
-        return { "data-lax-scale": `(vh) ${v}, (vh*0.8) 1, (vh*0.2) 1, -elh ${v}` }
-      },
-      zoomIn: (v=0.2) => {
-        return { "data-lax-scale": `(vh) ${v}, (vh*0.7) 1` }
-      },
-      zoomOut: (v=0.2) => {
-        return { "data-lax-scale": `(vh*0.3) 1, -elh ${v}` }
-      },
-      speedy: (v=30) => {
-        return { "data-lax-skew-x": `(vh) ${v}, -elh ${-v}` }
-      },
-      swing: (v=30) => {
-        return { "data-lax-skew-y": `(vh) ${v}, -elh ${-v}` }
-      }
-    }
-
-    lax.addPreset = (p, o) => {
-      lax.presets[p] = o
-    }
-
-    function intrp(t, v) {
-      let i = 0
-
-      while(t[i][0] <= v && t[i+1] !== undefined) {
-        i+=1
-      }
-
-      const x = t[i][0]
-      const prevX = t[i-1] === undefined ? x : t[i-1][0]
-
-      const y = t[i][1]
-      const prevY = t[i-1] === undefined ? y : t[i-1][1]
-
-      const xPoint = Math.min(Math.max((v-prevX)/(x-prevX),0),1)
-      const yPoint = (xPoint*(y-prevY)) + prevY
-
-      return yPoint
-    }
-
-    function fnOrVal(s) {
-      if(s[0] === "(") return eval(s)
-      else return parseFloat(s)
-    }
-
-    lax.setup = (o={}) => {
-      lax.breakpoints = o.breakpoints || {}
-      
-      lax.selector = o.selector || '.lax'
-      lax.populateElements()
-    }
-
-    lax.removeElement = (el) => {
-      const i = lax.elements.findIndex(o => o.el = el)
-      if(i > -1) {
-        lax.elements.splice(i, 1)
-      }
-    }
-
-    lax.createLaxObject = (el) => {
-      const o = {
-        el: el,
-        originalStyle: {
-          transform: el.style.transform,
-          filter: el.style.filter
-        },
-        transforms: {}
-      }
-
-      return o
-    }
-
-    lax.calcTransforms = (o) => {
-      const { el } = o
-
-      //find presets in data attributes
-      const presets = []
-      for(let i=0; i<el.attributes.length; i++) {
-          const a = el.attributes[i]
-          if(a.name.indexOf("data-lax-preset") > -1)  {
-            presets.push(a);
-          }
-      }
-
-      //unwrap presets into transformations
-      for(let i=0; i<presets.length; i++) {
-          const a = presets[i]
-          const b = a.name.split(breakpointsSeparator)
-          const breakpoint = b[1] ? `${breakpointsSeparator}${b[1]}` : ''
-          a.value.split(" ").forEach((p) => {
-              const bits = p.split("-")
-              const fn = lax.presets[bits[0]]
-              if(!fn) {
-                  console.log(`lax error: preset ${bits[0]} is not defined`)
-              } else {
-                  const d = fn(bits[1])
-                  for(let k in d) {
-                      el.setAttribute(`${k}${breakpoint}`, d[k])
-                  }
-              }
-          })
-	  
-          const currentAnchor = el.getAttribute("data-lax-anchor")
-          if(!currentAnchor || currentAnchor === "") el.setAttribute("data-lax-anchor", "self")
-          el.attributes.removeNamedItem(a.name)
-
-      }
-
-      // use gpu
-      const useGpu = !(el.attributes["data-lax-use-gpu"] && el.attributes["data-lax-use-gpu"].value === 'false')
-      if(useGpu) {
-        el.style["backface-visibility"] = "hidden"
-        el.style["-webkit-backface-visibility"] = "hidden"
-      }
-      if(el.attributes["data-lax-use-gpu"]) el.attributes.removeNamedItem("data-lax-use-gpu")
-
-      // optmise off screen
-      o.optimise = false 
-      if(el.attributes["data-lax-optimize"] && el.attributes["data-lax-optimize"].value === 'true') {
-        o.optimise = true
-        const bounds = el.getBoundingClientRect()
-        el.setAttribute("data-lax-opacity", `${-bounds.height-1} 0, ${-bounds.height} 1, ${window.innerHeight} 1, ${window.innerHeight+1} 0`)
-        el.attributes.removeNamedItem("data-lax-optimize")
-      }
-
-      // build transform list
-      for(let i=0; i<el.attributes.length; i++) {
-        const a = el.attributes[i]
-        if(a.name.indexOf("data-lax") < 0) continue
-
-        const b = a.name.split(breakpointsSeparator)
-        const bits = b[0].split("-")
-        const breakpoint = b[1] || "default"
-        if(bits[1] === "lax") {
-          if(a.name === "data-lax-anchor") {
-            o["data-lax-anchor"] = a.value === "self" ? el : document.querySelector(a.value)
-            const rect = o["data-lax-anchor"].getBoundingClientRect()
-            o.anchorTop = Math.floor(rect.top) + window.scrollY
-          } else {
-            const tString = a.value
-              .replace(/vw/g, window.innerWidth)
-              .replace(/vh/g, window.innerHeight)
-              .replace(/elh/g, el.clientHeight)
-              .replace(/elw/g, el.clientWidth)
-              .replace(/\s+/g," ")
-
-            const [arrString, optionString] = tString.split("|")
-            const options = {}
-
-            if(optionString) {
-              optionString.split(" ").forEach((o) => {
-                const [key, val] = o.split("=")
-                options[key] = key && fnOrVal(val)
-              }) 
-            }
-
-            const name = b[0]
-            const valueMap = arrString.split(",").map((x) => { 
-                return x.trim().split(" ").map(fnOrVal)
-              }).sort((a,b) => {
-                return a[0] - b[0]  
-              })
-
-            if(!o.transforms[name]) {
-              o.transforms[name] = {}
-            }
-            
-            o.transforms[name][breakpoint] = { valueMap, options } 
-          }
+  const laxPresets = {
+    fadeInOut: (y = 30, str = 0) => ({
+      "opacity": [
+        inOutMap(y),
+        [str, 1, 1, 1, str]
+      ],
+    }),
+    fadeIn: (y = 'elCenterY', str = 0) => ({
+      "opacity": [
+        ["elInY+elHeight", y],
+        [str, 1],
+      ],
+    }),
+    fadeOut: (y = 'elCenterY', str = 0) => ({
+      "opacity": [
+        [y, "elOutY-elHeight"],
+        [1, str],
+      ],
+    }),
+    blurInOut: (y = 100, str = 20) => ({
+      "blur": [
+        inOutMap(y),
+        [str, 0, 0, 0, str],
+      ],
+    }),
+    blurIn: (y = 'elCenterY', str = 20) => ({
+      "blur": [
+        ["elInY+elHeight", y],
+        [str, 0],
+      ],
+    }),
+    blurOut: (y = 'elCenterY', str = 20) => ({
+      "opacity": [
+        [y, "elOutY-elHeight"],
+        [0, str],
+      ],
+    }),
+    scaleInOut: (y = 100, str = 0.6) => ({
+      "scale": [
+        inOutMap(y),
+        [str, 1, 1, 1, str],
+      ],
+    }),
+    scaleIn: (y = 'elCenterY', str = 0.6) => ({
+      "scale": [
+        ["elInY+elHeight", y],
+        [str, 1],
+      ],
+    }),
+    scaleOut: (y = 'elCenterY', str = 0.6) => ({
+      "scale": [
+        [y, "elOutY-elHeight"],
+        [1, str],
+      ],
+    }),
+    slideX: (y = 0, str = 500) => ({
+      "translateX": [
+        ['elInY', y],
+        [0, str],
+      ],
+    }),
+    slideY: (y = 0, str = 500) => ({
+      "translateY": [
+        ['elInY', y],
+        [0, str],
+      ],
+    }),
+    spin: (y = 1000, str = 360) => ({
+      "rotate": [
+        [0, y],
+        [0, str],
+        {
+          modValue: y,
         }
-      }
-
-      // sprite sheet animation
-      const spriteData = el.attributes["data-lax-sprite-data"] && el.attributes["data-lax-sprite-data"].value
-      if(spriteData) {
-        o.spriteData = spriteData.split(",").map(x => parseInt(x))
-        el.style.height = o.spriteData[1] + "px"
-        el.style.width = o.spriteData[0] + "px"
-
-        const spriteImage = el.attributes["data-lax-sprite-image"] && el.attributes["data-lax-sprite-image"].value
-        if(spriteImage) {
-          el.style.backgroundImage = `url(${spriteImage})`
+      ],
+    }),
+    flipX: (y = 1000, str = 360) => ({
+      "rotateX": [
+        [0, y],
+        [0, str],
+        {
+          modValue: y
         }
-      }
+      ],
+    }),
+    flipY: (y = 1000, str = 360) => ({
+      "rotateY": [
+        [0, y],
+        [0, str],
+        {
+          modValue: y
+        }
+      ],
+    }),
+    jiggle: (y = 50, str = 40) => ({
+      "skewX": [
+        [0, y * 1, y * 2, y * 3, y * 4],
+        [0, str, 0, -str, 0],
+        {
+          modValue: y * 4,
+        }
+      ],
+    }),
+    seesaw: (y = 50, str = 40) => ({
+      "skewY": [
+        [0, y * 1, y * 2, y * 3, y * 4],
+        [0, str, 0, -str, 0],
+        {
+          modValue: y * 4,
+        }
+      ],
+    }),
+    zigzag: (y = 100, str = 100) => ({
+      "translateX": [
+        [0, y * 1, y * 2, y * 3, y * 4],
+        [0, str, 0, -str, 0],
+        {
+          modValue: y * 4,
+        }
+      ],
+    }),
+    hueRotate: (y = 600, str = 360) => ({
+      "hue-rotate": [
+        [0, y],
+        [0, str],
+        {
+          modValue: y,
+        }
+      ],
+    }),
+  }
 
-      return o
-    }
+  const laxInstance = (() => {
+    const transformKeys = ["perspective", "scaleX", "scaleY", "scale", "skewX", "skewY", "skew", "rotateX", "rotateY", "rotate"]
+    const filterKeys = ["blur", "hue-rotate", "brightness"]
+    const translate3dKeys = ["translateX", "translateY", "translateZ"]
 
-    lax.addElement = (el) => {
-      const o = lax.calcTransforms(lax.createLaxObject(el))
-      lax.elements.push(o)
-      lax.updateElement(o)
-    }
+    const pxUnits = ["perspective", "border-radius", "blur", "translateX", "translateY", "translateZ"]
+    const degUnits = ["hue-rotate", "rotate", "rotateX", "rotateY", "skew", "skewX", "skewY"]
 
-    lax.populateElements = () => {
-      lax.elements = []
-      document.querySelectorAll(lax.selector).forEach(lax.addElement)
-      currentBreakpoint = lax.getCurrentBreakPoint()
-    }
+    function getArrayValues(arr, windowWidth) {
+      if (Array.isArray(arr)) return arr
 
-    lax.updateElements = () => {
-      lax.elements.forEach((o) => {
-        lax.calcTransforms(o)
-        lax.updateElement(o)
-      }) 
+      const keys = Object.keys(arr).map(x => parseInt(x)).sort((a, b) => a > b ? 1 : -1)
 
-      currentBreakpoint = lax.getCurrentBreakPoint()
-    }
-
-
-    lax.getCurrentBreakPoint = () => {
-      let b = 'default'
-      const w = window.innerWidth
-
-      for(let i in lax.breakpoints) {
-        const px = parseFloat(lax.breakpoints[i])
-        if(px <= w) {
-          b = i
-        } else {
+      let retKey = keys[keys.length - 1]
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        if (windowWidth < key) {
+          retKey = key
           break
         }
       }
 
-      return b
+      return arr[retKey]
     }
 
-    lax.updateElement = (o) => {
-      const { originalStyle, anchorTop, transforms, spriteData, el } = o
+    function lerp(start, end, t) {
+      return start * (1 - t) + end * t
+    }
 
-      let r = anchorTop ? anchorTop-lastY : lastY
+    function invlerp(a, b, v) {
+      return (v - a) / (b - a)
+    }
 
-      const style = {
-        transform: originalStyle.transform,
-        filter: originalStyle.filter
+    function interpolate(arrA, arrB, v, easingFn) {
+      let k = 0
+
+      arrA.forEach((a) => {
+        if (a < v) k++
+      })
+
+      if (k <= 0) {
+        return arrB[0]
       }
 
-      for(let i in transforms) {
-        const transformData = transforms[i][currentBreakpoint] || transforms[i]["default"]
-
-        if(!transformData) {
-          // console.log(`lax error: there is no setting for key ${i} and screen size ${currentBreakpoint}. Try adding a default value!`)
-          continue
-        }
-
-        let _r = r
-        if(transformData.options.offset) _r = _r+transformData.options.offset
-        if(transformData.options.speed) _r = _r*transformData.options.speed
-        if(transformData.options.loop) _r = _r%transformData.options.loop
-
-        const t = transformFns[i]
-        const v = intrp(transformData.valueMap, _r)
-
-        if(!t) {
-          // console.info(`lax: error ${i} is not supported`)
-          continue
-        }
-
-        t(style, v)
+      if (k >= arrA.length) {
+        return arrB[arrA.length - 1]
       }
 
-      if(spriteData) {
-        const [frameW,frameH,numFrames,cols,scrollStep] = spriteData
-        const frameNo = Math.floor(lastY/scrollStep) % numFrames
-        const framePosX = frameNo%cols
-        const framePosY = Math.floor(frameNo/cols)
-        style.backgroundPosition = `-${framePosX*frameW}px -${framePosY*frameH}px`
+      const j = k - 1
+
+      let vector = invlerp(arrA[j], arrA[k], v)
+      if (easingFn) vector = easingFn(vector)
+      const lerpVal = lerp(arrB[j], arrB[k], vector)
+      return lerpVal
+    }
+
+    const easings = {
+      easeInQuad: t => t * t,
+      easeOutQuad: t => t * (2 - t),
+      easeInOutQuad: t => t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
+      easeInCubic: t => t * t * t,
+      easeOutCubic: t => (--t) * t * t + 1,
+      easeInOutCubic: t => t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+      easeInQuart: t => t * t * t * t,
+      easeOutQuart: t => 1 - (--t) * t * t * t,
+      easeInOutQuart: t => t < .5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t,
+      easeInQuint: t => t * t * t * t * t,
+      easeOutQuint: t => 1 + (--t) * t * t * t * t,
+      easeInOutQuint: t => t < .5 ? 16 * t * t * t * t * t : 1 + 16 * (--t) * t * t * t * t,
+      easeOutBounce: t => {
+        const n1 = 7.5625;
+        const d1 = 2.75;
+
+        if (t < 1 / d1) {
+          return n1 * t * t;
+        } else if (t < 2 / d1) {
+          return n1 * (t -= 1.5 / d1) * t + 0.75;
+        } else if (t < 2.5 / d1) {
+          return n1 * (t -= 2.25 / d1) * t + 0.9375;
+        } else {
+          return n1 * (t -= 2.625 / d1) * t + 0.984375;
+        }
+      },
+      easeInBounce: t => {
+        return 1 - easings.easeOutBounce(1 - t);
+      },
+      easeOutBack: t => {
+        const c1 = 1.70158;
+        const c3 = c1 + 1;
+
+        return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+      },
+      easeInBack: t => {
+        const c1 = 1.70158;
+        const c3 = c1 + 1;
+
+        return c3 * t * t * t - c1 * t * t;
+      },
+    }
+
+    function flattenStyles(styles) {
+      const flattenedStyles = {
+        transform: '',
+        filter: ''
       }
 
-      if(style.opacity === 0) { // if opacity 0 don't update
-        el.style.opacity = 0 
-      } else {
-        for(let k in style) {
-          el.style[k] = style[k]
+      const translate3dValues = {
+        translateX: 0.00001,
+        translateY: 0.00001,
+        translateZ: 0.00001
+      }
+
+      Object.keys(styles).forEach((key) => {
+        const val = styles[key]
+        const unit = pxUnits.includes(key) ? 'px' : (degUnits.includes(key) ? 'deg' : '')
+
+        if (translate3dKeys.includes(key)) {
+          translate3dValues[key] = val
+        } else if (transformKeys.includes(key)) {
+          flattenedStyles.transform += `${key}(${val}${unit}) `
+        } else if (filterKeys.includes(key)) {
+          flattenedStyles.filter += `${key}(${val}${unit}) `
+        } else {
+          flattenedStyles[key] = `${val}${unit} `
         }
+      })
+
+      flattenedStyles.transform = `translate3d(${translate3dValues.translateX}px, ${translate3dValues.translateY}px, ${translate3dValues.translateZ}px) ${flattenedStyles.transform}`
+
+      return flattenedStyles
+    }
+
+    function parseValue(val, { width, height, x, y }, index) {
+      if (typeof val === 'number') {
+        return val
+      }
+
+      const pageHeight = document.body.scrollHeight
+      const pageWidth = document.body.scrollWidth
+      const screenWidth = window.innerWidth
+      const screenHeight = window.innerHeight
+      const scrollTop = window.scrollY
+      const scrollLeft = window.scrollX
+
+      const left = x + scrollLeft
+      const right = left + width
+      const top = y + scrollTop
+      const bottom = top + height
+
+      return Function(`return ${val
+        .replace(/screenWidth/g, screenWidth)
+        .replace(/screenHeight/g, screenHeight)
+        .replace(/pageHeight/g, pageHeight)
+        .replace(/pageWidth/g, pageWidth)
+        .replace(/elWidth/g, width)
+        .replace(/elHeight/g, height)
+        .replace(/elInY/g, top - screenHeight)
+        .replace(/elOutY/g, bottom)
+        .replace(/elCenterY/g, top + (height / 2) - (screenHeight / 2))
+        .replace(/elInX/g, left - screenWidth)
+        .replace(/elOutX/g, right)
+        .replace(/elCenterX/g, left + (width / 2) - (screenWidth / 2))
+        .replace(/index/g, index)
+        }`)()
+    }
+
+    class LaxDriver {
+      getValueFn
+      name = ''
+      lastValue = 0
+      frameStep = 1
+      m1 = 0
+
+      m2 = 0
+      inertia = 0
+      inertiaEnabled = false
+
+
+      constructor(name, getValueFn, options = {}) {
+        this.name = name
+        this.getValueFn = getValueFn
+
+        Object.keys(options).forEach((key) => {
+          this[key] = options[key]
+        })
+
+        this.lastValue = this.getValueFn()
+      }
+
+      getValue = (frame) => {
+        let value = this.lastValue
+
+        if (frame % this.frameStep === 0) {
+          value = this.getValueFn()
+        }
+
+        if (this.inertiaEnabled) {
+          const delta = value - this.lastValue
+          const damping = 0.8
+
+          this.m1 = this.m1 * damping + delta * (1 - damping)
+          this.m2 = this.m2 * damping + this.m1 * (1 - damping)
+          this.inertia = Math.round(this.m2 * 5000) / 15000
+        }
+
+        this.lastValue = value
+        return [this.lastValue, this.inertia]
       }
     }
 
-    lax.update = (y) => {
-      if(lastY === y) return
-      lastY = y
-      lax.elements.forEach(lax.updateElement)
+    class LaxElement {
+      domElement
+      transformsData
+      styles = {}
+      selector = ''
+
+      groupIndex = 0
+      laxInstance
+
+      onUpdate
+
+      constructor(selector, laxInstance, domElement, transformsData, groupIndex = 0, options = {}) {
+        this.selector = selector
+        this.laxInstance = laxInstance
+        this.domElement = domElement
+        this.transformsData = transformsData
+        this.groupIndex = groupIndex
+
+        const { style = {}, onUpdate } = options
+
+        Object.keys(style).forEach(key => {
+          domElement.style.setProperty(key, style[key])
+        })
+
+        if (onUpdate) this.onUpdate = onUpdate
+
+        this.calculateTransforms()
+      }
+
+      update = (driverValues, frame) => {
+        const { transforms } = this
+
+        const styles = {}
+
+        for (let driverName in transforms) {
+          const styleBindings = transforms[driverName]
+
+          if (!driverValues[driverName]) {
+            console.error("No lax driver with name: ", driverName)
+          }
+
+          const [value, inertiaValue] = driverValues[driverName]
+
+          for (let key in styleBindings) {
+            const [arr1, arr2, options = {}] = styleBindings[key]
+            const { modValue, frameStep = 1, easing, inertia, inertiaMode, cssFn, cssUnit = '' } = options
+
+            const easingFn = easings[easing]
+
+            if (frame % frameStep === 0) {
+              const v = modValue ? value % modValue : value
+
+              let interpolatedValue = interpolate(arr1, arr2, v, easingFn)
+
+              if (inertia) {
+                let inertiaExtra = inertiaValue * inertia
+                if (inertiaMode === 'absolute') inertiaExtra = Math.abs((inertiaExtra))
+                interpolatedValue += inertiaExtra
+              }
+
+              const unit = cssUnit || pxUnits.includes(key) ? 'px' : (degUnits.includes(key) ? 'deg' : '')
+              const dp = unit === 'px' ? 0 : 3
+              const val = interpolatedValue.toFixed(dp)
+              styles[key] = cssFn ? cssFn(val, this.domElement) : val + cssUnit
+            }
+          }
+        }
+
+        this.applyStyles(styles)
+        if (this.onUpdate) this.onUpdate(driverValues, this.domElement)
+      }
+
+      calculateTransforms = () => {
+        this.transforms = {}
+        const windowWidth = this.laxInstance.windowWidth
+
+        for (let driverName in this.transformsData) {
+          let styleBindings = this.transformsData[driverName]
+
+          const parsedStyleBindings = {}
+
+          const { presets = [] } = styleBindings
+
+          presets.forEach((presetString) => {
+
+            const [presetName, y, str] = presetString.split("-")
+
+            const presetFn = window.lax.presets[presetName]
+
+            if (!presetFn) {
+              console.error("Lax preset cannot be found with name: ", presetName)
+            } else {
+              const preset = presetFn(y, str)
+
+              Object.keys(preset).forEach((key) => {
+                styleBindings[key] = preset[key]
+              })
+            }
+          })
+
+          delete styleBindings.presets
+
+          for (let key in styleBindings) {
+            let [arr1 = [-1e9, 1e9], arr2 = [-1e9, 1e9], options = {}] = styleBindings[key]
+
+            const bounds = this.domElement.getBoundingClientRect()
+            const parsedArr1 = getArrayValues(arr1, windowWidth).map(i => parseValue(i, bounds, this.groupIndex))
+            const parsedArr2 = getArrayValues(arr2, windowWidth).map(i => parseValue(i, bounds, this.groupIndex))
+
+            parsedStyleBindings[key] = [parsedArr1, parsedArr2, options]
+          }
+
+          this.transforms[driverName] = parsedStyleBindings
+        }
+      }
+
+      applyStyles = (styles) => {
+        const mergedStyles = flattenStyles(styles)
+
+        Object.keys(mergedStyles).forEach((key) => {
+          this.domElement.style.setProperty(key, mergedStyles[key])
+        })
+      }
     }
 
-    return lax;
-  })();
+    class Lax {
+      drivers = []
+      elements = []
+      frame = 0
+
+      debug = false
+
+      windowWidth = 0
+      windowHeight = 0
+      presets = laxPresets
+
+      debugData = {
+        frameLengths: []
+      }
+
+      init = () => {
+        this.findAndAddElements()
+
+        window.requestAnimationFrame(this.onAnimationFrame)
+        this.windowWidth = document.body.clientWidth
+        this.windowHeight = document.body.clientHeight
+
+        window.onresize = this.onWindowResize
+      }
+
+      onWindowResize = () => {
+        const changed = document.body.clientWidth !== this.windowWidth ||
+          document.body.clientHeight !== this.windowHeight
+
+        if (changed) {
+          this.windowWidth = document.body.clientWidth
+          this.windowHeight = document.body.clientHeight
+          this.elements.forEach(el => el.calculateTransforms())
+        }
+      }
+
+      onAnimationFrame = (e) => {
+        if (this.debug) {
+          this.debugData.frameStart = Date.now()
+        }
+
+        const driverValues = {}
+
+        this.drivers.forEach((driver) => {
+          driverValues[driver.name] = driver.getValue(this.frame)
+        })
+
+        this.elements.forEach((element) => {
+          element.update(driverValues, this.frame)
+        })
+
+        if (this.debug) {
+          this.debugData.frameLengths.push(Date.now() - this.debugData.frameStart)
+        }
+
+        if (this.frame % 60 === 0 && this.debug) {
+          const averageFrameTime = Math.ceil((this.debugData.frameLengths.reduce((a, b) => a + b, 0) / 60))
+          console.log(`Average frame calculation time: ${averageFrameTime}ms`)
+          this.debugData.frameLengths = []
+        }
+
+        this.frame++
+
+        window.requestAnimationFrame(this.onAnimationFrame)
+      }
+
+      addDriver = (name, getValueFn, options = {}) => {
+        this.drivers.push(
+          new LaxDriver(name, getValueFn, options)
+        )
+      }
+
+      removeDriver = (name) => {
+        this.drivers = this.drivers.filter(driver => driver.name !== name)
+      }
+
+      findAndAddElements = () => {
+        this.elements = []
+        const elements = document.querySelectorAll(".lax")
+
+        elements.forEach((domElement) => {
+          const driverName = "scrollY"
+          const presets = []
+
+          domElement.classList.forEach((className) => {
+            if (className.includes("lax_preset")) {
+              const preset = className.replace("lax_preset_", "")
+              presets.push(preset)
+            }
+          })
+
+          const transforms = {
+            [driverName]: {
+              presets
+            }
+          }
+
+          this.elements.push(new LaxElement('.lax', this, domElement, transforms, 0, {}))
+        })
+      }
+
+      addElements = (selector, transforms, options) => {
+        const domElements = document.querySelectorAll(selector)
+
+        domElements.forEach((domElement, i) => {
+          this.elements.push(new LaxElement(selector, this, domElement, transforms, i, options))
+        })
+      }
+
+      removeElements = (selector) => {
+        this.elements = this.elements.filter(element => element.selector !== selector)
+      }
+
+      addElement = (domElement, transforms, options) => {
+        this.elements.push(new LaxElement('', this, domElement, transforms, 0, options))
+      }
+
+      removeElement = (domElement) => {
+        this.elements = this.elements.filter(element => element.domElement !== domElement)
+      }
+    }
+
+    return new Lax()
+  })()
 
   if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-    module.exports = lax;
+    module.exports = laxInstance;
   else
-    window.lax = lax;
-})();
+    window.lax = laxInstance;
+})()

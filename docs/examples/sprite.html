@@ -1,0 +1,59 @@
+<head>
+  <script type="application/javascript" src="../lib/lax.min.js"></script>
+  <script type="application/javascript">
+
+    window.onload = function () {
+      lax.init()
+
+      lax.addDriver('scrollY', function () {
+        return window.scrollY
+      })
+
+      const frameWidth = 370
+      const frameCount = 12
+
+      lax.addElements(".sprite", {
+        scrollY: {
+          "background-position": [
+            [0, 1e9],
+            [0, 1e9],
+            {
+              cssFn: function (val) {
+                const frame = Math.floor(val / 10) % frameCount
+                const x = frame * frameWidth
+
+                return `-${x}px 0px`
+              },
+            }
+          ]
+        }
+      })
+    }
+  </script>
+</head>
+
+<style>
+  .sprite {
+    height: 370px;
+    width: 370px;
+    background-image: url('../assets/spritesheet.jpg');
+    background-repeat: no-repeat;
+    position: fixed;
+    left: calc(50vw - 185px);
+    top: calc(50vh - 185px);
+  }
+
+  body {
+    padding: 0;
+    background-color: #dedbde;
+    background-image: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+    margin: 0;
+    background-size: 700px 700px;
+    height: 1000000px;
+  }
+</style>
+
+<body>
+  <div class="sprite">
+  </div>
+</body>
