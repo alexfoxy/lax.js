@@ -331,14 +331,14 @@
           this[key] = options[key]
         })
 
-        this.lastValue = this.getValueFn()
+        this.lastValue = this.getValueFn(0)
       }
 
       getValue = (frame) => {
         let value = this.lastValue
 
         if (frame % this.frameStep === 0) {
-          value = this.getValueFn()
+          value = this.getValueFn(frame)
         }
 
         if (this.inertiaEnabled) {
