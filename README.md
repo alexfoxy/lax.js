@@ -107,7 +107,7 @@ To implement lax you need to create at least one _driver_, to provide values for
 The easiest way to get started is to use presets via html classes. For example: 
 
 ```html
-<div class="lax lax_preset_fadeIn-50-100 lax_preset_spin"></div>
+<div class="lax lax_preset_fadeIn:50:100 lax_preset_spin"></div>
 ```
 
 Multiple presets can be chained together and they can be customised to suit your needs. Use the [preset explorer](https://alexfox.dev/lax.js/preset-explorer) to explore effects and see a simple example [here](https://alexfox.dev/lax.js/html-inline).
@@ -177,6 +177,19 @@ Add static CSS to each element, for example:
 }
 ```
 
+#### `onUpdate: (driverValues: Object, domElement: DomElement) => void`
+A method called every frame with the current driverValues and domElement. This could be used to toggle classes on an element or set innerHTML. See it in action [here](https://alexfox.dev/lax.js/examples/on-update).
+
+The driver values are formatted as follows:
+```js
+{
+  scrollY: [  // Driver name
+    100,      // Driver value
+    0         // Driver inertia
+  ]
+}
+```
+
 # Going deeper
 
 ## Custom animations
@@ -206,7 +219,7 @@ The name of the driver you want to use as a source of values to map to your anim
 ### CSS property
 The name of the CSS property you want to animate, for example `opacity` or `rotate`. See a list of supported properties [here](#css-properties).
 
-> Some css properties, for example `box-shadow`, require a custom function to build the style string. To do this use the [cssFn](#cssfn-value-number--string) element option.
+> Some CSS properties, for example `box-shadow`, require a custom function to build the style string. To do this use the [cssFn](#cssfn-value-number--string) element option.
 
 ### Value maps
 The value maps are used to interpolate the driver value and output a value for your CSS property. For example:
@@ -270,20 +283,7 @@ Use in combination with `inertia`. If set to `absolute` the inertia value will a
 Define the unit to be appended to the end of the value, for example 
 For example `px` `deg`
 
-#### `onUpdate: (driverValues: Object, domElement: DomElement) => void`
-A method called every frame with the current driverValues and domElement. This could be used to toggle classes on an element or set innerHTML. See it in action [here](https://alexfox.dev/lax.js/examples/on-update).
-
-The driver values are formatted as follows:
-```js
-{
-  scrollY: [  // Drivr name
-    100,      // Driver value
-    0         // Driver inertia
-  ]
-}
-```
-
-#### `cssFn: (value: number) => string`
+#### `cssFn: (value: number, domElement: DomElement) => number | string`
 Some CSS properties require more complex strings as values. For example, `box-shadow` has multiple values that could be modified by a lax animation.
 
 ```javascript
@@ -292,6 +292,9 @@ Some CSS properties require more complex strings as values. For example, `box-sh
   return `${val}px ${val}px ${val}px rgba(0,0,0,0.5)`;
 };
 ```
+
+#### `easing: string`
+See a list of available values [here](#supported-easings).
 
 ## Optimising performance
 Lax.js has been designed to be performant but there are a few things to bare in mind when creating your websites.
