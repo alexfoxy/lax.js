@@ -107,7 +107,7 @@ To implement lax you need to create at least one _driver_, to provide values for
 The easiest way to get started is to use presets via html classes. For example: 
 
 ```html
-<div class="lax lax_preset_fadeIn-50-100 lax_preset_spin"></div>
+<div class="lax lax_preset_fadeIn:50:100 lax_preset_spin"></div>
 ```
 
 Multiple presets can be chained together and they can be customised to suit your needs. Use the [preset explorer](https://alexfox.dev/lax.js/preset-explorer) to explore effects and see a simple example [here](https://alexfox.dev/lax.js/html-inline).

@@ -153,7 +153,7 @@
 
         enabledPresets.forEach((presetName) => {
           const control = controlData[presetName]
-          const controlStr = control ? "-" + control.map(c => c.value).join("-") : ''
+          const controlStr = control ? ":" + control.map(c => c.value).join(":") : ''
           const settingString = `${presetName}${controlStr}`
           presets.push(settingString)
         })
