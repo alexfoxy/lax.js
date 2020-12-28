@@ -267,6 +267,17 @@
       return flattenedStyles
     }
 
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollY#Notes
+    function getScrollPosition() {
+      const supportPageOffset = window.pageXOffset !== undefined
+      const isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat')
+
+      const x = supportPageOffset ? window.pageXOffset : isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft
+      const y = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
+
+      return [y, x]
+    }
+
     function parseValue(val, { width, height, x, y }, index) {
       if (typeof val === 'number') {
         return val
@@ -276,8 +287,7 @@
       const pageWidth = document.body.scrollWidth
       const screenWidth = window.innerWidth
       const screenHeight = window.innerHeight
-      const scrollTop = window.scrollY
-      const scrollLeft = window.scrollX
+      const [scrollTop, scrollLeft] = getScrollPosition()
 
       const left = x + scrollLeft
       const right = left + width
