@@ -247,7 +247,7 @@ Within the maps you can use strings for simple formulas as well as use special v
 
 See a list of available values [here](#special-values).
 
-You can also use mobile breakpoints within animation maps for more flexibility.
+You can also use mobile breakpoints within driver value maps and animation maps for more flexibility.
 
 ```javascript
 scrollY: {
