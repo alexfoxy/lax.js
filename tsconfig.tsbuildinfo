@@ -142,9 +142,9 @@
         "affectsGlobalScope": true
       },
       "./src/lax.ts": {
-        "version": "4f5709f3f4c94660d29ed5c4f3415f61c2102ae1d1d47dcd8a08d308b6a2d150",
-        "signature": "0536a13af7b3d61f516e13f96d9e56273faf934f6dab7866f7b23e43193dfecf",
-        "affectsGlobalScope": true
+        "version": "87258f150569fab4e37625847b0a222672c18ebd4c48ec56d28c151bc881f8b4",
+        "signature": "7f20325e55671ae4cd9a15a83568446dfc6e5ba2c7074f7d6606dd83e1682ef5",
+        "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
         "version": "215d8d9a2c480fd460127edc048d68d9931d3b27f95132253a6e71975f060bb1",

@@ -4,25 +4,24 @@ interface DriverOptions {
 }
 interface StyleObject {
 }
-declare type easingOptions = "easeInQuad" | "easeOutQuad" | "easeInOutQuad" | "easeInCubic" | "easeOutCubic" | "easeInOutCubic" | "easeInQuart" | "easeOutQuart" | "easeInOutQuart" | "easeInQuint" | "easeOutQuint" | "easeInOutQuint" | "easeOutBounce" | "easeInBounce" | "easeOutBack" | "easeInBack";
 declare type specialValues = "screenWidth" | "screenHeight" | "pageWidth" | "pageHeight" | "elWidth" | "elHeight" | "elInY" | "elOutY" | "elCenterY" | "elInX" | "elOutX" | "elCenterX" | "index";
 declare enum cssValues {
-    "opacity" = 0,
-    "scaleX" = 1,
-    "scaleY" = 2,
-    "scale" = 3,
-    "skewX" = 4,
-    "skewY" = 5,
-    "skew" = 6,
-    "rotateX" = 7,
-    "rotateY" = 8,
-    "rotate" = 9,
-    "translateX" = 10,
-    "translateY" = 11,
-    "translateZ" = 12,
-    "blur" = 13,
-    "hue-rotate" = 14,
-    "brightness" = 15
+    "opacity" = "opacity",
+    "scaleX" = "scaleX",
+    "scaleY" = "scaleY",
+    "scale" = "scale",
+    "skewX" = "skewX",
+    "skewY" = "skewY",
+    "skew" = "skew",
+    "rotateX" = "rotateX",
+    "rotateY" = "rotateY",
+    "rotate" = "rotate",
+    "translateX" = "translateX",
+    "translateY" = "translateY",
+    "translateZ" = "translateZ",
+    "blur" = "blur",
+    "hue-rotate" = "hue-rotate",
+    "brightness" = "brightness"
 }
 declare type cssMap = [
     Array<specialValues>,
@@ -30,15 +29,6 @@ declare type cssMap = [
         [key: number]: Array<number | specialValues>;
     }
 ];
-interface AnimationOptions {
-    modValue?: number;
-    frameStep?: number;
-    inertia?: number;
-    inertiaMode?: "normal" | "absolute";
-    cssUnit?: string;
-    cssFn?(value: number, domElement: HTMLElement | Element): number | string;
-    easing?: easingOptions;
-}
 interface ElementOptions {
     style?: StyleObject;
     onUpdate?(driverValues: any, domElement: HTMLElement | Element): void;
@@ -48,4 +38,36 @@ interface ElementTransforms {
         [key in cssValues]: cssMap;
     };
 }
+declare class Lax {
+    private drivers;
+    private elements;
+    private frame;
+    private debug;
+    private windowWidth;
+    private windowHeight;
+    private presets;
+    private debugData;
+    init: () => void;
+    onWindowResize: () => void;
+    onAnimationFrame: (e: any) => void;
+    addDriver: (name: string, getValueFn: () => number, options?: DriverOptions) => void;
+    removeDriver: (name: string) => void;
+    findAndAddElements: () => void;
+    addElements: (selector: string, transforms: ElementTransforms, options?: ElementOptions) => void;
+    removeElements: (selector: string) => void;
+    addElement: (domElement: HTMLElement | Element, transforms: ElementTransforms, options?: ElementOptions) => void;
+    removeElement: (domElement: HTMLElement | Element) => void;
+}
+export declare const laxInstance: Lax;
+declare const lax: {
+    addElements: (selector: string, transforms: ElementTransforms, options?: ElementOptions) => void;
+    removeElements: (selector: string) => void;
+    removeElement: (domElement: HTMLElement | Element) => void;
+    addElement: (domElement: HTMLElement | Element, transforms: ElementTransforms, options?: ElementOptions) => void;
+    init: () => void;
+    addDriver: (name: string, getValueFn: () => number, options?: DriverOptions) => void;
+    removeDriver: (name: string) => void;
+};
+export default lax;
+export declare const addDriver: (name: string, getValueFn: () => number, options?: DriverOptions) => void, addElement: (domElement: HTMLElement | Element, transforms: ElementTransforms, options?: ElementOptions) => void, addElements: (selector: string, transforms: ElementTransforms, options?: ElementOptions) => void, removeDriver: (name: string) => void, removeElement: (domElement: HTMLElement | Element) => void, removeElements: (selector: string) => void, init: () => void;
 //# sourceMappingURL=lax.d.ts.map
