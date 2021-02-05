@@ -23,19 +23,15 @@ declare enum cssValues {
     "hue-rotate" = "hue-rotate",
     "brightness" = "brightness"
 }
-declare type cssMap = [
-    Array<specialValues>,
-    Array<number | specialValues> | {
-        [key: number]: Array<number | specialValues>;
-    }
-];
 interface ElementOptions {
     style?: StyleObject;
     onUpdate?(driverValues: any, domElement: HTMLElement | Element): void;
 }
 interface ElementTransforms {
     [key: string]: {
-        [key in cssValues]: cssMap;
+        [key in cssValues]?: Array<number | specialValues | string>[] | {
+            [key: number]: Array<number | specialValues | string>;
+        }[];
     };
 }
 declare class Lax {

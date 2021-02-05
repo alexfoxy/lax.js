@@ -37,8 +37,8 @@ type specialValues =
 "elCenterX" |
 "index";
 enum cssValues {
-  "opacity"= "opacity",
-  "scaleX"= "scaleX",
+  "opacity"=`opacity`,
+  "scaleX"="scaleX",
   "scaleY"="scaleY",
   "scale"="scale",
   "skewX"="skewX",
@@ -47,17 +47,14 @@ enum cssValues {
   "rotateX"="rotateX",
   "rotateY"="rotateY",
   "rotate"="rotate",
-  "translateX"="translateX",
+  "translateX"=`translateX`,
   "translateY"="translateY",
   "translateZ"="translateZ",
   "blur"="blur",
   "hue-rotate"="hue-rotate",
   "brightness"="brightness"
 }
-type cssMap = [
-  Array<specialValues>,
-  Array<number | specialValues> | { [key: number]: Array<number | specialValues>}
-]
+
 
 interface AnimationOptions{
   modValue?: number
@@ -75,7 +72,7 @@ interface ElementOptions{
 
 interface ElementTransforms {
   [key: string]: {
-    [key in cssValues]: cssMap
+    [key in cssValues]?: Array<number | specialValues | string>[] | { [key: number]: Array<number | specialValues | string>}[]
   }
 }
 const inOutMap = (y = 30) => {
