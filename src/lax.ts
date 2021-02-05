@@ -1,3 +1,84 @@
+interface DriverOptions{
+  inertiaEnabled?: boolean
+  frameStep?: number
+}
+interface StyleObject {
+
+}
+type easingOptions = 
+"easeInQuad" | 
+"easeOutQuad" | 
+"easeInOutQuad" | 
+"easeInCubic" |
+"easeOutCubic" | 
+"easeInOutCubic" | 
+"easeInQuart" | 
+"easeOutQuart" |
+"easeInOutQuart" | 
+"easeInQuint" | 
+"easeOutQuint" | 
+"easeInOutQuint" |
+"easeOutBounce" | 
+"easeInBounce" | 
+"easeOutBack" | 
+"easeInBack";
+type specialValues = 
+"screenWidth" | 
+"screenHeight" | 
+"pageWidth" | 
+"pageHeight" |
+"elWidth" | 
+"elHeight" | 
+"elInY" | 
+"elOutY" |
+"elCenterY" | 
+"elInX" | 
+"elOutX" | 
+"elCenterX" |
+"index";
+enum cssValues {
+  "opacity",
+  "scaleX",
+  "scaleY",
+  "scale",
+  "skewX" ,
+  "skewY" ,
+  "skew" ,
+  "rotateX" ,
+  "rotateY" ,
+  "rotate" ,
+  "translateX" ,
+  "translateY",
+  "translateZ" ,
+  "blur" ,
+  "hue-rotate" ,
+  "brightness"
+}
+type cssMap = [
+  Array<specialValues>,
+  Array<number | specialValues> | { [key: number]: Array<number | specialValues>}
+]
+
+interface AnimationOptions{
+  modValue?: number
+  frameStep?: number
+  inertia?: number
+  inertiaMode?: "normal" | "absolute"
+  cssUnit?: string
+  cssFn?(value: number, domElement: HTMLElement | Element): number | string
+  easing?: easingOptions
+}
+interface ElementOptions{
+  style?: StyleObject
+  onUpdate?(driverValues: any, domElement: HTMLElement | Element): void
+}
+
+interface ElementTransforms {
+  [key: string]: {
+    [key in cssValues]: cssMap
+  }
+}
+
 (() => {
   const inOutMap = (y = 30) => {
     return ["elInY+elHeight", `elCenterY-${y}`, "elCenterY", `elCenterY+${y}`, "elOutY-elHeight"]
@@ -365,8 +446,9 @@
       laxInstance
 
       onUpdate
+      transforms
 
-      constructor(selector, laxInstance, domElement, transformsData, groupIndex = 0, options = {}) {
+      constructor(selector, laxInstance, domElement, transformsData, groupIndex = 0, options: ElementOptions={}) {
         this.selector = selector
         this.laxInstance = laxInstance
         this.domElement = domElement
@@ -442,7 +524,7 @@
 
             const [presetName, y, str] = presetString.split(":")
 
-            const presetFn = window.lax.presets[presetName]
+            const presetFn = window["lax"].presets[presetName]
 
             if (!presetFn) {
               console.error("Lax preset cannot be found with name: ", presetName)
@@ -518,7 +600,7 @@
 
       onAnimationFrame = (e) => {
         if (this.debug) {
-          this.debugData.frameStart = Date.now()
+          this.debugData["frameStart"] = Date.now()
         }
 
         const driverValues = {}
@@ -532,7 +614,7 @@
         })
 
         if (this.debug) {
-          this.debugData.frameLengths.push(Date.now() - this.debugData.frameStart)
+          this.debugData.frameLengths.push(Date.now() - this.debugData["frameStart"])
         }
 
         if (this.frame % 60 === 0 && this.debug) {
@@ -577,11 +659,11 @@
             }
           }
 
-          this.elements.push(new LaxElement('.lax', this, domElement, transforms, 0, {}))
+          this.elements.push(new LaxElement('.lax', this, domElement, transforms, 0))
         })
       }
 
-      addElements = (selector, transforms, options) => {
+      addElements = (selector, transforms: ElementTransforms, options) => {
         const domElements = document.querySelectorAll(selector)
 
         domElements.forEach((domElement, i) => {
@@ -593,7 +675,7 @@
         this.elements = this.elements.filter(element => element.selector !== selector)
       }
 
-      addElement = (domElement, transforms, options) => {
+      addElement = (domElement, transforms: ElementTransforms, options) => {
         this.elements.push(new LaxElement('', this, domElement, transforms, 0, options))
       }
 
@@ -608,5 +690,5 @@
   if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
     module.exports = laxInstance;
   else
-    window.lax = laxInstance;
+    window["lax"] = laxInstance;
 })()
