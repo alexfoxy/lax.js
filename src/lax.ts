@@ -79,6 +79,8 @@ interface ElementTransforms {
   }
 }
 
+let laxInstance;
+
 (() => {
   const inOutMap = (y = 30) => {
     return ["elInY+elHeight", `elCenterY-${y}`, "elCenterY", `elCenterY+${y}`, "elOutY-elHeight"]
@@ -691,4 +693,6 @@ interface ElementTransforms {
     module.exports = laxInstance;
   else
     window["lax"] = laxInstance;
+  
 })()
+export default laxInstance;

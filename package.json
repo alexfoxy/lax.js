@@ -23,7 +23,7 @@
     "url": "https://github.com/alexfoxy/lax.js"
   },
   "main": "lib/lax.js",
-  "types": "lib/index.d.ts",
+  "types": "lib/lax.d.ts",
   "keywords": [
     "javascript",
     "lax",
