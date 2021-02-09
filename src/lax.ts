@@ -1,3 +1,4 @@
+import {DriverOptions, AnimationOptions, LaxDriver, LaxElement, ElementOptions, ElementTransforms} from './types';
 const inOutMap = (y = 30) => {
   return ["elInY+elHeight", `elCenterY-${y}`, "elCenterY", `elCenterY+${y}`, "elOutY-elHeight"]
 }
@@ -136,7 +137,6 @@ const laxPresets = {
 const transformKeys = ["perspective", "scaleX", "scaleY", "scale", "skewX", "skewY", "skew", "rotateX", "rotateY", "rotate"]
 const filterKeys = ["blur", "hue-rotate", "brightness"]
 const translate3dKeys = ["translateX", "translateY", "translateZ"]
-
 const pxUnits = ["perspective", "border-radius", "blur", "translateX", "translateY", "translateZ"]
 const degUnits = ["hue-rotate", "rotate", "rotateX", "rotateY", "skew", "skewX", "skewY"]
 
@@ -392,7 +392,6 @@ class LaxElement {
       if (!driverValues[driverName]) {
         console.error("No lax driver with name: ", driverName)
       }
-
       const [value, inertiaValue] = driverValues[driverName]
 
       for (let key in styleBindings) {
@@ -512,7 +511,7 @@ class Lax {
     }
   }
 
-  onAnimationFrame = (e) => {
+  onAnimationFrame = (e: DOMHighResTimeStamp) => {
     if (this.debug) {
       this.debugData["frameStart"] = Date.now()
     }
@@ -608,13 +607,16 @@ const lax = {
   addDriver: laxInstance.addDriver,
   removeDriver: laxInstance.removeDriver,
 };
-(() => {
-  
 
+(() => {
   if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
     module.exports = lax;
-  else
+  else if(window)
     window["lax"] = lax;
+  else if(global)
+    global["lax"] = lax;
+  else if(globalThis)
+    globalThis["lax"] = lax;
   
 })()
 

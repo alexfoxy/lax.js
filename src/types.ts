@@ -1,11 +1,11 @@
-interface DriverOptions{
+export interface DriverOptions{
   inertiaEnabled?: boolean
   frameStep?: number
 }
-interface StyleObject {
+export interface StyleObject {
 
 }
-type easingOptions = 
+export type easingOptions = 
 "easeInQuad" | 
 "easeOutQuad" | 
 "easeInOutQuad" | 
@@ -22,7 +22,7 @@ type easingOptions =
 "easeInBounce" | 
 "easeOutBack" | 
 "easeInBack";
-type specialValues = 
+export type specialValues = 
 "screenWidth" | 
 "screenHeight" | 
 "pageWidth" | 
@@ -36,7 +36,7 @@ type specialValues =
 "elOutX" | 
 "elCenterX" |
 "index";
-enum cssValues {
+export enum cssValues {
   "opacity"=`opacity`,
   "scaleX"="scaleX",
   "scaleY"="scaleY",
@@ -56,7 +56,7 @@ enum cssValues {
 }
 
 
-interface AnimationOptions{
+export interface AnimationOptions{
   modValue?: number
   frameStep?: number
   inertia?: number
@@ -65,13 +65,19 @@ interface AnimationOptions{
   cssFn?(value: number, domElement: HTMLElement | Element): number | string
   easing?: easingOptions
 }
-interface ElementOptions{
+export interface ElementOptions{
   style?: StyleObject
   onUpdate?(driverValues: any, domElement: HTMLElement | Element): void
 }
 
-interface ElementTransforms {
+export interface ElementTransforms {
   [key: string]: {
     [key in cssValues]?: Array<number | specialValues | string>[] | { [key: number]: Array<number | specialValues | string>}[]
   }
+}
+export namespace LaxElement {
+
+}
+export namespace LaxDriver {
+
 }

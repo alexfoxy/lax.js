@@ -3,7 +3,7 @@
   "version": "2.0.3",
   "scripts": {
     "build": "babel src -d lib && uglifyjs lib/lax.js -o lib/lax.min.js -c -m && gzip -c lib/lax.min.js > lib/lax.min.js.gz && cp lib/lax.min.js docs/lib/lax.min.js",
-    "build-ts": "tsc && uglifyjs ./lib/lax.js -o ./lib/lax.min.js -c -m && gzip -c ./lib/lax.min.js > ./lib/lax.min.js.gz && cp ./lib/lax.min.js ./docs/lib/lax.min.js",
+    "build-ts": "tsc && uglifyjs ./lib/lax.js --source-map -o ./lib/lax.min.js -c -m  && gzip -c ./lib/lax.min.js > ./lib/lax.min.js.gz && cp ./lib/lax.min.js ./docs/lib/lax.min.js",
     "build-ts:dev": "tsc --watch"
   },
   "devDependencies": {
