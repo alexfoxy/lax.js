@@ -1,39 +1,3 @@
-interface DriverOptions {
-    inertiaEnabled?: boolean;
-    frameStep?: number;
-}
-interface StyleObject {
-}
-declare type specialValues = "screenWidth" | "screenHeight" | "pageWidth" | "pageHeight" | "elWidth" | "elHeight" | "elInY" | "elOutY" | "elCenterY" | "elInX" | "elOutX" | "elCenterX" | "index";
-declare enum cssValues {
-    "opacity" = "opacity",
-    "scaleX" = "scaleX",
-    "scaleY" = "scaleY",
-    "scale" = "scale",
-    "skewX" = "skewX",
-    "skewY" = "skewY",
-    "skew" = "skew",
-    "rotateX" = "rotateX",
-    "rotateY" = "rotateY",
-    "rotate" = "rotate",
-    "translateX" = "translateX",
-    "translateY" = "translateY",
-    "translateZ" = "translateZ",
-    "blur" = "blur",
-    "hue-rotate" = "hue-rotate",
-    "brightness" = "brightness"
-}
-interface ElementOptions {
-    style?: StyleObject;
-    onUpdate?(driverValues: any, domElement: HTMLElement | Element): void;
-}
-interface ElementTransforms {
-    [key: string]: {
-        [key in cssValues]?: Array<number | specialValues | string>[] | {
-            [key: number]: Array<number | specialValues | string>;
-        }[];
-    };
-}
 declare class Lax {
     private drivers;
     private elements;
