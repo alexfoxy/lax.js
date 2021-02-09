@@ -140,7 +140,7 @@ const translate3dKeys = ["translateX", "translateY", "translateZ"]
 const pxUnits = ["perspective", "border-radius", "blur", "translateX", "translateY", "translateZ"]
 const degUnits = ["hue-rotate", "rotate", "rotateX", "rotateY", "skew", "skewX", "skewY"]
 
-function getArrayValues(arr, windowWidth) {
+function getArrayValues(arr: Array<number>, windowWidth: number) {
   if (Array.isArray(arr)) return arr
 
   const keys = Object.keys(arr).map(x => parseInt(x)).sort((a, b) => a > b ? 1 : -1)
@@ -157,18 +157,18 @@ function getArrayValues(arr, windowWidth) {
   return arr[retKey]
 }
 
-function lerp(start, end, t) {
+function lerp(start: number, end: number, t: number) {
   return start * (1 - t) + end * t
 }
 
-function invlerp(a, b, v) {
+function invlerp(a: number, b: number, v: number) {
   return (v - a) / (b - a)
 }
 
-function interpolate(arrA, arrB, v, easingFn) {
+function interpolate(arrA: number[], arrB: number[], v: number, easingFn: (vector: any) => any) {
   let k = 0
 
-  arrA.forEach((a) => {
+  arrA.forEach((a: number) => {
     if (a < v) k++
   })
 
@@ -189,19 +189,19 @@ function interpolate(arrA, arrB, v, easingFn) {
 }
 
 const easings = {
-  easeInQuad: t => t * t,
-  easeOutQuad: t => t * (2 - t),
-  easeInOutQuad: t => t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
-  easeInCubic: t => t * t * t,
-  easeOutCubic: t => (--t) * t * t + 1,
-  easeInOutCubic: t => t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
-  easeInQuart: t => t * t * t * t,
-  easeOutQuart: t => 1 - (--t) * t * t * t,
-  easeInOutQuart: t => t < .5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t,
-  easeInQuint: t => t * t * t * t * t,
-  easeOutQuint: t => 1 + (--t) * t * t * t * t,
-  easeInOutQuint: t => t < .5 ? 16 * t * t * t * t * t : 1 + 16 * (--t) * t * t * t * t,
-  easeOutBounce: t => {
+  easeInQuad: (t: number) => t * t,
+  easeOutQuad: (t: number) => t * (2 - t),
+  easeInOutQuad: (t: number) => t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
+  easeInCubic: (t: number) => t * t * t,
+  easeOutCubic: (t: number) => (--t) * t * t + 1,
+  easeInOutCubic: (t: number) => t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+  easeInQuart: (t: number) => t * t * t * t,
+  easeOutQuart: (t: number) => 1 - (--t) * t * t * t,
+  easeInOutQuart: (t: number) => t < .5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t,
+  easeInQuint: (t: number) => t * t * t * t * t,
+  easeOutQuint: (t: number) => 1 + (--t) * t * t * t * t,
+  easeInOutQuint: (t: number) => t < .5 ? 16 * t * t * t * t * t : 1 + 16 * (--t) * t * t * t * t,
+  easeOutBounce: (t: number) => {
     const n1 = 7.5625;
     const d1 = 2.75;
 
@@ -215,16 +215,16 @@ const easings = {
       return n1 * (t -= 2.625 / d1) * t + 0.984375;
     }
   },
-  easeInBounce: t => {
+  easeInBounce: (t: number) => {
     return 1 - easings.easeOutBounce(1 - t);
   },
-  easeOutBack: t => {
+  easeOutBack: (t: number) => {
     const c1 = 1.70158;
     const c3 = c1 + 1;
 
     return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
   },
-  easeInBack: t => {
+  easeInBack: (t: number) => {
     const c1 = 1.70158;
     const c3 = c1 + 1;
 
@@ -477,7 +477,7 @@ class LaxElement {
 }
 class Lax {
   private drivers = []
-  private elements = []
+  private elements: Array<LaxElement> = []
   private frame = 0
 
   private debug = false
@@ -487,7 +487,7 @@ class Lax {
   private presets = laxPresets
 
   private debugData = {
-    frameLengths: []
+    frameLengths: <Array<number>>[]
   }
 
   init = () => {

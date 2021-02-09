@@ -75,9 +75,5 @@ export interface ElementTransforms {
     [key in cssValues]?: Array<number | specialValues | string>[] | { [key: number]: Array<number | specialValues | string>}[]
   }
 }
-export namespace LaxElement {
 
-}
-export namespace LaxDriver {
 
-}

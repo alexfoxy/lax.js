@@ -8,7 +8,7 @@
         "sourceMap": true,
         "strict": false,
         "composite": false,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
         "rootDir": "src",
