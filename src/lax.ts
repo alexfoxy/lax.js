@@ -1,4 +1,4 @@
-import {DriverOptions, AnimationOptions, LaxDriver, LaxElement, ElementOptions, ElementTransforms} from './types';
+import {DriverOptions, AnimationOptions, ElementOptions, ElementTransforms, LaxPresetName, isPresetName, LaxStyleProps, LaxStyleMap} from './types';
 const inOutMap = (y = 30) => {
   return ["elInY+elHeight", `elCenterY-${y}`, "elCenterY", `elCenterY+${y}`, "elOutY-elHeight"]
 }
@@ -232,7 +232,7 @@ const easings = {
   },
 }
 
-function flattenStyles(styles) {
+function flattenStyles(styles: LaxStyleProps) {
   const flattenedStyles = {
     transform: '',
     filter: ''
@@ -244,11 +244,11 @@ function flattenStyles(styles) {
     translateZ: 0.00001
   }
 
-  Object.keys(styles).forEach((key) => {
+  Object.keys(styles).forEach((key: Partial<keyof LaxStyleProps>) => {
     const val = styles[key]
     const unit = pxUnits.includes(key) ? 'px' : (degUnits.includes(key) ? 'deg' : '')
 
-    if (translate3dKeys.includes(key)) {
+    if (translate3dKeys.includes(key) && translate3dValues[key]) {
       translate3dValues[key] = val
     } else if (transformKeys.includes(key)) {
       flattenedStyles.transform += `${key}(${val}${unit}) `
@@ -274,38 +274,39 @@ function getScrollPosition() {
 
   return [y, x]
 }
-
-function parseValue(val, { width, height, x, y }, index) {
+type boxData = { width: number, height: number, x: number, y: number }
+function parseValue(val: number | string, { width, height, x, y }: boxData, index: number) {
   if (typeof val === 'number') {
     return val
   }
+  if (typeof val === 'string') {
+    const pageHeight = document.body.scrollHeight
+    const pageWidth = document.body.scrollWidth
+    const screenWidth = window.innerWidth
+    const screenHeight = window.innerHeight
+    const [scrollTop, scrollLeft] = getScrollPosition()
 
-  const pageHeight = document.body.scrollHeight
-  const pageWidth = document.body.scrollWidth
-  const screenWidth = window.innerWidth
-  const screenHeight = window.innerHeight
-  const [scrollTop, scrollLeft] = getScrollPosition()
+    const left = x + scrollLeft
+    const right = left + width
+    const top = y + scrollTop
+    const bottom = top + height
 
-  const left = x + scrollLeft
-  const right = left + width
-  const top = y + scrollTop
-  const bottom = top + height
-
-  return Function(`return ${val
-    .replace(/screenWidth/g, screenWidth)
-    .replace(/screenHeight/g, screenHeight)
-    .replace(/pageHeight/g, pageHeight)
-    .replace(/pageWidth/g, pageWidth)
-    .replace(/elWidth/g, width)
-    .replace(/elHeight/g, height)
-    .replace(/elInY/g, top - screenHeight)
-    .replace(/elOutY/g, bottom)
-    .replace(/elCenterY/g, top + (height / 2) - (screenHeight / 2))
-    .replace(/elInX/g, left - screenWidth)
-    .replace(/elOutX/g, right)
-    .replace(/elCenterX/g, left + (width / 2) - (screenWidth / 2))
-    .replace(/index/g, index)
-    }`)()
+    return Function(`return ${val
+      .replace(/screenWidth/g, String(screenWidth))
+      .replace(/screenHeight/g, String(screenHeight))
+      .replace(/pageHeight/g, String(pageHeight))
+      .replace(/pageWidth/g, String(pageWidth))
+      .replace(/elWidth/g, String(width))
+      .replace(/elHeight/g, String(height))
+      .replace(/elInY/g, String(top - screenHeight))
+      .replace(/elOutY/g, String(bottom))
+      .replace(/elCenterY/g, String(top + (height / 2) - (screenHeight / 2)))
+      .replace(/elInX/g, String(left - screenWidth))
+      .replace(/elOutX/g, String(right))
+      .replace(/elCenterX/g, String(left + (width / 2) - (screenWidth / 2)))
+      .replace(/index/g, String (index))
+      }`)()
+  }
 }
 class LaxDriver {
   getValueFn
@@ -319,18 +320,17 @@ class LaxDriver {
   inertiaEnabled = false
 
 
-  constructor(name: string, getValueFn: () => number, options: DriverOptions = {}) {
+  constructor(name: string, getValueFn: (frame?: number) => number, options: DriverOptions = {}) {
     this.name = name
     this.getValueFn = getValueFn
 
-    Object.keys(options).forEach((key) => {
-      this[key] = options[key]
-    })
+    this.inertiaEnabled = options.inertiaEnabled;
+    this.frameStep = options.frameStep;    
 
     this.lastValue = this.getValueFn(0)
   }
 
-  getValue = (frame) => {
+  getValue = (frame: number) => {
     let value = this.lastValue
 
     if (frame % this.frameStep === 0) {
@@ -361,9 +361,9 @@ class LaxElement {
   laxInstance
 
   onUpdate
-  transforms
+  transforms: ElementTransforms
 
-  constructor(selector, laxInstance, domElement, transformsData, groupIndex = 0, options: ElementOptions={}) {
+  constructor(selector: string, laxInstance: Lax, domElement: HTMLElement, transformsData: ElementTransforms, groupIndex = 0, options: ElementOptions={}) {
     this.selector = selector
     this.laxInstance = laxInstance
     this.domElement = domElement
@@ -381,7 +381,7 @@ class LaxElement {
     this.calculateTransforms()
   }
 
-  update = (driverValues, frame) => {
+  update = (driverValues: {[key: string]: Array<number>}, frame: number) => {
     const { transforms } = this
 
     const styles = {}
@@ -393,9 +393,9 @@ class LaxElement {
         console.error("No lax driver with name: ", driverName)
       }
       const [value, inertiaValue] = driverValues[driverName]
-
-      for (let key in styleBindings) {
-        const [arr1, arr2, options = <AnimationOptions>{}] = styleBindings[key]
+      let key: keyof LaxStyleProps;
+      for (key in styleBindings) {
+        const [arr1, arr2, options = {}] = styleBindings[key]
         const { modValue, frameStep = 1, easing, inertia, inertiaMode, cssFn, cssUnit = '' } = options
 
         const easingFn = easings[easing]
@@ -432,7 +432,7 @@ class LaxElement {
 
       const parsedStyleBindings = {}
 
-      const { presets = [] } = styleBindings
+      const { presets = <Array<string>>[] } = styleBindings
 
       presets.forEach((presetString) => {
 
@@ -470,24 +470,25 @@ class LaxElement {
   applyStyles = (styles) => {
     const mergedStyles = flattenStyles(styles)
 
-    Object.keys(mergedStyles).forEach((key) => {
+    Object.keys(mergedStyles).forEach((key: "transform" | "filter") => {
       this.domElement.style.setProperty(key, mergedStyles[key])
     })
   }
 }
 class Lax {
-  private drivers = []
+  private drivers = <LaxDriver[]>[]
   private elements: Array<LaxElement> = []
   private frame = 0
 
   private debug = false
 
-  private windowWidth = 0
-  private windowHeight = 0
-  private presets = laxPresets
+  windowWidth = 0
+  windowHeight = 0
+  presets = laxPresets
 
   private debugData = {
-    frameLengths: <Array<number>>[]
+    frameLengths: <Array<number>>[],
+    frameStart: 0
   }
 
   init = () => {
@@ -516,7 +517,7 @@ class Lax {
       this.debugData["frameStart"] = Date.now()
     }
 
-    const driverValues = {}
+    const driverValues: {[key: string]: Array<number>} = {}
 
     this.drivers.forEach((driver) => {
       driverValues[driver.name] = driver.getValue(this.frame)
@@ -557,12 +558,13 @@ class Lax {
 
     elements.forEach((domElement: HTMLElement | Element) => {
       const driverName = "scrollY"
-      const presets = []
+      const presets: Array<LaxPresetName> = []
 
       domElement.classList.forEach((className) => {
         if (className.includes("lax_preset")) {
           const preset = className.replace("lax_preset_", "")
-          presets.push(preset)
+          if(isPresetName(preset))
+            presets.push(preset)
         }
       })
 
@@ -572,7 +574,7 @@ class Lax {
         }
       }
 
-      this.elements.push(new LaxElement('.lax', this, domElement, transforms, 0))
+      this.elements.push(new LaxElement('.lax', this, <HTMLElement>domElement, transforms, 0))
     })
   }
 
@@ -580,7 +582,7 @@ class Lax {
     const domElements = document.querySelectorAll(selector)
 
     domElements.forEach((domElement, i) => {
-      this.elements.push(new LaxElement(selector, this, domElement, transforms, i, options))
+      this.elements.push(new LaxElement(selector, this, <HTMLElement>domElement, transforms, i, options))
     })
   }
 
@@ -589,7 +591,7 @@ class Lax {
   }
 
   addElement = (domElement: HTMLElement | Element, transforms: ElementTransforms, options?: ElementOptions) => {
-    this.elements.push(new LaxElement('', this, domElement, transforms, 0, options))
+    this.elements.push(new LaxElement('', this, <HTMLElement>domElement, transforms, 0, options))
   }
 
   removeElement = (domElement: HTMLElement | Element) => {
@@ -607,17 +609,26 @@ const lax = {
   addDriver: laxInstance.addDriver,
   removeDriver: laxInstance.removeDriver,
 };
+// needed because window, and global don't have lax on them initially
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      lax: Partial<Lax>;
+    }
+  }
+  interface Window {
+    lax: Partial<Lax>;
+  }
+};
 
 (() => {
-  if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-    module.exports = lax;
+  if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') 
+    module.exports = lax
   else if(window)
-    window["lax"] = lax;
+    window.lax = lax;
   else if(global)
     global["lax"] = lax;
-  else if(globalThis)
-    globalThis["lax"] = lax;
-  
 })()
 
 export default lax
