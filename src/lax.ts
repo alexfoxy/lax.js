@@ -1,4 +1,4 @@
-import {DriverOptions, LaxPresetFn, ElementOptions, ElementTransforms, LaxPresetName, isPresetName, LaxStyleProps, LaxStyleMap} from './types';
+import {DriverOptions, LaxPresetFn, ElementOptions, ElementTransforms, LaxPresetName, isPresetName, LaxStyleProps, LaxStyleMap, LaxPresetStyleProps} from './types';
 const inOutMap = (y: number | string = 30) => {
   return ["elInY+elHeight", `elCenterY-${y}`, "elCenterY", `elCenterY+${y}`, "elOutY-elHeight"]
 }
@@ -232,7 +232,7 @@ const easings = {
   },
 }
 
-function flattenStyles(styles: LaxStyleProps) {
+function flattenStyles(styles: Partial<{[key in (keyof LaxStyleProps) | "transform" | "filter"]: number | string}>) {
   const flattenedStyles = {
     transform: '',
     filter: ''
@@ -248,14 +248,14 @@ function flattenStyles(styles: LaxStyleProps) {
     const val = styles[key]
     const unit = pxUnits.includes(key) ? 'px' : (degUnits.includes(key) ? 'deg' : '')
 
-    if (translate3dKeys.includes(key) && translate3dValues[key]) {
-      translate3dValues[key] = val
+    if (translate3dKeys.includes(key)) {
+      translate3dValues[<keyof typeof translate3dValues>key] = <number>val // this was very annoying to get right but I think this should work properly
     } else if (transformKeys.includes(key)) {
       flattenedStyles.transform += `${key}(${val}${unit}) `
     } else if (filterKeys.includes(key)) {
       flattenedStyles.filter += `${key}(${val}${unit}) `
     } else {
-      flattenedStyles[key] = `${val}${unit} `
+      flattenedStyles[<keyof typeof flattenedStyles>key] = `${val}${unit} `
     }
   })
 
@@ -431,7 +431,7 @@ class LaxElement {
     const windowWidth = this.laxInstance.windowWidth
 
     for (let driverName in this.transformsData) {
-      let styleBindings = this.transformsData[driverName]
+      let styleBindings: LaxStyleProps = this.transformsData[driverName]
 
       const parsedStyleBindings: {[key in keyof LaxStyleProps]: LaxStyleMap} = {}
 
@@ -441,14 +441,14 @@ class LaxElement {
 
         const [presetName, y, str] = presetString.split(":")
 
-        const presetFn: typeof laxPresets = window["lax"].presets[presetName]
+        const presetFn: LaxPresetFn = window["lax"].presets[<keyof LaxPresetFn>presetName]
 
         if (!presetFn) {
           console.error("Lax preset cannot be found with name: ", presetName)
         } else {
           const preset = presetFn(y, str)
 
-          Object.keys(preset).forEach((key) => {
+          Object.keys(preset).forEach((key: keyof LaxPresetStyleProps) => {
             styleBindings[key] = preset[key]
           })
         }
@@ -470,7 +470,7 @@ class LaxElement {
     }
   }
 
-  applyStyles = (styles) => {
+  applyStyles = (styles: {[key in keyof LaxStyleProps]: number | string}) => {
     const mergedStyles = flattenStyles(styles)
 
     Object.keys(mergedStyles).forEach((key: "transform" | "filter") => {
