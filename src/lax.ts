@@ -1,9 +1,9 @@
-import {DriverOptions, AnimationOptions, ElementOptions, ElementTransforms, LaxPresetName, isPresetName, LaxStyleProps, LaxStyleMap} from './types';
-const inOutMap = (y = 30) => {
+import {DriverOptions, LaxPresetFn, ElementOptions, ElementTransforms, LaxPresetName, isPresetName, LaxStyleProps, LaxStyleMap} from './types';
+const inOutMap = (y: number | string = 30) => {
   return ["elInY+elHeight", `elCenterY-${y}`, "elCenterY", `elCenterY+${y}`, "elOutY-elHeight"]
 }
 
-const laxPresets = {
+const laxPresets: {[key in LaxPresetName]: LaxPresetFn} = {
   fadeInOut: (y = 30, str = 0) => ({
     "opacity": [
       inOutMap(y),
@@ -70,7 +70,7 @@ const laxPresets = {
       [0, str],
     ],
   }),
-  spin: (y = 1000, str = 360) => ({
+  spin: (y: number = 1000, str: number = 360) => ({
     "rotate": [
       [0, y],
       [0, str],
@@ -79,7 +79,7 @@ const laxPresets = {
       }
     ],
   }),
-  flipX: (y = 1000, str = 360) => ({
+  flipX: (y: number = 1000, str: number = 360) => ({
     "rotateX": [
       [0, y],
       [0, str],
@@ -88,7 +88,7 @@ const laxPresets = {
       }
     ],
   }),
-  flipY: (y = 1000, str = 360) => ({
+  flipY: (y: number = 1000, str: number = 360) => ({
     "rotateY": [
       [0, y],
       [0, str],
@@ -97,7 +97,7 @@ const laxPresets = {
       }
     ],
   }),
-  jiggle: (y = 50, str = 40) => ({
+  jiggle: (y: number = 50, str: number = 40) => ({
     "skewX": [
       [0, y * 1, y * 2, y * 3, y * 4],
       [0, str, 0, -str, 0],
@@ -106,7 +106,7 @@ const laxPresets = {
       }
     ],
   }),
-  seesaw: (y = 50, str = 40) => ({
+  seesaw: (y: number = 50, str: number = 40) => ({
     "skewY": [
       [0, y * 1, y * 2, y * 3, y * 4],
       [0, str, 0, -str, 0],
@@ -115,7 +115,7 @@ const laxPresets = {
       }
     ],
   }),
-  zigzag: (y = 100, str = 100) => ({
+  zigzag: (y: number = 100, str: number = 100) => ({
     "translateX": [
       [0, y * 1, y * 2, y * 3, y * 4],
       [0, str, 0, -str, 0],
@@ -124,7 +124,7 @@ const laxPresets = {
       }
     ],
   }),
-  hueRotate: (y = 600, str = 360) => ({
+  hueRotate: (y: number = 600, str: number = 360) => ({
     "hue-rotate": [
       [0, y],
       [0, str],
@@ -384,7 +384,7 @@ class LaxElement {
   update = (driverValues: {[key: string]: Array<number>}, frame: number) => {
     const { transforms } = this
 
-    const styles = {}
+    const styles: {[key in keyof LaxStyleProps]: string | number} = {}
 
     for (let driverName in transforms) {
       const styleBindings = transforms[driverName]
@@ -395,27 +395,30 @@ class LaxElement {
       const [value, inertiaValue] = driverValues[driverName]
       let key: keyof LaxStyleProps;
       for (key in styleBindings) {
-        const [arr1, arr2, options = {}] = styleBindings[key]
-        const { modValue, frameStep = 1, easing, inertia, inertiaMode, cssFn, cssUnit = '' } = options
+        if(key !== "presets"){
+          const [arr1, arr2, options = {}] = styleBindings[key]
+          const { modValue, frameStep = 1, easing, inertia, inertiaMode, cssFn, cssUnit = '' } = options
 
-        const easingFn = easings[easing]
+          const easingFn = easings[easing]
 
-        if (frame % frameStep === 0) {
-          const v = modValue ? value % modValue : value
+          if (frame % frameStep === 0) {
+            const v = modValue ? value % modValue : value
 
-          let interpolatedValue = interpolate(arr1, arr2, v, easingFn)
+            let interpolatedValue = interpolate(<number[]>arr1, <number[]>arr2, v, easingFn) // because this function is only used internally, this casting is valid
 
-          if (inertia) {
-            let inertiaExtra = inertiaValue * inertia
-            if (inertiaMode === 'absolute') inertiaExtra = Math.abs((inertiaExtra))
-            interpolatedValue += inertiaExtra
+            if (inertia) {
+              let inertiaExtra = inertiaValue * inertia
+              if (inertiaMode === 'absolute') inertiaExtra = Math.abs((inertiaExtra))
+              interpolatedValue += inertiaExtra
+            }
+
+            const unit = cssUnit || pxUnits.includes(key) ? 'px' : (degUnits.includes(key) ? 'deg' : '')
+            const dp = unit === 'px' ? 0 : 3
+            const val = unit === 'px' ? Number.parseFloat(interpolatedValue.toFixed(dp)) : interpolatedValue
+            styles[key] = cssFn ? cssFn(val, this.domElement) : val + cssUnit
           }
-
-          const unit = cssUnit || pxUnits.includes(key) ? 'px' : (degUnits.includes(key) ? 'deg' : '')
-          const dp = unit === 'px' ? 0 : 3
-          const val = interpolatedValue.toFixed(dp)
-          styles[key] = cssFn ? cssFn(val, this.domElement) : val + cssUnit
         }
+        
       }
     }
 
@@ -430,7 +433,7 @@ class LaxElement {
     for (let driverName in this.transformsData) {
       let styleBindings = this.transformsData[driverName]
 
-      const parsedStyleBindings = {}
+      const parsedStyleBindings: {[key in keyof LaxStyleProps]: LaxStyleMap} = {}
 
       const { presets = <Array<string>>[] } = styleBindings
 
@@ -438,7 +441,7 @@ class LaxElement {
 
         const [presetName, y, str] = presetString.split(":")
 
-        const presetFn = window["lax"].presets[presetName]
+        const presetFn: typeof laxPresets = window["lax"].presets[presetName]
 
         if (!presetFn) {
           console.error("Lax preset cannot be found with name: ", presetName)
@@ -452,9 +455,9 @@ class LaxElement {
       })
 
       delete styleBindings.presets
-
-      for (let key in styleBindings) {
-        let [arr1 = [-1e9, 1e9], arr2 = [-1e9, 1e9], options = <AnimationOptions>{}] = styleBindings[key]
+      let key: keyof LaxStyleProps;
+      for (key in styleBindings) {
+        let [arr1 = [-1e9, 1e9], arr2 = [-1e9, 1e9], options = {}] = styleBindings[key]
 
         const bounds = this.domElement.getBoundingClientRect()
         const parsedArr1 = getArrayValues(arr1, windowWidth).map(i => parseValue(i, bounds, this.groupIndex))

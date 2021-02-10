@@ -22,7 +22,7 @@ export type LaxPresetName =
   "flipX" |
   "flipY" |
   "blurIn" |
-  "blurOur" |
+  "blurOut" |
   "blurInOut"
 ;
 const LaxPresetNames  = [
@@ -42,11 +42,11 @@ const LaxPresetNames  = [
   "flipX" ,
   "flipY" ,
   "blurIn" ,
-  "blurOur" ,
+  "blurOut" ,
   "blurInOut"
 ]
 export const isPresetName = (presetName: string): presetName is LaxPresetName => LaxPresetNames.indexOf(presetName) !== -1 ? true : false;
-
+export type LaxPresetFn = (x: number | string, y: number | string) => LaxPresetStyleProps
 
 export type easingOptions = 
   "easeInQuad" | 
@@ -100,7 +100,7 @@ export enum cssValues {
   "brightness"="brightness"
 }
 export interface LaxStyleMapOptions {
-  modValue?: number
+  modValue?: number | undefined
   frameStep?: number
   inertia?: number
   inertiaMode?: "normal" | "absolute"
@@ -134,16 +134,26 @@ export interface LaxStyleProps {
   "presets"?: Array<LaxPresetName>;
 }
 
-
-export interface AnimationOptions{
-  modValue?: number
-  frameStep?: number
-  inertia?: number
-  inertiaMode?: "normal" | "absolute"
-  cssUnit?: string
-  cssFn?(value: number, domElement: HTMLElement | Element): number | string
-  easing?: easingOptions
+export interface LaxPresetStyleProps {
+  "opacity"?: LaxStyleMap;
+  "scaleX"?: LaxStyleMap;
+  "scaleY"?: LaxStyleMap;
+  "scale"?: LaxStyleMap;
+  "skewX"?: LaxStyleMap;
+  "skewY"?: LaxStyleMap;
+  "skew"?: LaxStyleMap;
+  "rotateX"?: LaxStyleMap;
+  "rotateY"?: LaxStyleMap;
+  "rotate"?: LaxStyleMap;
+  "translateX"?: LaxStyleMap;
+  "translateY"?: LaxStyleMap;
+  "translateZ"?: LaxStyleMap;
+  "blur"?: LaxStyleMap;
+  "hue-rotate"?: LaxStyleMap;
+  "brightness"?: LaxStyleMap;
 }
+
+
 export interface ElementOptions{
   style?: StyleObject
   onUpdate?(driverValues: any, domElement: HTMLElement | Element): void
