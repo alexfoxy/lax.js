@@ -2,17 +2,18 @@
     "compilerOptions": {
         "target": "ES5",
         "lib": ["es5", "es6", "es2017", "dom"],
-        "module": "CommonJS",
-        "declaration": false,
-        "declarationMap": false,
+        "module": "system",
+        "declaration": true,
+        "declarationMap": true,
         "sourceMap": true,
         "strict": false,
-        "composite": false,
+        "composite": true,
         "noImplicitAny": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
         "rootDir": "src",
-        "outDir": "lib"
+        "outDir": "lib",
+        "outFile": "lib/lax.js"
     },
     "include": [
         "./src/**/*"

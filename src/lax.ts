@@ -1,4 +1,26 @@
-import {DriverOptions, LaxPresetFn, ElementOptions, DriverTransforms, LaxPresetName, isPresetName, LaxStyleProps, LaxStyleMap, LaxPresetStyleProps} from './types';
+import {DriverOptions, LaxPresetFn, ElementOptions, DriverTransforms, LaxPresetName, LaxStyleProps, LaxStyleMap, LaxPresetStyleProps} from './types';
+
+const isPresetName = (presetName: string): presetName is LaxPresetName => [
+  "fadeIn" ,
+  "fadeOut" ,
+  "fadeInOut" ,
+  "scaleIn" ,
+  "scaleOut" ,
+  "scaleInOut" ,
+  "slideX" ,
+  "slideY" ,
+  "jiggle" ,
+  "seesaw" ,
+  "zigzag" ,
+  "hueRotate" ,
+  "spin" ,
+  "flipX" ,
+  "flipY" ,
+  "blurIn" ,
+  "blurOut" ,
+  "blurInOut"
+].indexOf(presetName) !== -1 ? true : false;
+
 const inOutMap = (y: number | string = 30) => {
   return ["elInY+elHeight", `elCenterY-${y}`, "elCenterY", `elCenterY+${y}`, "elOutY-elHeight"]
 }

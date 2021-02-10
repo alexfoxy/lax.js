@@ -25,27 +25,7 @@ export type LaxPresetName =
   "blurOut" |
   "blurInOut"
 ;
-const LaxPresetNames  = [
-  "fadeIn" ,
-  "fadeOut" ,
-  "fadeInOut" ,
-  "scaleIn" ,
-  "scaleOut" ,
-  "scaleInOut" ,
-  "slideX" ,
-  "slideY" ,
-  "jiggle" ,
-  "seesaw" ,
-  "zigzag" ,
-  "hueRotate" ,
-  "spin" ,
-  "flipX" ,
-  "flipY" ,
-  "blurIn" ,
-  "blurOut" ,
-  "blurInOut"
-]
-export const isPresetName = (presetName: string): presetName is LaxPresetName => LaxPresetNames.indexOf(presetName) !== -1 ? true : false;
+
 export type LaxPresetFn = (x: number | string, y: number | string) => LaxPresetStyleProps
 
 export type easingOptions = 
