@@ -634,17 +634,18 @@ const lax = {
   init: laxInstance.init,
   addDriver: laxInstance.addDriver,
   removeDriver: laxInstance.removeDriver,
+  presets: laxInstance.presets,
 };
 // needed because window, and global don't have lax on them initially
 
 declare global {
   namespace NodeJS {
     interface Global {
-      lax: Partial<Lax>;
+      lax: typeof lax;
     }
   }
   interface Window {
-    lax: Partial<Lax>;
+    lax: typeof lax;
   }
 };
 
@@ -658,4 +659,4 @@ declare global {
 })()
 
 export default lax
-export const {addDriver, addElement, addElements, removeDriver, removeElement, removeElements, init} = lax;
+export const {addDriver, addElement, addElements, removeDriver, removeElement, removeElements, init, presets} = lax;
