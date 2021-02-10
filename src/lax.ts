@@ -1,4 +1,4 @@
-import {DriverOptions, LaxPresetFn, ElementOptions, ElementTransforms, LaxPresetName, isPresetName, LaxStyleProps, LaxStyleMap, LaxPresetStyleProps} from './types';
+import {DriverOptions, LaxPresetFn, ElementOptions, DriverTransforms, LaxPresetName, isPresetName, LaxStyleProps, LaxStyleMap, LaxPresetStyleProps} from './types';
 const inOutMap = (y: number | string = 30) => {
   return ["elInY+elHeight", `elCenterY-${y}`, "elCenterY", `elCenterY+${y}`, "elOutY-elHeight"]
 }
@@ -361,9 +361,9 @@ class LaxElement {
   laxInstance
 
   onUpdate
-  transforms: ElementTransforms
+  transforms: DriverTransforms
 
-  constructor(selector: string, laxInstance: Lax, domElement: HTMLElement, transformsData: ElementTransforms, groupIndex = 0, options: ElementOptions={}) {
+  constructor(selector: string, laxInstance: Lax, domElement: HTMLElement, transformsData: DriverTransforms, groupIndex = 0, options: ElementOptions={}) {
     this.selector = selector
     this.laxInstance = laxInstance
     this.domElement = domElement
@@ -429,8 +429,8 @@ class LaxElement {
   calculateTransforms = () => {
     this.transforms = {}
     const windowWidth = this.laxInstance.windowWidth
-
-    for (let driverName in this.transformsData) {
+    let driverName: keyof DriverTransforms;
+    for (driverName in this.transformsData) {
       let styleBindings: LaxStyleProps = this.transformsData[driverName]
 
       const parsedStyleBindings: {[key in keyof LaxStyleProps]: LaxStyleMap} = {}
@@ -457,15 +457,16 @@ class LaxElement {
       delete styleBindings.presets
       let key: keyof LaxStyleProps;
       for (key in styleBindings) {
-        let [arr1 = [-1e9, 1e9], arr2 = [-1e9, 1e9], options = {}] = styleBindings[key]
+        if(key !== "presets"){ // should always be true in here, but typescript wants to be 100% sure
+          let [arr1 = [-1e9, 1e9], arr2 = [-1e9, 1e9], options = {}] = styleBindings[key]
 
-        const bounds = this.domElement.getBoundingClientRect()
-        const parsedArr1 = getArrayValues(arr1, windowWidth).map(i => parseValue(i, bounds, this.groupIndex))
-        const parsedArr2 = getArrayValues(arr2, windowWidth).map(i => parseValue(i, bounds, this.groupIndex))
+          const bounds = this.domElement.getBoundingClientRect()
+          const parsedArr1 = getArrayValues(<Array<number>>arr1, windowWidth).map(i => parseValue(i, bounds, this.groupIndex)) // should always work here
+          const parsedArr2 = getArrayValues(<Array<number>>arr2, windowWidth).map(i => parseValue(i, bounds, this.groupIndex)) // should always work here
 
-        parsedStyleBindings[key] = [parsedArr1, parsedArr2, options]
+          parsedStyleBindings[key] = [parsedArr1, parsedArr2, options]
+        }
       }
-
       this.transforms[driverName] = parsedStyleBindings
     }
   }
@@ -581,7 +582,7 @@ class Lax {
     })
   }
 
-  addElements = (selector: string, transforms: ElementTransforms, options?: ElementOptions) => {
+  addElements = (selector: string, transforms: DriverTransforms, options?: ElementOptions) => {
     const domElements = document.querySelectorAll(selector)
 
     domElements.forEach((domElement, i) => {
@@ -593,7 +594,7 @@ class Lax {
     this.elements = this.elements.filter(element => element.selector !== selector)
   }
 
-  addElement = (domElement: HTMLElement | Element, transforms: ElementTransforms, options?: ElementOptions) => {
+  addElement = (domElement: HTMLElement | Element, transforms: DriverTransforms, options?: ElementOptions) => {
     this.elements.push(new LaxElement('', this, <HTMLElement>domElement, transforms, 0, options))
   }
 

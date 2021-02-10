@@ -113,24 +113,7 @@ export type LaxStyleMap = [
   Array<number | specialValues | string>,
   LaxStyleMapOptions?
 ]
-export interface LaxStyleProps {
-  "opacity"?: LaxStyleMap;
-  "scaleX"?: LaxStyleMap;
-  "scaleY"?: LaxStyleMap;
-  "scale"?: LaxStyleMap;
-  "skewX"?: LaxStyleMap;
-  "skewY"?: LaxStyleMap;
-  "skew"?: LaxStyleMap;
-  "rotateX"?: LaxStyleMap;
-  "rotateY"?: LaxStyleMap;
-  "rotate"?: LaxStyleMap;
-  "translateX"?: LaxStyleMap;
-  "translateY"?: LaxStyleMap;
-  "translateZ"?: LaxStyleMap;
-  "blur"?: LaxStyleMap;
-  "hue-rotate"?: LaxStyleMap;
-  "brightness"?: LaxStyleMap;
-
+export interface LaxStyleProps extends LaxPresetStyleProps{
   "presets"?: Array<LaxPresetName>;
 }
 
@@ -158,9 +141,9 @@ export interface ElementOptions{
   style?: StyleObject
   onUpdate?(driverValues: any, domElement: HTMLElement | Element): void
 }
-
-export interface ElementTransforms {
-  [key: string]: LaxStyleProps
+type DriverName = string;
+export interface DriverTransforms {
+  [key: string]: LaxStyleProps | LaxPresetStyleProps
 }
 
 
