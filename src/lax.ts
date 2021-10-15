@@ -1,31 +1,31 @@
-import {DriverOptions, LaxPresetFn, ElementOptions, DriverTransforms, LaxPresetName, LaxStyleProps, LaxStyleMap, LaxPresetStyleProps} from './types';
+import { DriverOptions, LaxPresetFn, ElementOptions, DriverTransforms, LaxPresetName, LaxStyleProps, LaxStyleMap, LaxPresetStyleProps } from './types'
 
 const isPresetName = (presetName: string): presetName is LaxPresetName => [
-  "fadeIn" ,
-  "fadeOut" ,
-  "fadeInOut" ,
-  "scaleIn" ,
-  "scaleOut" ,
-  "scaleInOut" ,
-  "slideX" ,
-  "slideY" ,
-  "jiggle" ,
-  "seesaw" ,
-  "zigzag" ,
-  "hueRotate" ,
-  "spin" ,
-  "flipX" ,
-  "flipY" ,
-  "blurIn" ,
-  "blurOut" ,
+  "fadeIn",
+  "fadeOut",
+  "fadeInOut",
+  "scaleIn",
+  "scaleOut",
+  "scaleInOut",
+  "slideX",
+  "slideY",
+  "jiggle",
+  "seesaw",
+  "zigzag",
+  "hueRotate",
+  "spin",
+  "flipX",
+  "flipY",
+  "blurIn",
+  "blurOut",
   "blurInOut"
-].indexOf(presetName) !== -1 ? true : false;
+].indexOf(presetName) !== -1 ? true : false
 
 const inOutMap = (y: number | string = 30) => {
   return ["elInY+elHeight", `elCenterY-${y}`, "elCenterY", `elCenterY+${y}`, "elOutY-elHeight"]
 }
 
-const laxPresets: {[key in LaxPresetName]: LaxPresetFn} = {
+const laxPresets: { [key in LaxPresetName]: LaxPresetFn } = {
   fadeInOut: (y = 30, str = 0) => ({
     "opacity": [
       inOutMap(y),
@@ -224,37 +224,37 @@ const easings = {
   easeOutQuint: (t: number) => 1 + (--t) * t * t * t * t,
   easeInOutQuint: (t: number) => t < .5 ? 16 * t * t * t * t * t : 1 + 16 * (--t) * t * t * t * t,
   easeOutBounce: (t: number) => {
-    const n1 = 7.5625;
-    const d1 = 2.75;
+    const n1 = 7.5625
+    const d1 = 2.75
 
     if (t < 1 / d1) {
-      return n1 * t * t;
+      return n1 * t * t
     } else if (t < 2 / d1) {
-      return n1 * (t -= 1.5 / d1) * t + 0.75;
+      return n1 * (t -= 1.5 / d1) * t + 0.75
     } else if (t < 2.5 / d1) {
-      return n1 * (t -= 2.25 / d1) * t + 0.9375;
+      return n1 * (t -= 2.25 / d1) * t + 0.9375
     } else {
-      return n1 * (t -= 2.625 / d1) * t + 0.984375;
+      return n1 * (t -= 2.625 / d1) * t + 0.984375
     }
   },
   easeInBounce: (t: number) => {
-    return 1 - easings.easeOutBounce(1 - t);
+    return 1 - easings.easeOutBounce(1 - t)
   },
   easeOutBack: (t: number) => {
-    const c1 = 1.70158;
-    const c3 = c1 + 1;
+    const c1 = 1.70158
+    const c3 = c1 + 1
 
-    return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+    return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2)
   },
   easeInBack: (t: number) => {
-    const c1 = 1.70158;
-    const c3 = c1 + 1;
+    const c1 = 1.70158
+    const c3 = c1 + 1
 
-    return c3 * t * t * t - c1 * t * t;
+    return c3 * t * t * t - c1 * t * t
   },
 }
 
-function flattenStyles(styles: Partial<{[key in (keyof LaxStyleProps) | "transform" | "filter"]: number | string}>) {
+function flattenStyles(styles: Partial<{ [key in (keyof LaxStyleProps) | "transform" | "filter"]: number | string }>) {
   const flattenedStyles = {
     transform: '',
     filter: ''
@@ -326,7 +326,7 @@ function parseValue(val: number | string, { width, height, x, y }: boxData, inde
       .replace(/elInX/g, String(left - screenWidth))
       .replace(/elOutX/g, String(right))
       .replace(/elCenterX/g, String(left + (width / 2) - (screenWidth / 2)))
-      .replace(/index/g, String (index))
+      .replace(/index/g, String(index))
       }`)()
   }
 }
@@ -346,8 +346,8 @@ class LaxDriver {
     this.name = name
     this.getValueFn = getValueFn
 
-    this.inertiaEnabled = options.inertiaEnabled;
-    this.frameStep = options.frameStep;    
+    this.inertiaEnabled = options.inertiaEnabled
+    this.frameStep = options.frameStep
 
     this.lastValue = this.getValueFn(0)
   }
@@ -385,7 +385,7 @@ class LaxElement {
   onUpdate
   transforms: DriverTransforms
 
-  constructor(selector: string, laxInstance: Lax, domElement: HTMLElement, transformsData: DriverTransforms, groupIndex = 0, options: ElementOptions={}) {
+  constructor(selector: string, laxInstance: Lax, domElement: HTMLElement, transformsData: DriverTransforms, groupIndex = 0, options: ElementOptions = {}) {
     this.selector = selector
     this.laxInstance = laxInstance
     this.domElement = domElement
@@ -403,10 +403,10 @@ class LaxElement {
     this.calculateTransforms()
   }
 
-  update = (driverValues: {[key: string]: Array<number>}, frame: number) => {
+  update = (driverValues: { [key: string]: Array<number> }, frame: number) => {
     const { transforms } = this
 
-    const styles: {[key in keyof LaxStyleProps]: string | number} = {}
+    const styles: { [key in keyof LaxStyleProps]: string | number } = {}
 
     for (let driverName in transforms) {
       const styleBindings = transforms[driverName]
@@ -415,9 +415,9 @@ class LaxElement {
         console.error("No lax driver with name: ", driverName)
       }
       const [value, inertiaValue] = driverValues[driverName]
-      let key: keyof LaxStyleProps;
+      let key: keyof LaxStyleProps
       for (key in styleBindings) {
-        if(key !== "presets"){
+        if (key !== "presets") {
           const [arr1, arr2, options = {}] = styleBindings[key]
           const { modValue, frameStep = 1, easing, inertia, inertiaMode, cssFn, cssUnit = '' } = options
 
@@ -440,7 +440,7 @@ class LaxElement {
             styles[key] = cssFn ? cssFn(val, this.domElement) : val + cssUnit
           }
         }
-        
+
       }
     }
 
@@ -451,11 +451,11 @@ class LaxElement {
   calculateTransforms = () => {
     this.transforms = {}
     const windowWidth = this.laxInstance.windowWidth
-    let driverName: keyof DriverTransforms;
+    let driverName: keyof DriverTransforms
     for (driverName in this.transformsData) {
       let styleBindings: LaxStyleProps = this.transformsData[driverName]
 
-      const parsedStyleBindings: {[key in keyof LaxStyleProps]: LaxStyleMap} = {}
+      const parsedStyleBindings: { [key in keyof LaxStyleProps]: LaxStyleMap } = {}
 
       const { presets = <Array<string>>[] } = styleBindings
 
@@ -477,12 +477,16 @@ class LaxElement {
       })
 
       delete styleBindings.presets
-      let key: keyof LaxStyleProps;
+      let key: keyof LaxStyleProps
       for (key in styleBindings) {
-        if(key !== "presets"){ // should always be true in here, but typescript wants to be 100% sure
+        if (key !== "presets") { // should always be true in here, but typescript wants to be 100% sure
           let [arr1 = [-1e9, 1e9], arr2 = [-1e9, 1e9], options = {}] = styleBindings[key]
 
+          const saveTransform = this.domElement.style.transform
+          this.domElement.style.removeProperty("transform")
           const bounds = this.domElement.getBoundingClientRect()
+          this.domElement.style.transform = saveTransform
+
           const parsedArr1 = getArrayValues(<Array<number>>arr1, windowWidth).map(i => parseValue(i, bounds, this.groupIndex)) // should always work here
           const parsedArr2 = getArrayValues(<Array<number>>arr2, windowWidth).map(i => parseValue(i, bounds, this.groupIndex)) // should always work here
 
@@ -493,7 +497,7 @@ class LaxElement {
     }
   }
 
-  applyStyles = (styles: {[key in keyof LaxStyleProps]: number | string}) => {
+  applyStyles = (styles: { [key in keyof LaxStyleProps]: number | string }) => {
     const mergedStyles = flattenStyles(styles)
 
     Object.keys(mergedStyles).forEach((key: "transform" | "filter") => {
@@ -543,7 +547,7 @@ class Lax {
       this.debugData["frameStart"] = Date.now()
     }
 
-    const driverValues: {[key: string]: Array<number>} = {}
+    const driverValues: { [key: string]: Array<number> } = {}
 
     this.drivers.forEach((driver) => {
       driverValues[driver.name] = driver.getValue(this.frame)
@@ -589,7 +593,7 @@ class Lax {
       domElement.classList.forEach((className) => {
         if (className.includes("lax_preset")) {
           const preset = className.replace("lax_preset_", "")
-          if(isPresetName(preset))
+          if (isPresetName(preset))
             presets.push(preset)
         }
       })
@@ -625,7 +629,7 @@ class Lax {
   }
 }
 
-export const laxInstance = new Lax();
+export const laxInstance = new Lax()
 const lax = {
   addElements: laxInstance.addElements,
   removeElements: laxInstance.removeElements,
@@ -635,28 +639,28 @@ const lax = {
   addDriver: laxInstance.addDriver,
   removeDriver: laxInstance.removeDriver,
   presets: laxInstance.presets,
-};
+}
 // needed because window, and global don't have lax on them initially
 
 declare global {
   namespace NodeJS {
     interface Global {
-      lax: typeof lax;
+      lax: typeof lax
     }
   }
   interface Window {
-    lax: typeof lax;
+    lax: typeof lax
   }
 };
 
 (() => {
-  if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') 
+  if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
     module.exports = lax
-  else if(window)
-    window.lax = lax;
-  else if(global)
-    global["lax"] = lax;
+  else if (window)
+    window.lax = lax
+  else if (global)
+    global["lax"] = lax
 })()
 
 export default lax
-export const {addDriver, addElement, addElements, removeDriver, removeElement, removeElements, init, presets} = lax;
+export const { addDriver, addElement, addElements, removeDriver, removeElement, removeElements, init, presets } = lax
