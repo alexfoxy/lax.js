@@ -205,33 +205,33 @@
       easeOutQuint: t => 1 + (--t) * t * t * t * t,
       easeInOutQuint: t => t < .5 ? 16 * t * t * t * t * t : 1 + 16 * (--t) * t * t * t * t,
       easeOutBounce: t => {
-        const n1 = 7.5625;
-        const d1 = 2.75;
+        const n1 = 7.5625
+        const d1 = 2.75
 
         if (t < 1 / d1) {
-          return n1 * t * t;
+          return n1 * t * t
         } else if (t < 2 / d1) {
-          return n1 * (t -= 1.5 / d1) * t + 0.75;
+          return n1 * (t -= 1.5 / d1) * t + 0.75
         } else if (t < 2.5 / d1) {
-          return n1 * (t -= 2.25 / d1) * t + 0.9375;
+          return n1 * (t -= 2.25 / d1) * t + 0.9375
         } else {
-          return n1 * (t -= 2.625 / d1) * t + 0.984375;
+          return n1 * (t -= 2.625 / d1) * t + 0.984375
         }
       },
       easeInBounce: t => {
-        return 1 - easings.easeOutBounce(1 - t);
+        return 1 - easings.easeOutBounce(1 - t)
       },
       easeOutBack: t => {
-        const c1 = 1.70158;
-        const c3 = c1 + 1;
+        const c1 = 1.70158
+        const c3 = c1 + 1
 
-        return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+        return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2)
       },
       easeInBack: t => {
-        const c1 = 1.70158;
-        const c3 = c1 + 1;
+        const c1 = 1.70158
+        const c3 = c1 + 1
 
-        return c3 * t * t * t - c1 * t * t;
+        return c3 * t * t * t - c1 * t * t
       },
     }
 
@@ -460,7 +460,11 @@
           for (let key in styleBindings) {
             let [arr1 = [-1e9, 1e9], arr2 = [-1e9, 1e9], options = {}] = styleBindings[key]
 
+            const saveTransform = this.domElement.style.transform
+            this.domElement.style.removeProperty("transform")
             const bounds = this.domElement.getBoundingClientRect()
+            this.domElement.style.transform = saveTransform
+
             const parsedArr1 = getArrayValues(arr1, windowWidth).map(i => parseValue(i, bounds, this.groupIndex))
             const parsedArr2 = getArrayValues(arr2, windowWidth).map(i => parseValue(i, bounds, this.groupIndex))
 
@@ -606,7 +610,7 @@
   })()
 
   if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-    module.exports = laxInstance;
+    module.exports = laxInstance
   else
-    window.lax = laxInstance;
+    window.lax = laxInstance
 })()
