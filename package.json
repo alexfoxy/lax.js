@@ -2,13 +2,18 @@
   "name": "lax.js",
   "version": "2.0.3",
   "scripts": {
-    "build": "babel src -d lib && uglifyjs lib/lax.js -o lib/lax.min.js -c -m && gzip -c lib/lax.min.js > lib/lax.min.js.gz && cp lib/lax.min.js docs/lib/lax.min.js"
+    "build": "babel src -d lib && uglifyjs lib/lax.js -o lib/lax.min.js -c -m && gzip -c lib/lax.min.js > lib/lax.min.js.gz && cp lib/lax.min.js docs/lib/lax.min.js",
+    "prebuild-ts": "tsc",
+    "build-ts": "uglifyjs ./lib/lax.js --source-map -o ./lib/lax.min.js -c -m  && gzip -c ./lib/lax.min.js > ./lib/lax.min.js.gz && cp ./lib/lax.min.js ./docs/lib/lax.min.js",
+    "dev": "tsc --watch"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
     "@babel/core": "^7.12.3",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
+    "@types/node": "^14.14.25",
+    "typescript": "^4.1.3",
     "uglify-js": "^3.9.4"
   },
   "description": "Simple & lightweight (<4kb gzipped) vanilla JavaScript library to create smooth & beautiful animations when you scroll.",
@@ -18,7 +23,8 @@
     "type": "git",
     "url": "https://github.com/alexfoxy/lax.js"
   },
-  "main": "lib/lax.min.js",
+  "main": "lib/lax.js",
+  "types": "lib/lax.d.ts",
   "keywords": [
     "javascript",
     "lax",
