@@ -110,7 +110,7 @@ The easiest way to get started is to use presets via html classes. For example:
 <div class="lax lax_preset_fadeIn:50:100 lax_preset_spin"></div>
 ```
 
-Multiple presets can be chained together and they can be customised to suit your needs. Use the [preset explorer](https://alexfox.dev/lax.js/preset-explorer) to explore effects and see a simple example [here](https://alexfox.dev/lax.js/html-inline).
+Multiple presets can be chained together and they can be customised to suit your needs. Use the [preset explorer](https://alexfox.dev/lax.js/preset-explorer) to explore effects and see a simple example [here](https://alexfox.dev/lax.js/examples/html-inline).
 
 ## DOM behavior and usage with Frameworks 
 
