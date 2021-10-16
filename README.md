@@ -167,16 +167,6 @@ lax.addElements(
 
 ### Element options
 
-#### `elements: Array of DOM nodes`
-
-Pass references to raw DOM elements to allow for more flexible selection patterns.
-In this case, a unique `selector` must still be passed as the first argument, however it does _not_ need to be a valid DOM selector.
-This allows the library to tag the elements for removal later. Example:
-
-```js
-[$('.selector')[0]]
-```
-
 #### `style: StyleObject`
 
 Add static CSS to each element, for example:
@@ -184,6 +174,20 @@ Add static CSS to each element, for example:
 ```css
 {
   transform: '200ms scale ease-in-out';
+}
+```
+
+#### `elements: Array<DOM nodes>`
+
+Pass references to raw DOM elements to allow for more flexible selection patterns. In this case, a unique `selector` must still be passed as the first argument, however it does _not_ need to be a valid DOM selector.
+
+This allows the library to tag the elements for removal later. Example:
+
+```js
+const myDomElements = $('.selector')
+
+{
+  elements: myDomElements
 }
 ```
 
