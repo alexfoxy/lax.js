@@ -609,7 +609,7 @@ class Lax {
   }
 
   addElements = (selector: string, transforms: DriverTransforms, options?: ElementOptions) => {
-    const domElements = document.querySelectorAll(selector)
+    const domElements = options.domElements || document.querySelectorAll(selector)
 
     domElements.forEach((domElement, i) => {
       this.elements.push(new LaxElement(selector, this, <HTMLElement>domElement, transforms, i, options))
