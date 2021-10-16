@@ -586,7 +586,7 @@
       }
 
       addElements = (selector, transforms, options) => {
-        const domElements = document.querySelectorAll(selector)
+        const domElements = options.domElements || document.querySelectorAll(selector)
 
         domElements.forEach((domElement, i) => {
           this.elements.push(new LaxElement(selector, this, domElement, transforms, i, options))

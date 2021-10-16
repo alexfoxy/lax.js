@@ -177,6 +177,20 @@ Add static CSS to each element, for example:
 }
 ```
 
+#### `elements: Array<DOM nodes>`
+
+Pass references to raw DOM elements to allow for more flexible selection patterns. In this case, a unique `selector` must still be passed as the first argument, however it does _not_ need to be a valid DOM selector.
+
+This allows the library to tag the elements for removal later. Example:
+
+```js
+const myDomElements = $('.selector')
+
+{
+  elements: myDomElements
+}
+```
+
 #### `onUpdate: (driverValues: Object, domElement: DomElement) => void`
 A method called every frame with the current driverValues and domElement. This could be used to toggle classes on an element or set innerHTML. See it in action [here](https://alexfox.dev/lax.js/examples/on-update).
 
