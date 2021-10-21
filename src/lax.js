@@ -585,7 +585,7 @@
         })
       }
 
-      addElements = (selector, transforms, options) => {
+      addElements = (selector, transforms, options = {}) => {
         const domElements = options.domElements || document.querySelectorAll(selector)
 
         domElements.forEach((domElement, i) => {
