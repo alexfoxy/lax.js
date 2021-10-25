@@ -503,19 +503,19 @@
         this.findAndAddElements()
 
         window.requestAnimationFrame(this.onAnimationFrame)
-        this.windowWidth = document.body.clientWidth
-        this.windowHeight = document.body.clientHeight
+        this.windowWidth = window.visualViewport.width
+        this.windowHeight = window.visualViewport.height
 
         window.onresize = this.onWindowResize
       }
 
       onWindowResize = () => {
-        const changed = document.body.clientWidth !== this.windowWidth ||
-          document.body.clientHeight !== this.windowHeight
+        const changed = window.visualViewport.width !== this.windowWidth ||
+          window.visualViewport.height !== this.windowHeight
 
         if (changed) {
-          this.windowWidth = document.body.clientWidth
-          this.windowHeight = document.body.clientHeight
+          this.windowWidth = window.visualViewport.width
+          this.windowHeight = window.visualViewport.height
           this.elements.forEach(el => el.calculateTransforms())
         }
       }
