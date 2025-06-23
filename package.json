@@ -2,7 +2,8 @@
   "name": "lax.js",
   "version": "2.0.3",
   "scripts": {
-    "build": "babel src -d lib && uglifyjs lib/lax.js -o lib/lax.min.js -c -m && gzip -c lib/lax.min.js > lib/lax.min.js.gz && cp lib/lax.min.js docs/lib/lax.min.js"
+    "build": "babel src -d lib && uglifyjs lib/lax.js -o lib/lax.min.js -c -m && gzip -c lib/lax.min.js > lib/lax.min.js.gz && cp lib/lax.min.js docs/lib/lax.min.js && npm run types",
+    "types": "npx -p typescript tsc src/lax.js --declaration --allowJs --emitDeclarationOnly --outDir types"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
@@ -19,6 +20,7 @@
     "url": "https://github.com/alexfoxy/lax.js"
   },
   "main": "lib/lax.min.js",
+  "types": "types/lax.d.ts",
   "keywords": [
     "javascript",
     "lax",
